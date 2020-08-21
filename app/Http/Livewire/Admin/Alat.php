@@ -62,7 +62,6 @@ class Alat extends Component
         $merk = new Merk();
         $gambar = new GambarAlat();
 
-
         // $this->validate([
         //     'selectJenisAlat' => 'required',
         //     'selectMerk' => 'required',
@@ -73,7 +72,6 @@ class Alat extends Component
         //     'inputKodeAlat' => 'required',
         //     'inputMerk' => 'required',
         // ]);
-
 
         if($this->pageJenis == true AND $this->pageMerk == true){
             $jenis->jenis_alat_nama = $this->inputJenisAlat;

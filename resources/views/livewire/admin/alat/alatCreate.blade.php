@@ -41,7 +41,6 @@
                         </div>
 
 
-
                         {{-- Jenis --}}
 
                         @if($pageJenis)
