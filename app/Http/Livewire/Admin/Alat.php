@@ -33,6 +33,7 @@ class Alat extends Component
     // Store Preview Image saat upload Gambar
     public function getDataGambar($imageData){
 
+        dd($imageData);
         $this->gambar = $imageData;
     }
 
@@ -62,18 +63,19 @@ class Alat extends Component
         $merk = new Merk();
         $gambar = new GambarAlat();
 
-        // $this->validate([
-        //     'selectJenisAlat' => 'required',
-        //     'selectMerk' => 'required',
-        //     'inputTipe' => 'required',
-        //     'inputJumlah' => 'required',
-        //     'inputJenisAlat' => 'required',
-        //     'inputJenisHarga' => 'required',
-        //     'inputKodeAlat' => 'required',
-        //     'inputMerk' => 'required',
-        // ]);
 
         if($this->pageJenis == true AND $this->pageMerk == true){
+
+
+            $this->validate([
+                'inputJenisAlat' => 'required',
+                'inputJenisHarga' => 'required',
+                'inputMerk' => 'required',
+                'inputTipe' => 'required',
+                'inputJumlah' => 'required',
+                'inputKodeAlat' => 'required',
+            ]);
+
             $jenis->jenis_alat_nama = $this->inputJenisAlat;
             $jenis->jenis_alat_harga = $this->inputJenisHarga;
             $merk->merk_nama = $this->inputMerk;
@@ -87,6 +89,16 @@ class Alat extends Component
 
         }
         elseif($this->pageJenis == true AND $this->pageMerk == false){
+
+            $this->validate([
+                'inputJenisAlat' => 'required',
+                'inputJenisHarga' => 'required',
+                'inputTipe' => 'required',
+                'inputJumlah' => 'required',
+                'inputKodeAlat' => 'required',
+                'selectMerk' => 'required',
+            ]);
+
             $jenis->jenis_alat_nama = $this->inputJenisAlat;
             $jenis->jenis_alat_harga = $this->inputJenisHarga;
 
@@ -98,6 +110,15 @@ class Alat extends Component
 
         }
         elseif($this->pageJenis == false AND $this->pageMerk == true){
+
+            $this->validate([
+                'inputMerk' => 'required',
+                'inputTipe' => 'required',
+                'inputJumlah' => 'required',
+                'inputKodeAlat' => 'required',
+                'selectJenisAlat' => 'required',
+            ]);
+
             $merk->merk_nama = $this->inputMerk;
 
             $merk->save();
@@ -107,6 +128,15 @@ class Alat extends Component
             return $this->createAlat($alatJenis,$alatMerk);
         }
         else{
+
+            $this->validate([
+                'selectJenisAlat' => 'required',
+                'selectMerk' => 'required',
+                'inputTipe' => 'required',
+                'inputJumlah' => 'required',
+                'inputKodeAlat' => 'required',
+            ]);
+
             $alatMerk = $this->selectMerk;
             $alatJenis = $this->selectJenisAlat;
 
@@ -126,21 +156,8 @@ class Alat extends Component
         $alat->alat_total = $this->inputJumlah;
         $alat->save();
 
-        // Clear Form
-        $this->inputKodeAlat = null;
-        $this->inputJenisAlat = null;
-        $this->inputJenisHarga = null;
-        $this->inputMerk = null;
-        $this->inputJumlah = null;
-        $this->inputTipe = null;
-        $this->selectJenisAlat = null;
-        $this->selectMerk = null;
-        $this->gambar = null;
+        return $this->clearForm();
 
-        $this->pageAlat = false;
-        $this->pageJenis = false;
-        $this->pageMerk = false;
-        $this->checkKode = false;
     }
 
     // Return View
@@ -153,6 +170,8 @@ class Alat extends Component
 
         return view('livewire.admin.alat.alatShow');
     }
+
+
 
     // Menampilkan Page
     public function addAlat(){
@@ -176,5 +195,24 @@ class Alat extends Component
     }
     public function cancelAddGambar(){
         $this->gambar = null;
+    }
+
+
+    // Cleaer Form
+    public function clearForm(){
+        $this->inputKodeAlat = null;
+        $this->inputJenisAlat = null;
+        $this->inputJenisHarga = null;
+        $this->inputMerk = null;
+        $this->inputJumlah = null;
+        $this->inputTipe = null;
+        $this->selectJenisAlat = null;
+        $this->selectMerk = null;
+        $this->gambar = null;
+
+        $this->pageAlat = false;
+        $this->pageJenis = false;
+        $this->pageMerk = false;
+        $this->checkKode = false;
     }
 }
