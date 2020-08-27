@@ -134,23 +134,11 @@
                             <label class="col-sm-4 control-label text-sm-right pt-2">Gambar</label>
                             <div class="col-sm-6">
                                 <div class="input-group">
-                                    <input type="file"  id="gambar" name="gambar" wire:change="$emit('gambar')" multiple/>
+                                    <input type="file"  id="gambar" name="gambar[]" wire:model="gambar" multiple/>
                                 </div>
                                 <br>
-                                @if($gambar != null)
-
-                                    @if (count($gambar) > 3)
-                                    <span style="color: red"> Maksimal Upload Hanya 3 Foto  {{$gsmbar=null}} </span>
-
-                                    @else
-                                        <button wire:click="cancelAddGambar()" class="btn btn-danger"  onclick="return false"> <i class="fas fa-window-close"></i></button>  &nbsp;&nbsp;
-                                        @foreach ($gambar as $preview)
-                                            <img src="{{ $preview }}" width="100" />
-                                        @endforeach
-
-                                    @endif
-
-                                @endif
+                                
+                                <div id="showGambar"></div>
 
                             </div>
                         </div>
@@ -173,27 +161,7 @@
 
 <script>
 
-    window.livewire.on('gambar', () => {
 
-        let inputField = document.getElementById('gambar').files
-        var data = []
-        var i=0;
-
-        for (let file of inputField) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-
-            // INSERT DATA TO ARRAY
-            data[i] = e.target.result
-                i++
-            };
-            // Read in the image file as a data URL.
-            reader.readAsDataURL(file);
-        }
-
-        window.livewire.emit('dataGambar', data)
-
-    })
 
 
 </script>

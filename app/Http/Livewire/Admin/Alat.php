@@ -2,25 +2,27 @@
 
 namespace App\Http\Livewire\Admin;
 
-use App\Model\Alat as ModelAlat;
-use App\Model\GambarAlat;
-use App\Model\JenisAlat;
 use App\Model\Merk;
 use Livewire\Component;
+use App\Model\JenisAlat;
+use App\Model\GambarAlat;
+use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
+use App\Model\Alat as ModelAlat;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic;
 
 class Alat extends Component
 {
     use WithFileUploads;
 
 
-    public $gambar;
+    public $gambar=[];
 
     public $dataAlat, $dataMerk, $dataJenis;
 
     public $selectJenisAlat, $inputJenisAlat , $inputJenisHarga, $selectMerk, $inputMerk, $inputJumlah, $inputTipe, $inputKodeAlat;
 
-    protected $listeners = ['dataGambar'=> 'getDataGambar'];
 
     public $countAlat;
 
@@ -30,12 +32,7 @@ class Alat extends Component
     public $pageJenis = false;
     public $pageMerk = false;
 
-    // Store Preview Image saat upload Gambar
-    public function getDataGambar($imageData){
 
-        dd($imageData);
-        $this->gambar = $imageData;
-    }
 
 
     public function checkKodeAlat(){
@@ -61,7 +58,6 @@ class Alat extends Component
 
         $jenis = new JenisAlat();
         $merk = new Merk();
-        $gambar = new GambarAlat();
 
 
         if($this->pageJenis == true AND $this->pageMerk == true){
@@ -74,6 +70,7 @@ class Alat extends Component
                 'inputTipe' => 'required',
                 'inputJumlah' => 'required',
                 'inputKodeAlat' => 'required',
+                'gambar' => 'required',
             ]);
 
             $jenis->jenis_alat_nama = $this->inputJenisAlat;
@@ -85,7 +82,7 @@ class Alat extends Component
             $alatJenis = $jenis->all()->last()->jenis_alat_id;
             $alatMerk = $merk->all()->last()->merk_id;
 
-            return $this->createAlat($alatJenis,$alatMerk);
+            return $this->createAlatdanImage($alatJenis,$alatMerk);
 
         }
         elseif($this->pageJenis == true AND $this->pageMerk == false){
@@ -97,6 +94,7 @@ class Alat extends Component
                 'inputJumlah' => 'required',
                 'inputKodeAlat' => 'required',
                 'selectMerk' => 'required',
+                'gambar' => 'required',
             ]);
 
             $jenis->jenis_alat_nama = $this->inputJenisAlat;
@@ -106,7 +104,7 @@ class Alat extends Component
             $alatJenis = $jenis->all()->last()->jenis_alat_id;
             $alatMerk = $this->selectMerk;
 
-            return $this->createAlat($alatJenis,$alatMerk);
+            return $this->createAlatdanImage($alatJenis,$alatMerk);
 
         }
         elseif($this->pageJenis == false AND $this->pageMerk == true){
@@ -117,6 +115,7 @@ class Alat extends Component
                 'inputJumlah' => 'required',
                 'inputKodeAlat' => 'required',
                 'selectJenisAlat' => 'required',
+                'gambar' => 'required',
             ]);
 
             $merk->merk_nama = $this->inputMerk;
@@ -125,7 +124,7 @@ class Alat extends Component
             $alatMerk = $merk->all()->last()->merk_id;
             $alatJenis = $this->selectJenisAlat;
 
-            return $this->createAlat($alatJenis,$alatMerk);
+            return $this->createAlatdanImage($alatJenis,$alatMerk);
         }
         else{
 
@@ -135,19 +134,22 @@ class Alat extends Component
                 'inputTipe' => 'required',
                 'inputJumlah' => 'required',
                 'inputKodeAlat' => 'required',
+                'gambar' => 'required',
             ]);
 
             $alatMerk = $this->selectMerk;
             $alatJenis = $this->selectJenisAlat;
 
-            return $this->createAlat($alatJenis,$alatMerk);
+            return $this->createAlatdanImage($alatJenis,$alatMerk);
         }
 
     }
 
 
-    // Fungsi Create Alat
-    public function createAlat($alatJenis,$alatMerk){
+    // Fungsi Create Alat dan Image
+    public function createAlatdanImage($alatJenis,$alatMerk){
+
+
         $alat = new ModelAlat();
         $alat->alat_kode = $this->inputKodeAlat;
         $alat->alat_jenis = $alatJenis;
@@ -156,6 +158,18 @@ class Alat extends Component
         $alat->alat_total = $this->inputJumlah;
         $alat->save();
 
+
+        if($dataGambar = $this->gambar) {
+            foreach ($dataGambar as $fileGambar) {
+                $gambar = new GambarAlat();
+
+                $name = $this->inputKodeAlat . Str::random(5) . '.jpg';
+                $gambar->gambar_kodealat = $this->inputKodeAlat;
+                $gambar->gambar_file = $name;
+                $gambar->save();
+                $fileGambar->storeAs('photos',$name);
+            }
+        }
         return $this->clearForm();
 
     }
