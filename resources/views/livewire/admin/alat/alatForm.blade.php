@@ -4,7 +4,11 @@
         <div class="card">
             <div class="card-body">
                 <div class="col-lg-12">
-                    <h4 class="card-title mb-4">Form Alat</h4>
+                    @if($updateMode)
+                    <h4 class="card-title mb-4">Form Edit Alat</h4>
+                    @else
+                    <h4 class="card-title mb-4">Form Input Alat</h4>
+                    @endif
                     <form id="form" class="form-horizontal">
 
                         {{-- Kode Alat --}}

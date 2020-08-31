@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Auth;
 class Header extends Component
 {
 
-
     public function logout(){
 
         Auth::logout();

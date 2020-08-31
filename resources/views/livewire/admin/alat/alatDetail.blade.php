@@ -63,12 +63,12 @@
                                 <tr>
                                     <td> <h8> Jumlah Stok </h8> </td>
                                     <td> <h8> : </h8> </td>
-                                    <td> <h8> {{ $detailAlat->alat_jumlah }} unit</h8> </td>
+                                    <td> <h8> {{ $detailAlat->alat_total }} unit</h8> </td>
                                 </tr>
                                 <tr>
                                     <td> <h8> Harga Sewa </h8> </td>
                                     <td> <h8> : </h8> </td>
-                                    <td> <h8> Rp .{{ $detailAlat->jenis_alat->jenis_alat_harga }} </h8> </td>
+                                    <td> <h8> Rp. {{ $detailAlat->jenis_alat->jenis_alat_harga }} / Hari</h8> </td>
                                 </tr>
 
                             </table>

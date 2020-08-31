@@ -33,7 +33,6 @@ class Login extends Component
 
         if(Auth::attempt($login)){
 
-
             if(Auth::user()->user_role == 2){
                 return redirect('/');
             }

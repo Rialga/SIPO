@@ -233,18 +233,6 @@ class Alat extends Component
     // Show Edit Page
     public function editPage($id){
 
-        $editAlat = ModelAlat::findOrfail($id);
-        $editGambar = GambarAlat::where('gambar_kodealat',$id)->get();
-        $this->dataGambar = $editGambar;
-        $this->inputKodeAlat = $id;
-        $this->selectJenisAlat = $editAlat->alat_jenis;
-        $this->selectMerk = $editAlat->alat_merk;
-        $this->inputTipe = $editAlat->alat_tipe;
-        $this->inputJumlah = $editAlat->alat_total;
-
-        $this->formAlat = true;
-        $this->updateMode = true;
-
     }
 
     // Show Detail Page
@@ -299,6 +287,9 @@ class Alat extends Component
 
     // Cleaer Form
     public function clearForm(){
+
+        $this->validate([]);
+
         $this->inputKodeAlat = null;
         $this->inputJenisAlat = null;
         $this->inputJenisHarga = null;

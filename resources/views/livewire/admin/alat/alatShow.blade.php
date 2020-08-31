@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="col-sm-8">
                                         <div class="text-sm-right">
-                                            <button wire:click="addAlat" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Order</button>
+                                            <button wire:click="addAlat" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Alat</button>
                                         </div>
                                     </div><!-- end col-->
                                 </div>
