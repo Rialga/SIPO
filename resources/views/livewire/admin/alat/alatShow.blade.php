@@ -1,98 +1,118 @@
 <div>
-    <livewire:layouts.admin-header />
 
-     <div class="inner-wrapper" style="background: #e1e2e5 ">
+<livewire:layouts.admin-header />
+<livewire:layouts.admin-sidebar />
 
-         <livewire:layouts.admin-sidebar />
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
 
-         @if($pageAlat)
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-flex align-items-center justify-content-between">
+                            <h4 class="mb-0 font-size-18">ALAT</h4>
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
 
-            @include('livewire.admin.alat.alatCreate')
+                @if($formAlat)
 
-         @else
+                    @include('livewire.admin.alat.alatForm')
 
-         <section role="main" class="content-body">
-             <header class="page-header">
-                 <h2><a href="{{ url('/') }}"><i class="fas fa-home"></i></a></h2>
-             </header>
 
-             <div style="display: flex; justify-content: flex-end">
-                <a wire:click="addAlat()" class=" btn btn-rounded btn-primary box-shadow-2 mb-2" style="color: white">
-                    <i class="fas fa-plus"></i> Tambah Data
-                </a>
+                @elseif($detailMode)
+
+                    @include('livewire.admin.alat.alatDetail')
+
+                @else
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col-sm-4">
+                                        <div class="search-box mr-2 mb-2 d-inline-block">
+                                            <div class="position-relative">
+                                                <input type="text" class="form-control" placeholder="Search...">
+                                                <i class="bx bx-search-alt search-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <div class="text-sm-right">
+                                            <button wire:click="addAlat" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Add New Order</button>
+                                        </div>
+                                    </div><!-- end col-->
+                                </div>
+                                <div class="table-responsive"">
+                                    <table class="table table-hover mb-0"" style="text-align: center">
+                                        <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Kode Alat</th>
+                                            <th>Jenis Alat</th>
+                                            <th>Merk</th>
+                                            <th>Jumlah Stock</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        @if ($dataAlat->count() == 0)
+                                            <tr>
+                                                <td colspan="5" style="text-align: center">Tidak Ada data yang Akan ditampilkan</td>
+                                            </tr>
+                                        @else
+                                            @foreach ($dataAlat as $row)
+                                            <tr>
+                                                <td>{{$loop->iteration}}</td>
+                                                <td>{{$row->alat_kode}}</td>
+                                                <td>{{$row->jenis_alat->jenis_alat_nama}}</td>
+                                                <td>{{$row->merk->merk_nama}}</td>
+                                                <td>{{$row->alat_total}}</td>
+                                                <td>
+                                                    <a wire:click="detailPage('{{ $row->alat_kode }}')" class="btn btn-primary btn-rounded waves-effect waves-light" title="detail"><i class="fas fa-eye" style="color: white"></i></a>
+                                                    <a wire:click="editPage('{{ $row->alat_kode }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-edit" style="color: white"></i></a>
+                                                    <a wire:click="deleteAlat('{{ $row->alat_kode }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        @endif
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+                </div> <!-- end row -->
+
+                @endif
+            </div> <!-- container-fluid -->
+        </div>
+        <!-- End Page-content -->
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        2020 © Sumbar Mountain Advanture.
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-right d-none d-sm-block">
+                            SIPO Sumber Mountain Advanture
+                        </div>
+                    </div>
+                </div>
             </div>
-
-             {{-- TABLE --}}
-             <div class="row">
-                 <div class="col">
-                     <section class="card">
-                         <header class="card-header">
-                             <h2 class="card-title">Data</h2>
-                              <div class="card-actions">
-                                  <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                              </div>
-                         </header>
-
-                         <div class="card-body">
-                             <table class="table">
-                                 <thead>
-                                     <tr>
-                                         <th>No</th>
-                                         <th>Kode Alat</th>
-                                         <th>Jenis Alat</th>
-                                         <th>Merk</th>
-                                         <th>Jumlah Stock</th>
-                                         <th>Aksi</th>
-                                     </tr>
-                                 </thead>
-
-                                 <tbody>
-                                     @if ($dataAlat->count() == 0)
-                                         <tr>
-                                             <td colspan="5" style="text-align: center">Tidak Ada data yang Akan ditampilkan</td>
-                                         </tr>
-                                     @else
-                                         @foreach ($dataAlat as $row)
-                                             <tr>
-                                                 <td>{{$loop->iteration}}</td>
-                                                 <td>{{$row->alat_kode}}</td>
-                                                 <td>{{$row->jenis_alat->jenis_alat_nama}}</td>
-                                                 <td>{{$row->merk->merk_nama}}</td>
-                                                 <td>{{$row->alat_total}}</td>
-                                                 <td>
-                                                     <a class="btn btn-rounded btn-info box-shadow-2 mb-2" title="detail"><i class="fas fa-eye" style="color: white"></i></a>
-                                                     <a class="btn btn-rounded btn-warning box-shadow-2 mb-2" title="edit"><i class="fas fa-edit" style="color: white"></i></a>
-                                                     <a class="btn btn-rounded btn-danger box-shadow-2 mb-2" title="delete"><i class="fas fa-trash" style="color: white"></i></a>
-                                                 </td>
-
-                                             </tr>
-                                         @endforeach
-                                     @endif
-                                 </tbody>
-                             </table>
-                         </div>
-                     </section>
-                 </div>
-             </div>
-
-
-         </section>
-
-         @endif
-     </div>
+        </footer>
+    </div>
 
 </div>
 
+
 <script type="text/javascript">
 
-    // function preview() {
-
-    //     var item = document.getElementById('gambar')
-
-    //     for (var i = 0; i <= item.files.length - 1; i++) {
-    //         $('#image_preview').append("<img width='100px'  src='" + URL.createObjectURL(event.target.files[i]) + "'>");
-    //     }
-
-    // }
 
 </script>

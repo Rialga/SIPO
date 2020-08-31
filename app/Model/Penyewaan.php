@@ -29,11 +29,11 @@ class Penyewaan extends Model
     //Many to many
     public function alat_detail_sewa()
     {
-        return $this->belongsToMany('App\Model\Alat','detail_sewa','detail_laporan_nosewa','alat_kode');
+        return $this->belongsToMany('App\Model\Alat','detail_sewa','detail_laporan_nosewa','detail_sewa_alat_kode');
     }
 
     public function alat_pengembalian()
     {
-        return $this->belongsToMany('App\Model\Alat','pengembalian','pengembalian_nosewa','alat_kode');
+        return $this->belongsToMany('App\Model\Alat','pengembalian','pengembalian_nosewa','pengembalian_kodealat');
     }
 }

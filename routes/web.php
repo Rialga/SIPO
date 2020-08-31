@@ -15,6 +15,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::livewire('/','welcome');
 Route::livewire('/login','login');
+
+
+
 Route::livewire('/dashboard','admin.dashboard');
+
+Route::livewire('/petugas','admin.petugas');
+Route::livewire('/member','admin.member');
+
 Route::livewire('/alat','admin.alat');
+Route::livewire('/jenis','admin.jenis');
+Route::livewire('/merk','admin.merk');
+
+Route::livewire('/kelola-denda','admin.kelola-denda');
+
+Route::livewire('/list-sewa','admin.list-sewa');
+Route::livewire('/pengembalian','admin.konfirmasi-pengembalian');
+
+Route::livewire('/report-penyewaan','admin.report-penyewaan');
+
+
 

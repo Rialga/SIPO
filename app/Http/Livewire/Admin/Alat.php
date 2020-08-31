@@ -16,25 +16,29 @@ class Alat extends Component
 {
     use WithFileUploads;
 
-
     public $gambar=[];
 
-    public $dataAlat, $dataMerk, $dataJenis;
+    public $dataAlat, $dataMerk, $dataJenis, $dataGambar;
+
+    public $detailAlat, $detailGambar;
 
     public $selectJenisAlat, $inputJenisAlat , $inputJenisHarga, $selectMerk, $inputMerk, $inputJumlah, $inputTipe, $inputKodeAlat;
 
 
     public $countAlat;
 
+    public $idDiv,$idPic,$detailPic;
 
-    public $pageAlat = false;
+
+    public $formAlat = false;
+    public $updateMode = false;
+    public $detailMode = false;
+
     public $checkKode = false;
     public $pageJenis = false;
     public $pageMerk = false;
 
-
-
-
+    // Check Kode alat
     public function checkKodeAlat(){
 
         $this->validate([
@@ -49,16 +53,11 @@ class Alat extends Component
 
     }
 
-
-
-
-
-    // Input Database (ALL)
+    // Create Jenis dan Merk
     public function create(){
 
         $jenis = new JenisAlat();
         $merk = new Merk();
-
 
         if($this->pageJenis == true AND $this->pageMerk == true){
 
@@ -70,7 +69,7 @@ class Alat extends Component
                 'inputTipe' => 'required',
                 'inputJumlah' => 'required',
                 'inputKodeAlat' => 'required',
-                'gambar' => 'required',
+                'gambar.*' => 'required'
             ]);
 
             $jenis->jenis_alat_nama = $this->inputJenisAlat;
@@ -82,7 +81,7 @@ class Alat extends Component
             $alatJenis = $jenis->all()->last()->jenis_alat_id;
             $alatMerk = $merk->all()->last()->merk_id;
 
-            return $this->createAlatdanImage($alatJenis,$alatMerk);
+            return $this->createAlat($alatJenis,$alatMerk);
 
         }
         elseif($this->pageJenis == true AND $this->pageMerk == false){
@@ -94,7 +93,7 @@ class Alat extends Component
                 'inputJumlah' => 'required',
                 'inputKodeAlat' => 'required',
                 'selectMerk' => 'required',
-                'gambar' => 'required',
+                'gambar.*' => 'required'
             ]);
 
             $jenis->jenis_alat_nama = $this->inputJenisAlat;
@@ -104,7 +103,7 @@ class Alat extends Component
             $alatJenis = $jenis->all()->last()->jenis_alat_id;
             $alatMerk = $this->selectMerk;
 
-            return $this->createAlatdanImage($alatJenis,$alatMerk);
+            return $this->createAlat($alatJenis,$alatMerk);
 
         }
         elseif($this->pageJenis == false AND $this->pageMerk == true){
@@ -115,7 +114,7 @@ class Alat extends Component
                 'inputJumlah' => 'required',
                 'inputKodeAlat' => 'required',
                 'selectJenisAlat' => 'required',
-                'gambar' => 'required',
+                'gambar.*' => 'required'
             ]);
 
             $merk->merk_nama = $this->inputMerk;
@@ -124,7 +123,7 @@ class Alat extends Component
             $alatMerk = $merk->all()->last()->merk_id;
             $alatJenis = $this->selectJenisAlat;
 
-            return $this->createAlatdanImage($alatJenis,$alatMerk);
+            return $this->createAlat($alatJenis,$alatMerk);
         }
         else{
 
@@ -134,21 +133,20 @@ class Alat extends Component
                 'inputTipe' => 'required',
                 'inputJumlah' => 'required',
                 'inputKodeAlat' => 'required',
-                'gambar' => 'required',
+                'gambar.*' => 'required'
             ]);
 
             $alatMerk = $this->selectMerk;
             $alatJenis = $this->selectJenisAlat;
 
-            return $this->createAlatdanImage($alatJenis,$alatMerk);
+            return $this->createAlat($alatJenis,$alatMerk);
         }
 
     }
 
 
-    // Fungsi Create Alat dan Image
-    public function createAlatdanImage($alatJenis,$alatMerk){
-
+    // Create Alat
+    public function createAlat($alatJenis,$alatMerk){
 
         $alat = new ModelAlat();
         $alat->alat_kode = $this->inputKodeAlat;
@@ -158,20 +156,107 @@ class Alat extends Component
         $alat->alat_total = $this->inputJumlah;
         $alat->save();
 
+        return $this->createImage();
 
-        if($dataGambar = $this->gambar) {
-            foreach ($dataGambar as $fileGambar) {
-                $gambar = new GambarAlat();
+    }
+
+    // Create Image
+    public function createImage(){
+
+        if($pic = $this->gambar){
+            foreach ($pic as $fileGambar) {
+                $modelGambar = new GambarAlat();
 
                 $name = $this->inputKodeAlat . Str::random(5) . '.jpg';
-                $gambar->gambar_kodealat = $this->inputKodeAlat;
-                $gambar->gambar_file = $name;
-                $gambar->save();
-                $fileGambar->storeAs('photos',$name);
+                $modelGambar->gambar_kodealat = $this->inputKodeAlat;
+                $modelGambar->gambar_file = $name;
+                $modelGambar->save();
+                $fileGambar->storePubliclyAs('gambarAlat',$name);
             }
         }
         return $this->clearForm();
+    }
 
+
+
+    //Update
+    public function update(){
+        $this->validate([
+            'selectJenisAlat' => 'required',
+            'selectMerk' => 'required',
+            'inputTipe' => 'required',
+            'inputJumlah' => 'required',
+        ]);
+
+        if($this->inputKodeAlat){
+            $update = ModelAlat::where('alat_kode',$this->inputKodeAlat)->first();
+            $update->alat_jenis = $this->selectJenisAlat;
+            $update->alat_merk = $this->selectMerk;
+            $update->alat_tipe = $this->inputTipe;
+            $update->alat_total = $this->inputJumlah;
+            $update->update();
+        }
+
+        return $this->createImage();
+
+    }
+
+    //Delete Alat
+    public function deleteAlat($id){
+        if($id){
+
+            $deleteGambar = GambarAlat::where('gambar_kodealat',$id)->get();
+
+            foreach($deleteGambar as $file){
+                Storage::disk('public')->delete('gambarAlat/'.$file->gambar_file);
+            }
+
+            GambarAlat::where('gambar_kodealat',$id)->delete();
+            ModelAlat::where('alat_kode',$id)->delete();
+            $this->dataAlat = ModelAlat::all();
+
+
+        }
+    }
+
+    //Delete Image
+    public function deletePict($id) {
+        if($id){
+
+            GambarAlat::where('gambar_id',$id)->delete();;
+            $this->dataGambar = GambarAlat::where('gambar_kodealat',$this->inputKodeAlat)->get();
+        }
+    }
+
+
+
+    // Show Edit Page
+    public function editPage($id){
+
+        $editAlat = ModelAlat::findOrfail($id);
+        $editGambar = GambarAlat::where('gambar_kodealat',$id)->get();
+        $this->dataGambar = $editGambar;
+        $this->inputKodeAlat = $id;
+        $this->selectJenisAlat = $editAlat->alat_jenis;
+        $this->selectMerk = $editAlat->alat_merk;
+        $this->inputTipe = $editAlat->alat_tipe;
+        $this->inputJumlah = $editAlat->alat_total;
+
+        $this->formAlat = true;
+        $this->updateMode = true;
+
+    }
+
+    // Show Detail Page
+    public function detailPage($id){
+        $this->detailAlat = ModelAlat::where('alat_kode',$id)->first();
+        $this->detailGambar = GambarAlat::where('gambar_kodealat',$id)->get();
+        $this->detailPic = GambarAlat::where('gambar_kodealat',$id)->first();
+
+
+        $this->idDiv = 0;
+        $this->idPic = 0;
+        $this->detailMode = true;
     }
 
     // Return View
@@ -187,9 +272,9 @@ class Alat extends Component
 
 
 
-    // Menampilkan Page
+    // Menampilkan filed pada page Crate
     public function addAlat(){
-        $this->pageAlat = true;
+        $this->formAlat = true;
     }
     public function addJenis(){
         $this->pageJenis = true;
@@ -224,9 +309,13 @@ class Alat extends Component
         $this->selectMerk = null;
         $this->gambar = null;
 
-        $this->pageAlat = false;
+        $this->formAlat = false;
+        $this->updateMode = false;
+        $this->detailMode = false;
+
         $this->pageJenis = false;
         $this->pageMerk = false;
         $this->checkKode = false;
+
     }
 }

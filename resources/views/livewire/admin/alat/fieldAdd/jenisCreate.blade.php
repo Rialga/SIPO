@@ -16,7 +16,8 @@
      <label class="col-sm-4 control-label text-sm-right pt-2">Harga Sewa</label>
      <div class="col-sm-2">
          <div class="input-group">
-             <label class="pt-2">Rp</label> &nbsp;&nbsp; <input type="number" name="inputHarga" id="inputHarga" class="form-control" placeholder=" harga " wire:model.lazy = "inputJenisHarga" />
+             <label class="pt-2">Rp</label> &nbsp;&nbsp;
+             <input type="number" name="inputHarga" id="inputHarga" class="form-control" placeholder=" harga " wire:model.lazy = "inputJenisHarga" />
          </div>
      </div>
      @error('inputJenisHarga') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror

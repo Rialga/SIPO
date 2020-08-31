@@ -30,10 +30,10 @@ class Alat extends Model
     //Many to many
     public function penyewaan_detail_sewa()
     {
-        return $this->belongsToMany('App\Model\Penyewaan','detail_sewa','detail_laporan_alat_kode','sewa_no');
+        return $this->belongsToMany('App\Model\Penyewaan','detail_sewa','detail_laporan_alat_kode','detail_laporan_nosewa');
     }
     public function penyewaan_pengembalian()
     {
-        return $this->belongsToMany('App\Model\Penyewaan','pengembalian','pengembalian_kodealat','sewa_no');
+        return $this->belongsToMany('App\Model\Penyewaan','pengembalian','pengembalian_kodealat','pengembalian_nosewa');
     }
 }

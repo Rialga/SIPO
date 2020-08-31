@@ -1,77 +1,104 @@
 <div>
-    <header id="header" class="header-effect-shrink" data-plugin-options="{'stickyEnabled': true, 'stickyEffect': 'shrink', 'stickyEnableOnBoxed': true, 'stickyEnableOnMobile': true, 'stickyChangeLogo': true, 'stickyStartAt': 30, 'stickyHeaderContainerHeight': 70}">
-        <div class="header-body">
-            <div class="header-container container">
-                <div class="header-row">
-                    <div class="header-column">
-                        <div class="header-row">
-                            <div class="header-logo">
-                                <a href="{{ url('/') }}">
-                                    <img alt="Porto" width="100" height="48" data-sticky-width="82" data-sticky-height="40" src="/assets/cust-assets/img/logo.png">
-                                </a>
+<header id="page-topbar">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box" style="position:relative;  left:40px;">
+                <a href="{{ url('/') }}" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-dark.png" alt="" height="17">
+                    </span>
+                </a>
+
+                <a href="index.html" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-light.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-light.png" alt="" height="19">
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <div class="d-flex" style="position:relative;  right:100px;">
+
+            @auth
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-bell bx-tada"></i>
+                    <span class="badge badge-danger badge-pill">3</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0"
+                    aria-labelledby="page-header-notifications-dropdown">
+                    <div class="p-3">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="m-0"> Notifications </h6>
+                            </div>
+                            <div class="col-auto">
+                                <a href="#!" class="small"> View All</a>
                             </div>
                         </div>
                     </div>
-
-                    <div class="header-column justify-content-center">
-                        <div class="header-row col-12">
-                            <div class="col-12">
-                                <form action="">
-                                    <div class="simple-search input-group w-auto">
-                                        <input class="form-control text-1" id="headerSearch" name="q" type="search" value="" placeholder="Search...">
-                                        <span class="input-group-append">
-                                    <button class="btn" type="submit">
-                                        <i class="fa fa-search header-nav-top-icon"></i>
-                                    </button>
-                                </span>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="header-column justify-content-end">
-                        <div class="header-row">
-                            <div class="header-nav header-nav-line header-nav-top-line header-nav-top-line-with-border order-2 order-lg-1">
-                                <div class="header-nav-main header-nav-main-square header-nav-main-effect-2 header-nav-main-sub-effect-1">
-                                    <nav class="collapse">
-                                        <ul class="nav nav-pills" id="mainNav">
-
-                                            @auth
-                                            <li class="dropdown">
-                                                <a class="dropdown-item" wire:click="logout">
-                                                    Logout
-                                                </a>
-                                            </li>
-                                            @endauth
-
-                                            @guest
-                                            <li class="dropdown">
-                                                <a class="dropdown-item" href="{{ url('/login') }}">
-                                                    Masuk
-                                                </a>
-                                            </li>
-                                            <li class="dropdown dropdown-mega">
-                                                <a class="dropdown-item" href="{{ url('/') }}">
-                                                    Daftar
-                                                </a>
-                                            </li>
-                                            @endguest
-                                        </ul>
-                                    </nav>
+                    <div data-simplebar style="max-height: 230px;">
+                        <a href="#" class="text-reset notification-item">
+                            <div class="media">
+                                <div class="avatar-xs mr-3">
+                                    <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                        <i class="bx bx-cart"></i>
+                                    </span>
                                 </div>
-                                <button class="btn header-btn-collapse-nav" data-toggle="collapse" data-target=".header-nav-main nav">
-                                    <i class="fas fa-bars"></i>
-                                </button>
+                                <div class="media-body">
+                                    <h6 class="mt-0 mb-1">Your order is placed</h6>
+                                    <div class="font-size-12 text-muted">
+                                        <p class="mb-1">If several languages coalesce the grammar</p>
+                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 3 min ago</p>
+                                    </div>
+                                </div>
                             </div>
-
-                        </div>
+                        </a>
+                    </div>
+                    <div class="p-2 border-top">
+                        <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="javascript:void(0)">
+                            <i class="mdi mdi-arrow-right-circle mr-1"></i> View More..
+                        </a>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
+            <div type="button" class="d-inline-block">
+                <a wire:click="logout" class="btn header-item waves-effect">
+                    <br>
+                    <i class="fas fa-user-plus"></i>
+                    <span class="d-none d-xl-inline-block ml-1">Logout</span>
+                </a>
+            </div>
+            @endauth
 
+            @guest
+            <div class="d-inline-block">
+                <a  href="{{ url('/login') }}" type="button" class="btn header-item waves-effect">
+                    <br>
+                    <i class="bx bx-log-in"></i>
+                    <span class="d-none d-xl-inline-block ml-1">Login</span>
+                </a>
+            </div>
+            <div type="button" class="d-inline-block">
+                <a href="{{ url('/') }}" class="btn header-item waves-effect">
+                    <br>
+                    <i class="fas fa-user-plus"></i>
+                    <span class="d-none d-xl-inline-block ml-1">Register</span>
+                </a>
+            </div>
+            @endguest
+
+        </div>
+    </div>
+</header>
 </div>
 
 
