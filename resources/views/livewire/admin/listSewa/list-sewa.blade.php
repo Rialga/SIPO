@@ -1,96 +1,108 @@
 <div>
 
     <livewire:layouts.admin-header />
+    <livewire:layouts.admin-sidebar />
 
-     <div class="inner-wrapper" style="background: #e1e2e5 ">
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
 
-         <livewire:layouts.admin-sidebar />
-
-         <section role="main" class="content-body">
-             <header class="page-header">
-                 <h2><a href="{{ url('/') }}"><i class="fas fa-home"></i></a></h2>
-             </header>
-
-             <div style="display: flex; justify-content: flex-end">
-                <a class=" btn btn-rounded btn-primary box-shadow-2 mb-2" data-toggle="modal" data-target="#modalJenisAlat" style="color: white">
-                    <i class="fas fa-plus"></i> Tambah Data
-                </a>
-            </div>
-
-            {{-- MODAL --}}
-            <div class="modal fade" id="modalJenisAlat" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="formModalLabel">Form Jenis Alat</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0 font-size-18">Sewat</h4>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <form id="demo-form" class="mb-4" novalidate="novalidate">
-                                <div class="form-group row align-items-center">
-                                    <label class="col-sm-3 text-left text-sm-right mb-0">Jenis Alat</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" name="jenisAlat" class="form-control" placeholder="Jenis Alat"  required/>
-                                    </div>
-                                    @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-sm-3 text-left text-sm-right mb-0">Harga Sewa</label>
-                                    <div class="col-sm-6">
-                                        <div class="input-group">
-                                            <label class="pt-2">Rp:</label> &nbsp;&nbsp;&nbsp;
-                                            <input type="number" name="jenisHarga" class="form-control" placeholder="Harga Sewa"  required/>
+                    </div>
+                    <!-- end page title -->
+
+                    {{-- @if($formJenis)
+
+                        @include('livewire.admin.jenis.jenisForm')
+
+                    @else --}}
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-2">
+                                        <div class="col-sm-4">
+                                            <div class="search-box mr-2 mb-2 d-inline-block">
+                                                <div class="position-relative">
+                                                    <input type="text" class="form-control" placeholder="Search...">
+                                                    <i class="bx bx-search-alt search-icon"></i>
+                                                </div>
+                                            </div>
                                         </div>
-                                        @error('fieldJenisHarga') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
+                                        <div class="col-sm-8">
+                                            <div class="text-sm-right">
+                                                {{-- <button wire:click="showFormJenis" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Jenis Alat</button> --}}
+                                            </div>
+                                        </div><!-- end col-->
+                                    </div>
+                                    <div class="table-responsive"">
+                                        <table class="table table-hover mb-0"" style="text-align: center">
+                                            <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Jenis Alat</th>
+                                                <th>Harga</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            {{-- @if ($dataJenis->count() == 0) --}}
+                                                <tr>
+                                                    <td colspan="5" style="text-align: center">Tidak Ada data yang Akan ditampilkan</td>
+                                                </tr>
+                                            {{-- @else --}}
+                                                {{-- @foreach ($dataJenis as $row) --}}
+                                                {{-- <tr>
+                                                    <td>{{$loop->iteration}}</td>
+                                                    <td>{{$row->jenis_alat_nama}}</td>
+                                                    <td>Rp. {{$row->jenis_alat_harga}}</td>
+                                                    <td>
+                                                        <a wire:click="editPage('{{ $row->jenis_alat_id }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-edit" style="color: white"></i></a>
+                                                        <a wire:click="delete('{{ $row->jenis_alat_id }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
+                                                    </td>
+                                                </tr>
+                                                @endforeach --}}
+                                            {{-- @endif --}}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+
+                    {{-- @endif --}}
+                </div> <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            2020 © Sumbar Mountain Advanture.
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Submit</button>
+                        <div class="col-sm-6">
+                            <div class="text-sm-right d-none d-sm-block">
+                                SIPO Sumber Mountain Advanture
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </footer>
+        </div>
 
-             {{-- TABLE --}}
-             <div class="row">
-                 <div class="col">
-                     <section class="card">
-                         <header class="card-header">
-                             <h2 class="card-title">Data List Transaski penyewaan</h2>
-                              <div class="card-actions">
-                                  <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                              </div>
-                         </header>
-
-                         <div class="card-body">
-                             <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Jenis Alat</th>
-                                        <th>Harga Sewa</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                </tbody>
-
-                             </table>
-                         </div>
-                     </section>
-                 </div>
-             </div>
-
-         </section>
-     </div>
-</div>
+    </div>
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-</script>
+
+    </script>

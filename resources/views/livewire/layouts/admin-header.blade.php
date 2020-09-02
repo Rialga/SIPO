@@ -76,14 +76,16 @@
             <div class="dropdown">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown">
                     <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar" style="position:relative;  top:-6px;">
+                    @auth
                     <span class="d-none d-xl-inline-block ml-1" style="position:relative;  top:10px;"> {{ Auth::user()->user_nama }} <br>( {{ Auth::user()->role->role_nama }} )</span>
+                    @endauth
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" id="page-header-user-dropdown">
                     <!-- item-->
                     <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle mr-1"></i> Profile</a>
                     <div class="dropdown-divider"></div>
-                    <a wire:click="logout" class="dropdown-item text-danger"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+                    <a wire:click="logout" class="dropdown-item text-danger" style="cursor: pointer;"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
                 </div>
             </div>
         </div>

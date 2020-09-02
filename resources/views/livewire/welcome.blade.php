@@ -3,7 +3,6 @@
 
 <div class="main-content" style="margin: auto;">
 
-
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
@@ -27,7 +26,9 @@
                         </div>
                     </div>
 
+
                     <div class="row">
+                        @foreach ($dataAlat as $item)
                         <div class="col-xl-3 col-sm-4">
                             <div class="card">
                                 <div class="card-body">
@@ -42,16 +43,16 @@
                                         </a>
                                     </div>
                                     <div class="mt-4 text-center">
-                                        <h5 class="mb-3 text-truncate"><a href="#" class="text-dark">Nama </a></h5>
-
-                                        <h5 class="my-0"><span class="text-muted mr-2"></span> <b>Rp 20000 / Hari</b></h5>
-
+                                        <h5 class="mb-3 text-truncate"><a href="#" class="text-dark">{{ $item->jenis_alat->jenis_alat_nama }} - {{ $item->merk->merk_nama }}</a></h5>
+                                        <h5 class="mb-3 text-truncate"><a href="#" class="text-dark">({{ $item->alat_tipe }})</a></h5>
+                                        <h5 class="my-0"><span class="text-muted mr-2"></span> <b>Rp {{ $item->jenis_alat->jenis_alat_harga }} / Hari</b></h5>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
+                        @endforeach
                     </div>
+
                     <!-- end row -->
 
                     <div class="row">

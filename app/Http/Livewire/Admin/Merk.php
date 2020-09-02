@@ -4,16 +4,42 @@ namespace App\Http\Livewire\Admin;
 
 use App\Model\Merk as ModelMerk;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class Merk extends Component
 {
 
+    use WithPagination;
     public $dataMerk;
     public $fieldMerkNama;
     public $fieldMerkId;
 
     public $formMerk = false;
     public $updateMode = false;
+
+    public $sortBy = 'merk_id';
+    public $sortDiraction = 'asc';
+    public $showPage = 10;
+    public $search='';
+
+    //Show View
+    public function render()
+    {
+        $data = ModelMerk::search($this->search)
+        ->orderBy($this->sortBy, $this->sortDiraction)
+        ->paginate($this->showPage);
+        return view('livewire.admin.merk.merkShow',['data'=>$data]);
+    }
+
+    public function sortBy($field){
+        if ($this->sortDiraction == 'asc' ){
+            $this->sortDiraction = 'desc';
+        }
+        else{
+            $this->sortDiraction = 'asc';
+        }
+
+        return $this->sortBy = $field;
+    }
 
 
     //Create Data
@@ -77,11 +103,7 @@ class Merk extends Component
         $this->formMerk = true;
     }
 
-    public function render()
-    {
-        $this->dataMerk = ModelMerk::all();
-        return view('livewire.admin.merk.merkShow');
-    }
+
 
     public function clearForm(){
         $this->validate([]);

@@ -10,11 +10,13 @@ use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 use App\Model\Alat as ModelAlat;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManagerStatic;
+use Livewire\WithPagination;
+
 
 class Alat extends Component
 {
     use WithFileUploads;
+    use WithPagination;
 
     public $gambar=[];
 
@@ -37,6 +39,39 @@ class Alat extends Component
     public $checkKode = false;
     public $pageJenis = false;
     public $pageMerk = false;
+
+    public $sortBy = 'alat_kode';
+    public $sortDiraction = 'asc';
+    public $showPage = 10;
+    public $search = '';
+
+
+    // Return View
+    public function render()
+    {
+        $data=   ModelAlat::search($this->search)
+        ->orderBy($this->sortBy, $this->sortDiraction)
+        ->paginate($this->showPage);
+
+        $this->dataMerk = Merk::all();
+        $this->dataJenis = JenisAlat::all();
+
+
+        return view('livewire.admin.alat.alatShow',['data'=>$data]);
+    }
+
+    // sorting
+    public function sortBy($field){
+        if ($this->sortDiraction == 'asc' ){
+            $this->sortDiraction = 'desc';
+        }
+        else{
+            $this->sortDiraction = 'asc';
+        }
+
+        return $this->sortBy = $field;
+    }
+
 
     // Check Kode alat
     public function checkKodeAlat(){
@@ -245,17 +280,6 @@ class Alat extends Component
         $this->idDiv = 0;
         $this->idPic = 0;
         $this->detailMode = true;
-    }
-
-    // Return View
-    public function render()
-    {
-        $this->dataAlat = ModelAlat::all();
-        $this->dataMerk = Merk::all();
-        $this->dataJenis = JenisAlat::all();
-
-
-        return view('livewire.admin.alat.alatShow');
     }
 
 

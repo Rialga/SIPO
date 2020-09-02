@@ -15,4 +15,11 @@ class JenisAlat extends Model
     public function alat() {
         return $this->hasMany('App\Model\Alat', 'alat_jenis', 'jenis_alat_id');
     }
+
+    public function scopeSearch($query,$val){
+        return $query
+        ->where('jenis_alat_nama','like','%' .$val. '%')
+        ->Orwhere('jenis_alat_harga','like','%' .$val. '%');
+    }
+
 }

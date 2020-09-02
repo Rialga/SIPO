@@ -9,7 +9,7 @@ class Alat extends Model
     protected $table = 'alat';
     protected $primaryKey = 'alat_kode';
     protected $fillable = [
-        'alat_kode' , 'alat_jenis' , 'alat_merk' , 'alat_tipe' ,'alat_status' , 'alat_total'
+        'alat_kode' , 'alat_jenis' , 'alat_merk' , 'alat_tipe' , 'alat_total'
     ];
 
     public $incrementing = false;
@@ -35,5 +35,15 @@ class Alat extends Model
     public function penyewaan_pengembalian()
     {
         return $this->belongsToMany('App\Model\Penyewaan','pengembalian','pengembalian_kodealat','pengembalian_nosewa');
+    }
+
+
+    public function scopeSearch($query,$val){
+        return $query
+        ->where('alat_kode','like','%' .$val. '%')
+        ->Orwhere('alat_jenis','like','%' .$val. '%')
+        ->Orwhere('alat_merk','like','%' .$val. '%')
+        ->Orwhere('alat_tipe','like','%' .$val. '%')
+        ->Orwhere('alat_total','like','%' .$val. '%');
     }
 }

@@ -4,10 +4,12 @@ namespace App\Http\Livewire\Admin;
 
 use App\Model\KondisiAlat;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class KelolaDenda extends Component
 {
 
+    use WithPagination;
 
     public $dataKondisi;
     public $fieldKondisiKet;
@@ -17,6 +19,33 @@ class KelolaDenda extends Component
 
     public $formKondisi = false;
     public $updateMode = false;
+
+    public $sortBy = 'kondisi_id';
+    public $sortDiraction = 'asc';
+    public $showPage = 10;
+    public $search='';
+
+
+    //Return View
+    public function render()
+    {
+        $data = KondisiAlat::search($this->search)
+        ->orderBy($this->sortBy, $this->sortDiraction)
+        ->paginate($this->showPage);
+        return view('livewire.admin.kelolaDenda.kelolaDendaShow',['data'=>$data]);
+    }
+
+    // sorting
+    public function sortBy($field){
+        if ($this->sortDiraction == 'asc' ){
+            $this->sortDiraction = 'desc';
+        }
+        else{
+            $this->sortDiraction = 'asc';
+        }
+
+        return $this->sortBy = $field;
+    }
 
 
     //Create
@@ -34,8 +63,6 @@ class KelolaDenda extends Component
 
         return $this->clearForm();
     }
-
-
 
 
     // Update
@@ -86,11 +113,6 @@ class KelolaDenda extends Component
     }
 
 
-    public function render()
-    {
-        $this->dataKondisi = KondisiAlat::all();
-        return view('livewire.admin.kelolaDenda.kelolaDendaShow');
-    }
 
 
     public function clearForm(){

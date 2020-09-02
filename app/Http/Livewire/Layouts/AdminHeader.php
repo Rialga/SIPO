@@ -9,7 +9,6 @@ class AdminHeader extends Component
 {
 
     public function logout(){
-
         Auth::logout();
         return redirect('/login');
     }

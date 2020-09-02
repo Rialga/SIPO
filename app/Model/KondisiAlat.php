@@ -16,4 +16,10 @@ class KondisiAlat extends Model
     public function pengembalian() {
         return $this->hasMany('App\Model\Pengembalian', 'pengembalian_kondisi', 'kondisi_id');
     }
+
+    public function scopeSearch($query,$val){
+        return $query
+        ->where('kondisi_keterangan','like','%' .$val. '%')
+        ->Orwhere('kondisi_dendarusak','like','%' .$val. '%');
+    }
 }

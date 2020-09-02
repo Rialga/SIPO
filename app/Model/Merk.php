@@ -17,4 +17,9 @@ class Merk extends Model
     public function gambar() {
         return $this->hasMany('App\Model\Alat', 'alat_merk', 'merk_id');
     }
+
+    public function scopeSearch($query,$val){
+        return $query
+        ->where('merk_nama','like','%' .$val. '%');
+    }
 }
