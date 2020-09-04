@@ -11,66 +11,106 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0 font-size-18">Sewat</h4>
+                                <h4 class="mb-0 font-size-18">Sewa</h4>
                             </div>
                         </div>
                     </div>
                     <!-- end page title -->
 
-                    {{-- @if($formJenis)
+                    @if($formSewa)
 
-                        @include('livewire.admin.jenis.jenisForm')
+                         @include('livewire.admin.listSewa.sewaForm')
 
-                    @else --}}
+                   @else
+
 
                     <div class="row">
+
+                        <div class="col-sm-12">
+                            <div class="text-sm-right">
+                                <button wire:click="showFormSewa" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Jenis Alat</button>
+                            </div>
+                        </div>
+
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="row mb-2">
-                                        <div class="col-sm-4">
-                                            <div class="search-box mr-2 mb-2 d-inline-block">
+
+                                        <div class="col-sm-4 mb-2">
+                                            <div class="col form-inline">
+                                                <label>Show Page:</label> &nbsp;&nbsp;&nbsp;
+                                                <select class="form-control" style="width: 70px" wire:model="showPage">
+                                                    <option value="2">2</option>
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-8" style="display: flex; justify-content: flex-end">
+                                            <div class="search-box mr-5 mb-2 d-inline-block">
                                                 <div class="position-relative">
-                                                    <input type="text" class="form-control" placeholder="Search...">
+                                                    <input type="text" class="form-control" placeholder="Search..." wire:model.debounce.300ms="search">
                                                     <i class="bx bx-search-alt search-icon"></i>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-8">
-                                            <div class="text-sm-right">
-                                                {{-- <button wire:click="showFormJenis" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Jenis Alat</button> --}}
-                                            </div>
-                                        </div><!-- end col-->
+
+                                    <!-- end col-->
                                     </div>
                                     <div class="table-responsive"">
                                         <table class="table table-hover mb-0"" style="text-align: center">
                                             <thead>
                                             <tr>
-                                                <th>No</th>
-                                                <th>Jenis Alat</th>
-                                                <th>Harga</th>
+                                                <th wire:click="sortBy('sewa_no')" style="cursor: pointer;">
+                                                    No Invoice
+                                                    @include('addOn.sort-icon',['field'=>'sewa_no'])
+                                                </th>
+                                                <th> Nama Penyewa </th>
+                                                <th wire:click="sortBy('sewa_tglsewa')" style="cursor: pointer;">
+                                                    Tanggal Pinjam
+                                                    @include('addOn.sort-icon',['field'=>'sewa_tglsewa'])
+                                                </th>
+                                                <th wire:click="sortBy('sewa_tglkembali')" style="cursor: pointer;">
+                                                    Tanggal Kembali
+                                                    @include('addOn.sort-icon',['field'=>'sewa_tglkembali'])
+                                                </th>
+                                                <th wire:click="sortBy('sewa_status')" style="cursor: pointer;">
+                                                    Status
+                                                    @include('addOn.sort-icon',['field'=>'sewa_status'])
+                                                </th>
                                                 <th>Aksi</th>
                                             </tr>
                                             </thead>
 
                                             <tbody>
-                                            {{-- @if ($dataJenis->count() == 0) --}}
+                                            @if ($data->count() == 0)
                                                 <tr>
                                                     <td colspan="5" style="text-align: center">Tidak Ada data yang Akan ditampilkan</td>
                                                 </tr>
-                                            {{-- @else --}}
-                                                {{-- @foreach ($dataJenis as $row) --}}
-                                                {{-- <tr>
-                                                    <td>{{$loop->iteration}}</td>
-                                                    <td>{{$row->jenis_alat_nama}}</td>
-                                                    <td>Rp. {{$row->jenis_alat_harga}}</td>
+                                            @else
+                                                @foreach ($data as $row)
+                                                <tr>
+                                                    <td>{{$row->sewa_no}}</td>
+                                                    @if($row->sewa_status == 1)
+                                                    <td>{{$row->user->user_nama}}</td>
+                                                    @else
+                                                    <td>{{$row->sewa_offnama}}</td>
+                                                    @endif
+                                                    <td>{{$row->sewa_tglsewa}}</td>
+                                                    <td>{{$row->sewa_tglkembali}}</td>
+                                                    <td>{{$row->sewa_status}}</td>
                                                     <td>
-                                                        <a wire:click="editPage('{{ $row->jenis_alat_id }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-edit" style="color: white"></i></a>
-                                                        <a wire:click="delete('{{ $row->jenis_alat_id }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
+                                                        <a wire:click="detail('{{ $row->sewa_no }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="detail"><i class="fas fa-eye" style="color: white"></i></a>
+                                                        <a wire:click="editPage('{{ $row->sewa_no }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-edit" style="color: white"></i></a>
+                                                        <a wire:click="delete('{{ $row->sewa_on }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
                                                     </td>
                                                 </tr>
-                                                @endforeach --}}
-                                            {{-- @endif --}}
+                                                @endforeach
+                                            @endif
                                             </tbody>
                                         </table>
                                     </div>
@@ -79,7 +119,7 @@
                         </div> <!-- end col -->
                     </div> <!-- end row -->
 
-                    {{-- @endif --}}
+                    @endif
                 </div> <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
@@ -98,7 +138,73 @@
                 </div>
             </footer>
         </div>
+    </div>
 
+</div>
+    <div class="modal fade exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Order Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-2">No Invoice : <span class="text-primary">#SK2540</span></p>
+                    <p class="mb-4">Nama Penyewa : <span class="text-primary"> </span></p>
+
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap">
+                            <thead>
+                                <tr>
+                                <th scope="col">Pic</th>
+                                <th scope="col">Nama Alat</th>
+                                <th scope="col">Harga</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">
+                                        <div>
+                                            <img src="assets/images/product/img-7.png" alt="" class="avatar-sm">
+                                        </div>
+                                    </th>
+                                    <td>
+                                        <div>
+                                            <h5 class="text-truncate font-size-14">Wireless Headphone (Black)</h5>
+                                            <p class="text-muted mb-0">$ 225 x 1</p>
+                                        </div>
+                                    </td>
+                                    <td>$ 255</td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <h6 class="m-0 text-right">Sub Total:</h6>
+                                    </td>
+                                    <td>
+                                        $ 400
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <h6 class="m-0 text-right">Total:</h6>
+                                    </td>
+                                    <td>
+                                        $ 400
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
 

@@ -268,6 +268,19 @@ class Alat extends Component
     // Show Edit Page
     public function editPage($id){
 
+
+        $this->dataGambar = GambarAlat::where('gambar_kodealat',$id)->get();
+
+        $fieldAlat = ModelAlat::findOrfail($id);
+        $this->inputKodeAlat = $fieldAlat->alat_kode;
+        $this->selectJenisAlat = $fieldAlat->alat_jenis;
+        $this->selectMerk = $fieldAlat->alat_merk;
+        $this->inputTipe = $fieldAlat->alat_tipe;
+        $this->inputJumlah = $fieldAlat->alat_total;
+
+        $this->updateMode = true;
+        $this->formAlat = true;
+
     }
 
     // Show Detail Page

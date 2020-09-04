@@ -41,9 +41,13 @@ class Alat extends Model
     public function scopeSearch($query,$val){
         return $query
         ->where('alat_kode','like','%' .$val. '%')
-        ->Orwhere('alat_jenis','like','%' .$val. '%')
-        ->Orwhere('alat_merk','like','%' .$val. '%')
-        ->Orwhere('alat_tipe','like','%' .$val. '%')
-        ->Orwhere('alat_total','like','%' .$val. '%');
+        ->Orwhere('alat_total','like','%' .$val. '%')
+        ->orWhereHas('jenis_alat',function ($query) use($val){
+            $query->where('jenis_alat_nama', 'like','%' .$val. '%');
+        })
+        ->orWhereHas('merk',function ($query) use($val){
+            $query->where('merk_nama', 'like','%' .$val. '%');
+        });
+
     }
 }

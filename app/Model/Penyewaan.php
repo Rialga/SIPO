@@ -9,7 +9,7 @@ class Penyewaan extends Model
     protected $table = 'penyewaan';
     protected $primaryKey = 'sewa_no';
     protected $fillable = [
-        'sewa_no' , 'sewa_jenis' , 'sewa_status' , 'sewa_user' , 'sewa_tglsewa' , 'sewa_tglbayar' , 'sewa_tglkembali' , 'sewa_buktitf' , 'sewa_offnama' , 'sewa_offphone'
+        'sewa_no' , 'sewa_jenis' , 'sewa_status' , 'sewa_user' , 'sewa_tglsewa' , 'sewa_tglbayar' , 'sewa_tglkembali' , 'sewa_tujuan', 'sewa_buktitf' , 'sewa_offnama' , 'sewa_offphone'
     ];
 
     public $incrementing = false;
