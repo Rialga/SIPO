@@ -87,6 +87,12 @@
                             </a>
                         </li>
                         <li>
+                            <a href="{{ url('/pembayaran') }}" class="waves-effect">
+                                <i class="mdi mdi-wallet"></i>
+                                <span>Pembayaran</span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="{{ url('/pengembalian') }}" class=" waves-effect">
                                 <i class="fas fa-check-circle"></i>
                                 <span>Pengembalian</span>

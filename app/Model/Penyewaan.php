@@ -27,13 +27,19 @@ class Penyewaan extends Model
 
 
     //Many to many
-    public function alat_detail_sewa()
+    public function alat_sewa()
     {
-        return $this->belongsToMany('App\Model\Alat','detail_sewa','detail_laporan_nosewa','detail_sewa_alat_kode');
+        return $this->belongsToMany('App\Model\Alat','detail_sewa', 'detail_sewa_nosewa' , 'detail_sewa_alat_kode');
     }
 
-    public function alat_pengembalian()
+    public function alat_kembali()
     {
         return $this->belongsToMany('App\Model\Alat','pengembalian','pengembalian_nosewa','pengembalian_kodealat');
     }
+
+    // Foreignkey pada table Lain
+    public function detail_sewa() {
+        return $this->hasMany('App\Model\DetailSewa', 'detail_sewa_nosewa', 'sewa_no');
+    }
+
 }

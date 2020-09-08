@@ -3,38 +3,42 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Model\Alat;
+use App\Model\DetailSewa;
 use App\Model\Penyewaan;
 use Carbon\Carbon;
 use Livewire\Component;
+use phpDocumentor\Reflection\Types\This;
 
 class ListSewa extends Component
 {
 
-    public $tglPinjam , $tglKembali , $sewaNohp , $sewaNama , $sewaTujuan;
+    public $invoice, $tglPinjam , $tglKembali , $sewaNohp , $sewaNama , $sewaTujuan, $tglBayar, $sewaStatus;
+
+    public $sewaTglCreate = null;
 
     public $alat = [];
     public $stok = [];
 
-    public $dataAlat;
+    public $dataSewa , $dataAlat;
 
     public $formSewa = false;
-    public $updateMode = false;
+    public $detailPage = false;
 
+    public $hargaTotal = 0;
 
     public $inputs = [];
-    public $num = 1;
+    public $num = 0;
 
-    public $sortBy = 'jenis_alat_id';
+    public $sortBy = 'sewa_no';
     public $sortDiraction = 'asc';
     public $showPage = 10;
     public $search='';
 
 
-
-    // methode mount() ready saat component di render
     public function mount(){
 
         $this->dataAlat = Alat::all();
+
     }
 
     // View
@@ -57,35 +61,84 @@ class ListSewa extends Component
         return $this->sortBy = $field;
     }
 
+    public function checkTotal(){
+
+
+        foreach ($this->stok as $key => $value) {
+
+            $alat = Alat::where('alat_kode', $this->alat[$key])->first();
+
+            $harga = $alat->jenis_alat->jenis_alat_harga;
+
+            $total = $harga * $this->stok[$key];
+
+            $price[] = $total;
+
+        }
+
+             $this->hargaTotal = array_sum($price);
+
+    }
 
 
     // add field
 
-    public function add($num)
+    public function add($num, $val)
     {
         $num++;
         $this->num = $num;
         array_push($this->inputs ,$num);
+
+        return $this->checkTotal();
+
     }
 
-    public function remove($num)
+    public function remove($num , $val)
     {
+
+        unset($this->stok[$val]);
+        unset($this->alat[$val]);
+
         unset($this->inputs[$num]);
+
+        return $this->checkTotal();
+
+
     }
 
 
     // Create
     public function create(){
 
-        $invoice = 'INV/II/'.Carbon::today();
+        $invoice = 'INVC/II/'.Carbon::now()->format('Ymd/His');
 
-        dd($invoice);
+        $createSewa = new Penyewaan();
 
-        // foreach ($this->stok as $key => $value) {
+        $createSewa->sewa_no = $invoice;
+        $createSewa->sewa_jenis = 2;
+        $createSewa->sewa_status = 3;
+        $createSewa->sewa_tglsewa = $this->tglPinjam;
+        $createSewa->sewa_tglkembali = $this->tglKembali;
+        $createSewa->sewa_offphone = $this->sewaNohp;
+        $createSewa->sewa_offnama = $this->sewaNama;
+        $createSewa->sewa_buktitf = 'Lunas';
+        $createSewa->sewa_tglbayar = Carbon::now();
+        $createSewa->sewa_tujuan = $this->sewaTujuan;
 
-        //     $inikey[] = $key;
-        //     $inivalue[] = $value;
-        // }
+        $createSewa->save();
+
+        foreach ($this->stok as $key => $value) {
+            $detail = new DetailSewa();
+
+            $detail->detail_sewa_alat_kode = $this->alat[$key];
+            $detail->detail_sewa_nosewa = $invoice;
+            $detail->detail_sewa_total = $this->stok[$key];
+
+            $detail->save();
+
+        }
+
+        return $this->clearForm();
 
     }
 
@@ -93,6 +146,27 @@ class ListSewa extends Component
     // Upadate
     public function update(){
 
+    }
+
+
+    // Show Edit page
+    public function showDetailPage($id){
+
+        $this->dataSewa = Penyewaan::find($id);
+
+
+
+        $this->invoice =  $this->dataSewa->sewa_no;
+        $this->sewaNama = $this->dataSewa->sewa_offnama;
+        $this->sewaNohp = $this->dataSewa->sewa_offphone;
+        $this->sewaTujuan = $this->dataSewa->sewa_tujuan;
+        $this->tglKembali = $this->dataSewa->sewa_tglkembali;
+        $this->tglPinjam = $this->dataSewa->sewa_tglsewa;
+        $this->tglBayar = $this->dataSewa->sewa_tglbayar;
+        $this->sewaStatus = $this->dataSewa->status_sewa->status_detail;
+        $this->sewaTglCreate = Carbon::parse($this->dataSewa->created_at)->format('d, M Y');
+
+        $this->detailPage = true;
     }
 
     // Show Page Add
@@ -103,11 +177,22 @@ class ListSewa extends Component
     //Cleat form
     public function clearForm(){
 
+        $this->tglPinjam = null;
+        $this->tglKembali = null;
+        $this->sewaNama = null;
+        $this->sewaNohp = null;
+        $this->sewaTujuan = null;
+        $this->invoice = null;
+
+
         $this->formSewa = false;
-        $this->updateMode = false;
+        $this->detailPage = false;
 
         $this->inputs = [];
         $this->num = 1;
+
+
+        $this->hargaTotal = 0;
 
         $this->alat = [];
         $this->stok = [];

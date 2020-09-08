@@ -12,6 +12,9 @@
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between">
                                 <h4 class="mb-0 font-size-18">Sewa</h4>
+
+                                <h4 wire:loading> Loading . . . </h4>
+
                             </div>
                         </div>
                     </div>
@@ -21,7 +24,12 @@
 
                          @include('livewire.admin.listSewa.sewaForm')
 
-                   @else
+                    @elseif($detailPage)
+
+                        @include('livewire.admin.listSewa.sewaDetail')
+
+
+                    @else
 
 
                     <div class="row">
@@ -82,7 +90,7 @@
                                                     Status
                                                     @include('addOn.sort-icon',['field'=>'sewa_status'])
                                                 </th>
-                                                <th>Aksi</th>
+                                                <th>Update Status</th>
                                             </tr>
                                             </thead>
 
@@ -94,7 +102,7 @@
                                             @else
                                                 @foreach ($data as $row)
                                                 <tr>
-                                                    <td>{{$row->sewa_no}}</td>
+                                                    <td class="btn waves-effect waves-light" title="Detail" wire:click="showDetailPage('{{$row->sewa_no}}')">{{$row->sewa_no}}</td>
                                                     @if($row->sewa_status == 1)
                                                     <td>{{$row->user->user_nama}}</td>
                                                     @else
@@ -102,11 +110,9 @@
                                                     @endif
                                                     <td>{{$row->sewa_tglsewa}}</td>
                                                     <td>{{$row->sewa_tglkembali}}</td>
-                                                    <td>{{$row->sewa_status}}</td>
+                                                    <td>{{$row->status_sewa->status_detail}}</td>
                                                     <td>
-                                                        <a wire:click="detail('{{ $row->sewa_no }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="detail"><i class="fas fa-eye" style="color: white"></i></a>
-                                                        <a wire:click="editPage('{{ $row->sewa_no }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-edit" style="color: white"></i></a>
-                                                        <a wire:click="delete('{{ $row->sewa_on }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
+                                                        <a wire:click="showEditPage('{{ $row->sewa_no }}')" class="btn btn-info btn-rounded waves-effect waves-light" title="Update Status"><i class="fas fa-sync-alt" style="color: white"></i></a>
                                                     </td>
                                                 </tr>
                                                 @endforeach

@@ -27,12 +27,16 @@ class Alat extends Model
         return $this->hasMany('App\Model\GambarAlat', 'gambar_kodealat', 'alat_kode');
     }
 
-    //Many to many
-    public function penyewaan_detail_sewa()
-    {
-        return $this->belongsToMany('App\Model\Penyewaan','detail_sewa','detail_laporan_alat_kode','detail_laporan_nosewa');
+    public function detail_sewa() {
+        return $this->hasMany(DetailSewa::Class, 'detail_sewa_alat_kode', 'alat_kode');
     }
-    public function penyewaan_pengembalian()
+
+    //Many to many
+    public function alat_sewa()
+    {
+            return $this->belongsToMany('App\Model\Penyewaan','detail_sewa','detail_sewa_alat_kode','detail_sewa_nosewa');
+    }
+    public function alat_kembali()
     {
         return $this->belongsToMany('App\Model\Penyewaan','pengembalian','pengembalian_kodealat','pengembalian_nosewa');
     }

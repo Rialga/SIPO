@@ -30,6 +30,7 @@ Route::livewire('/merk','admin.merk');
 Route::livewire('/kelola-denda','admin.kelola-denda');
 
 Route::livewire('/list-sewa','admin.list-sewa');
+Route::livewire('/pembayaran','admin.konfirmasi-pembayaran');
 Route::livewire('/pengembalian','admin.konfirmasi-pengembalian');
 
 Route::livewire('/report-penyewaan','admin.report-penyewaan');
