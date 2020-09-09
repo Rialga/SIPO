@@ -13,6 +13,41 @@
                         <div class="col-sm-6 text-sm-center">
                             <address>
                                 <strong>Detail Sewa</strong><br><br>
+
+                                <div class="text-sm-left">
+                                    <table>
+                                        <tr>
+                                            <td>Nama</td>
+                                            <td>:</td>
+                                            @if($dataSewa->sewa_status == 1)
+                                            <td>{{ $dataSewa->user->user_nama }}</td>
+                                            @else
+                                            <td>{{ $dataSewa->sewa_offnama }}</td>
+                                            @endif
+                                        </tr>
+                                        <tr>
+                                            <td>No HP</td>
+                                            <td>:</td>
+                                            @if($dataSewa->sewa_status == 1)
+                                            <td>{{ $dataSewa->user->user_phone }}</td>
+                                            @else
+                                            <td>{{ $dataSewa->sewa_offphone }}</td>
+                                            @endif
+                                        </tr>
+                                        <tr>
+                                            <td> Waktu  </td>
+                                            <td>:</td>
+                                            <td>{{ \Carbon\Carbon::parse($dataSewa->sewa_tglpinjam)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} ({{ $totalHari }} hari)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Tujuan</td>
+                                            <td>:</td>
+                                            <td>{{ $dataSewa->sewa_tujuan }}</td>
+                                        </tr>
+                                    </table>
+                                </div><br><br>
+
+
                                     <div class="table-responsive">
                                         <table class="table table-nowrap">
                                             <thead>
@@ -22,7 +57,7 @@
                                                     <th style="width: 20px;">Jumlah</th>
                                                     <th class="text-right">Harga Sewa</th>
                                                     <th class="text-right"></th>
-                                                    <th class="text-right">Sub Total</th>
+                                                    <th class="text-right">Total</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -43,7 +78,24 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <h4 class="text-right"> <strong>Total</strong> : Rp 141.000</h4>
+
+                                    <div  class="float-right">
+                                        <table class="text-sm-left">
+                                            <tr>
+                                                <td style="width:150px"> Total Alat </td>
+                                                <td class="text-right"> Rp.  {{ $subTotal }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:150px"> Durasi Peminjaman </td>
+                                                <td class="text-right"> {{ $totalHari }} Hari</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="width:0px"><strong> Total Sewa </strong></td>
+                                                <td class="text-right"><h4> Rp. {{ $grandTotal }}</h4></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+
                             </address>
                         </div>
                         <div class="col-sm-6 text-sm-center">

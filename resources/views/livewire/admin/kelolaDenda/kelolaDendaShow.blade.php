@@ -63,7 +63,7 @@
                                             <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th wire:click="sortBy('kondisi_keterangan')" style="cursor: pointer;">
+                                                <th class="text-sm-left" wire:click="sortBy('kondisi_keterangan')" style="cursor: pointer;">
                                                     Kondisi Alat
                                                     @include('addOn.sort-icon',['field'=>'kondisi_keterangan'])
                                                 </th>
@@ -84,7 +84,7 @@
                                                 @foreach ($data as $row)
                                                 <tr>
                                                     <td>{{$loop->iteration}}</td>
-                                                    <td>{{$row->kondisi_keterangan}}</td>
+                                                    <td class="text-sm-left">{{$row->kondisi_keterangan}}</td>
                                                     <td>Rp. {{$row->kondisi_dendarusak}}</td>
                                                     <td>
                                                         <a wire:click="editPage('{{ $row->kondisi_id }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-edit" style="color: white"></i></a>

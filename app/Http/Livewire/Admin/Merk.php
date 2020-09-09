@@ -113,5 +113,10 @@ class Merk extends Component
         $this->formMerk = false;
         $this->updateMode = false;
 
+        $this->sortBy = 'merk_id';
+        $this->sortDiraction = 'asc';
+        $this->showPage = 10;
+        $this->search='';
+
     }
 }

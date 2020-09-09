@@ -1,96 +1,140 @@
 <div>
 
     <livewire:layouts.admin-header />
+    <livewire:layouts.admin-sidebar />
 
-     <div class="inner-wrapper" style="background: #e1e2e5 ">
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
 
-         <livewire:layouts.admin-sidebar />
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0 font-size-18">Konfirmasi Pengembalian</h4>
 
-         <section role="main" class="content-body">
-             <header class="page-header">
-                 <h2><a href="{{ url('/') }}"><i class="fas fa-home"></i></a></h2>
-             </header>
+                                <h4 wire:loading> Loading . . . </h4>
 
-             <div style="display: flex; justify-content: flex-end">
-                <a class=" btn btn-rounded btn-primary box-shadow-2 mb-2" data-toggle="modal" data-target="#modalJenisAlat" style="color: white">
-                    <i class="fas fa-plus"></i> Tambah Data
-                </a>
-            </div>
-
-            {{-- MODAL --}}
-            <div class="modal fade" id="modalJenisAlat" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="formModalLabel">Form Jenis Alat</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <form id="demo-form" class="mb-4" novalidate="novalidate">
-                                <div class="form-group row align-items-center">
-                                    <label class="col-sm-3 text-left text-sm-right mb-0">Jenis Alat</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" name="jenisAlat" class="form-control" placeholder="Jenis Alat"  required/>
-                                    </div>
-                                    @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-sm-3 text-left text-sm-right mb-0">Harga Sewa</label>
-                                    <div class="col-sm-6">
-                                        <div class="input-group">
-                                            <label class="pt-2">Rp:</label> &nbsp;&nbsp;&nbsp;
-                                            <input type="number" name="jenisHarga" class="form-control" placeholder="Harga Sewa"  required/>
+                    </div>
+                    <!-- end page title -->
+
+                @if($detailPage)
+
+
+                    @include('livewire.admin.konfirmasiPengembalian.pengembalianDetail')
+
+
+                @else
+
+
+                <div class="row">
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-2">
+
+                                    <div class="col-sm-4 mb-2">
+                                        <div class="col form-inline">
+                                            <label>Show Page:</label> &nbsp;&nbsp;&nbsp;
+                                            <select class="form-control" style="width: 70px" wire:model="showPage">
+                                                <option value="2">2</option>
+                                                <option value="5">5</option>
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                            </select>
                                         </div>
-                                        @error('fieldJenisHarga') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="col-sm-8" style="display: flex; justify-content: flex-end">
+                                        <div class="search-box mr-5 mb-2 d-inline-block">
+                                            <div class="position-relative">
+                                                <input type="text" class="form-control" placeholder="Search..." wire:model.debounce.300ms="search">
+                                                <i class="bx bx-search-alt search-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <!-- end col-->
+                                </div>
+                                <div class="table-responsive"">
+                                    <table class="table table-hover mb-0"" style="text-align: center">
+                                        <thead>
+                                        <tr>
+                                            <th wire:click="sortBy('sewa_no')" style="cursor: pointer;">
+                                                No Invoice
+                                                @include('addOn.sort-icon',['field'=>'sewa_no'])
+                                            </th>
+                                            <th> Nama Penyewa </th>
+                                            <th wire:click="sortBy('sewa_tglsewa')" style="cursor: pointer;">
+                                                Tanggal Pinjam
+                                                @include('addOn.sort-icon',['field'=>'sewa_tglsewa'])
+                                            </th>
+                                            <th wire:click="sortBy('sewa_tglkembali')" style="cursor: pointer;">
+                                                Tanggal Kembali
+                                                @include('addOn.sort-icon',['field'=>'sewa_tglkembali'])
+                                            </th>
+                                            <th wire:click="sortBy('sewa_status')" style="cursor: pointer;">
+                                                Status
+                                                @include('addOn.sort-icon',['field'=>'sewa_status'])
+                                            </th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        @if ($data->count() == 0)
+                                            <tr>
+                                                <td colspan="5" style="text-align: center">Tidak Ada data yang Akan ditampilkan</td>
+                                            </tr>
+                                        @else
+                                            @foreach ($data as $row)
+                                            <tr>
+                                                <td class="btn waves-effect waves-light" title="Detail" wire:click="showDetailPage('{{$row->sewa_no}}')">{{$row->sewa_no}}</td>
+                                                @if($row->sewa_status == 1)
+                                                <td>{{$row->user->user_nama}}</td>
+                                                @else
+                                                <td>{{$row->sewa_offnama}}</td>
+                                                @endif
+                                                <td>{{ \Carbon\Carbon::parse($row->sewa_tglsewa)->format('d/m/Y') }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($row->sewa_tglkembali)->format('d/m/Y') }}</td>
+                                                <td>{{$row->status_sewa->status_detail}}</td>
+                                                <td>
+                                                    <a wire:click="showDetailPage('{{$row->sewa_no}}'" class="btn btn-success btn-default waves-effect waves-light" title="Accept"><i class="fas fa-eye" style="color: white"></i></a>
+                                                </td>
+                                            </tr>
+                                                @endforeach
+                                            @endif
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+
+                    @endif
+                </div> <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            2020 © Sumbar Mountain Advanture.
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Submit</button>
+                        <div class="col-sm-6">
+                            <div class="text-sm-right d-none d-sm-block">
+                                SIPO Sumber Mountain Advanture
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </footer>
+        </div>
+    </div>
 
-             {{-- TABLE --}}
-             <div class="row">
-                 <div class="col">
-                     <section class="card">
-                         <header class="card-header">
-                             <h2 class="card-title">Data Konfirmasi Pngembalian</h2>
-                              <div class="card-actions">
-                                  <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                              </div>
-                         </header>
-
-                         <div class="card-body">
-                             <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Jenis Alat</th>
-                                        <th>Harga Sewa</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                </tbody>
-
-                             </table>
-                         </div>
-                     </section>
-                 </div>
-             </div>
-
-         </section>
-     </div>
 </div>
-
-
-<script type="text/javascript">
-
-</script>

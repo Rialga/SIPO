@@ -112,7 +112,7 @@
                                                     <td>{{$row->sewa_tglkembali}}</td>
                                                     <td>{{$row->status_sewa->status_detail}}</td>
                                                     <td>
-                                                        <a wire:click="showEditPage('{{ $row->sewa_no }}')" class="btn btn-info btn-rounded waves-effect waves-light" title="Update Status"><i class="fas fa-sync-alt" style="color: white"></i></a>
+                                                        <a wire:click="updateStatus('{{ $row->sewa_no }}')" class="btn btn-info btn-rounded waves-effect waves-light" title="Update Status"><i class="fas fa-sync-alt" style="color: white"></i></a>
                                                     </td>
                                                 </tr>
                                                 @endforeach

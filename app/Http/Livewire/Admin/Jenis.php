@@ -125,5 +125,11 @@ class Jenis extends Component
         $this->formJenis = false;
         $this->updateMode = false;
 
+
+         $this->sortBy = 'jenis_alat_id';
+         $this->sortDiraction = 'asc';
+         $this->showPage = 10;
+         $this->search='';
+
     }
 }

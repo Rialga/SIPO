@@ -12,7 +12,7 @@ use phpDocumentor\Reflection\Types\This;
 class ListSewa extends Component
 {
 
-    public $invoice, $tglPinjam , $tglKembali , $sewaNohp , $sewaNama , $sewaTujuan, $tglBayar, $sewaStatus;
+    public $invoice, $tglPinjam , $tglKembali , $sewaNohp , $sewaNama , $sewaTujuan, $tglBayar, $sewaStatus, $fullPrice , $totalHari;
 
     public $sewaTglCreate = null;
 
@@ -61,6 +61,7 @@ class ListSewa extends Component
         return $this->sortBy = $field;
     }
 
+    // Fungsi Harga Total
     public function checkTotal(){
 
 
@@ -82,7 +83,6 @@ class ListSewa extends Component
 
 
     // add field
-
     public function add($num, $val)
     {
         $num++;
@@ -143,8 +143,33 @@ class ListSewa extends Component
     }
 
 
-    // Upadate
-    public function update(){
+    // Upadate Status
+    public function updateStatus($id){
+        $status = Penyewaan::where('sewa_no' , $id)->first();
+
+        if($status->sewa_status == 3){
+
+
+            foreach($status->detail_sewa as $item){
+
+                $updateStok = Alat::where('alat_kode',$item->alat->alat_kode)->first();
+                $stokNow = $updateStok->alat_total - $item->detail_sewa_total;
+
+                $updateStok->alat_total = $stokNow  ;
+                $updateStok->update();
+            }
+
+            $status->sewa_status = 4;
+            $status->update();
+        }
+
+        elseif($status->sewa_status == 4){
+            $status->sewa_status = 5;
+            $status->update();
+        }
+        else{
+            dd('WTF');
+        }
 
     }
 
@@ -153,7 +178,6 @@ class ListSewa extends Component
     public function showDetailPage($id){
 
         $this->dataSewa = Penyewaan::find($id);
-
 
 
         $this->invoice =  $this->dataSewa->sewa_no;
@@ -165,6 +189,23 @@ class ListSewa extends Component
         $this->tglBayar = $this->dataSewa->sewa_tglbayar;
         $this->sewaStatus = $this->dataSewa->status_sewa->status_detail;
         $this->sewaTglCreate = Carbon::parse($this->dataSewa->created_at)->format('d, M Y');
+
+
+        foreach($this->dataSewa->detail_sewa as $item){
+
+            $harga[] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
+
+        }
+
+        $this->hargaTotal = array_sum($harga);
+
+        $selisih = Carbon::parse( $this->tglPinjam )->diffInDays( $this->tglKembali );
+
+        $this->totalHari = $selisih;
+
+        $this->fullPrice = $this->totalHari * $this->hargaTotal;
+
+
 
         $this->detailPage = true;
     }
@@ -183,6 +224,8 @@ class ListSewa extends Component
         $this->sewaNohp = null;
         $this->sewaTujuan = null;
         $this->invoice = null;
+        $this->totalHari = null;
+        $this->fullPrice = null;
 
 
         $this->formSewa = false;
@@ -196,6 +239,12 @@ class ListSewa extends Component
 
         $this->alat = [];
         $this->stok = [];
+
+        $this->sortBy = 'sewa_no';
+        $this->sortDiraction = 'asc';
+        $this->showPage = 10;
+        $this->search='';
+
     }
 
 }

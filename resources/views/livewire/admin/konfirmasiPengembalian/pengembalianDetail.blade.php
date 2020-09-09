@@ -4,23 +4,29 @@
             <div class="card">
                 <div class="card-body">
                     <div class="invoice-title">
-                        <h4 class="float-left font-size-20">{{ $invoice }}</h4> <br><br>
-                        <h4 class="float-left font-size-15">( {{ $sewaStatus }} )</h4>
-                        <a class="btn btn-secondary waves-effect waves-light float-right" title="edit"><i class="fas fa-edit" style="color: white"></i></a> <br><br>
+                        <h4 class="float-left font-size-20">{{ $dataSewa->sewa_no }}</h4> <br><br>
+                        <h4 class="float-left font-size-15">( {{ $dataSewa->status_sewa->status_detail }} )</h4> <br>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="col-sm-6">
                             <address>
                                 <strong>Data Penyewa:</strong><br>
-                                Nama : {{ $sewaNama }}<br>
-                                HP : {{ $sewaNohp }}<br>
+                                @if($dataSewa->sewa_status == 1)
+                                    Nama : {{ $dataSewa->user->user_nama }}<br>
+                                    Alamat : {{ $dataSewa->user->user_alamat }}<br>
+                                    Pekerjaan/Sekolah : {{ $dataSewa->user->user_job }}<br>
+                                    HP : {{ $dataSewa->user->user_phone }}<br>
+                                @else
+                                    Nama : {{ $dataSewa->sewa_offnama }}<br>
+                                    HP : {{ $dataSewa->sewa_offphone }}<br>
+                                @endif
                             </address>
                         </div>
                         <div class="col-sm-6 text-sm-right">
                             <address>
                                 <strong>Tanggal Pemesanan:</strong><br>
-                                {{ $sewaTglCreate }}<br><br>
+                                {{ \Carbon\Carbon::parse($dataSewa->createdAt)->format('d, M Y') }}<br><br>
                             </address>
                         </div>
                     </div>
@@ -28,18 +34,18 @@
                         <div class="col-sm-6 mt-3">
                             <address>
                                 <strong>Rentang Peminjaman :</strong><br>
-                                {{  \Carbon\Carbon::parse($tglPinjam)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($tglKembali)->format('d, M Y') }} <br>
+                                {{  \Carbon\Carbon::parse($dataSewa->sewa_tglsewa)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} <br>
                                 ({{ $totalHari }} Hari) <br>
-                                Tujuan : {{ $sewaTujuan }} <br>
+                                Tujuan : {{ $dataSewa->sewa_tujuan }} <br>
                             </address>
                         </div>
 
                         <div class="col-sm-6 mt-3 text-sm-right">
                             <address>
                                 <strong>Jenis Pembayaran:</strong><br>
-                                Langsung (Offline) <br>
+                                {{ $dataSewa->jenis_sewa->jenis_nama }} <br>
                                 di Bayar pada :<br>
-                                {{ \Carbon\Carbon::parse($tglBayar)->format('d, M Y') }} | {{ \Carbon\Carbon::parse($tglBayar)->format('H:i') }} WIB<br>
+                                {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('d, M Y') }} | {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('H:i') }} WIB<br>
                             </address>
                         </div>
                     </div>
@@ -76,7 +82,7 @@
                                 @endforeach
                                 <tr>
                                     <td colspan="5" class="text-right">Total Alat</td>
-                                    <td class="text-right">Rp. {{ $hargaTotal }}</td>
+                                    <td class="text-right">Rp. {{ $totalAlat }}</td>
                                 </tr>
                                 <tr>
                                     <td colspan="5" class="text-right">Durasi Peminjaman</td>
@@ -85,7 +91,7 @@
                                 <tr>
                                     <td colspan="5" class="border-0 text-right">
                                         <strong>Total Sewa</strong></td>
-                                    <td class="border-0 text-right"><h4 class="m-0"> Rp. {{ $fullPrice }}  </h4></td>
+                                    <td class="border-0 text-right"><h4 class="m-0"> Rp. {{ $totalSewa }}  </h4></td>
                                 </tr>
                             </tbody>
                         </table>

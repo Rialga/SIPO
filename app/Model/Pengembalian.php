@@ -8,7 +8,7 @@ class Pengembalian extends Model
 {
     protected $table = 'pengembalian';
     protected $fillable = [
-        'pengembalian_nosewa' , 'pengembalian_kodealat' , 'pengembalian_kondisi' , 'pengembalian_totalalat' , 'pengembalian_waktu' , 'pengembalian_dendaterlambat'
+        'pengembalian_nosewa' , 'pengembalian_kodealat' , 'pengembalian_kondisi' , 'pengembalian_totalrusak' , 'pengembalian_waktu' , 'pengembalian_dendaterlambat'
     ];
 
 

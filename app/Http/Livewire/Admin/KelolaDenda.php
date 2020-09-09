@@ -124,5 +124,10 @@ class KelolaDenda extends Component
         $this->formKondisi = false;
         $this->updateMode = false;
 
+        $this->sortBy = 'kondisi_id';
+        $this->sortDiraction = 'asc';
+        $this->showPage = 10;
+        $this->search='';
+
     }
 }

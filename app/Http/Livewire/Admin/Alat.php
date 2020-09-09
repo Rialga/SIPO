@@ -259,7 +259,7 @@ class Alat extends Component
         if($id){
 
             GambarAlat::where('gambar_id',$id)->delete();;
-            $this->dataGambar = GambarAlat::where('gambar_kodealat',$this->inputKodeAlat)->get();
+            // $this->dataGambar = GambarAlat::where('gambar_kodealat',$this->inputKodeAlat)->get();
         }
     }
 
@@ -344,6 +344,12 @@ class Alat extends Component
         $this->pageJenis = false;
         $this->pageMerk = false;
         $this->checkKode = false;
+
+        $this->sortBy = 'alat_kode';
+        $this->sortDiraction = 'asc';
+        $this->showPage = 10;
+        $this->search='';
+
 
     }
 }
