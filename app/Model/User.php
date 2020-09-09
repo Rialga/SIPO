@@ -82,5 +82,13 @@ class User extends Authenticatable {
         return (strtolower($role)==strtolower($this->have_role->role_name)) ? true : false;
     }
 
+    public function scopeSearch($query,$val){
+        return $query
+        ->where('user_id','like','%' .$val. '%')
+        ->Orwhere('user_nama','like','%' .$val. '%')
+        ->Orwhere('user_mail','like','%' .$val. '%')
+        ->Orwhere('user_phone','like','%' .$val. '%');
 
+
+    }
 }

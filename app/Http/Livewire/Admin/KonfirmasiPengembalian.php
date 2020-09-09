@@ -41,6 +41,7 @@ class KonfirmasiPengembalian extends Component
     }
 
     public function showDetailPage($id){
+
         $this->dataSewa = Penyewaan::find($id);
 
         foreach($this->dataSewa->detail_sewa as $item){
@@ -54,8 +55,9 @@ class KonfirmasiPengembalian extends Component
         $this->totalHari = Carbon::parse( $this->dataSewa->sewa_tglsewa)->diffInDays( $this->dataSewa->sewa_tglkembali );
 
         $this->totalSewa = $this->totalHari * $this->totalAlat;
-
+        
         $this->detailPage = true;
+
     }
 
 

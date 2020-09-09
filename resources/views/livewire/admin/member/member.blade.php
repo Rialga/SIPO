@@ -1,96 +1,162 @@
 <div>
 
     <livewire:layouts.admin-header />
+    <livewire:layouts.admin-sidebar />
 
-     <div class="inner-wrapper" style="background: #e1e2e5 ">
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
 
-         <livewire:layouts.admin-sidebar />
-
-         <section role="main" class="content-body">
-             <header class="page-header">
-                 <h2><a href="{{ url('/') }}"><i class="fas fa-home"></i></a></h2>
-             </header>
-
-             <div style="display: flex; justify-content: flex-end">
-                <a class=" btn btn-rounded btn-primary box-shadow-2 mb-2" data-toggle="modal" data-target="#modalJenisAlat" style="color: white">
-                    <i class="fas fa-plus"></i> Tambah Data
-                </a>
-            </div>
-
-            {{-- MODAL --}}
-            <div class="modal fade" id="modalJenisAlat" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="formModalLabel">Form Jenis Alat</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0 font-size-18">Member</h4>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <form id="demo-form" class="mb-4" novalidate="novalidate">
-                                <div class="form-group row align-items-center">
-                                    <label class="col-sm-3 text-left text-sm-right mb-0">Jenis Alat</label>
-                                    <div class="col-sm-6">
-                                        <input type="text" name="jenisAlat" class="form-control" placeholder="Jenis Alat"  required/>
-                                    </div>
-                                    @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
-                                </div>
-                                <div class="form-group row align-items-center">
-                                    <label class="col-sm-3 text-left text-sm-right mb-0">Harga Sewa</label>
-                                    <div class="col-sm-6">
-                                        <div class="input-group">
-                                            <label class="pt-2">Rp:</label> &nbsp;&nbsp;&nbsp;
-                                            <input type="number" name="jenisHarga" class="form-control" placeholder="Harga Sewa"  required/>
+                    </div>
+                    <!-- end page title -->
+
+                    @if($formMember)
+
+                        @include('livewire.admin.member.memberForm')
+
+
+                    @else
+
+
+
+                    <div class="row">
+
+                        {{-- Button ADD --}}
+                        <div class="col-sm-12">
+                            <div class="text-sm-right">
+                                <button wire:click="showFormJenis" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Member</button>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row mb-2">
+
+                                        <div class="col-sm-4 mb-2">
+                                            <div class="col form-inline">
+                                                <label>Show Page:</label> &nbsp;&nbsp;&nbsp;
+                                                <select class="form-control" style="width: 70px" wire:model="showPage">
+                                                    <option value="2">2</option>
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="25">25</option>
+                                                    <option value="50">50</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        @error('fieldJenisHarga') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
+
+                                        <div class="col-sm-8" style="display: flex; justify-content: flex-end">
+                                            <div class="search-box mr-5 mb-2 d-inline-block">
+                                                <div class="position-relative">
+                                                    <input type="text" class="form-control" placeholder="Search..." wire:model.debounce.300ms="search">
+                                                    <i class="bx bx-search-alt search-icon"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- end col-->
                                     </div>
+
+                                    <div class="table-responsive"">
+                                        <table class="table table-hover mb-0"" style="text-align: center">
+                                            <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th wire:click="sortBy('user_id')" style="cursor: pointer;">
+                                                    Member ID
+                                                    @include('addOn.sort-icon',['field'=>'user_id'])
+                                                </th>
+                                                <th wire:click="sortBy('user_nama')" style="cursor: pointer;">
+                                                    Member Nama
+                                                    @include('addOn.sort-icon',['field'=>'user_nama'])
+                                                </th>
+                                                <th wire:click="sortBy('user_mail')" style="cursor: pointer;">
+                                                    Member Email
+                                                    @include('addOn.sort-icon',['field'=>'user_mail'])
+                                                </th>
+                                                <th wire:click="sortBy('user_phone')" style="cursor: pointer;">
+                                                    Member HP
+                                                    @include('addOn.sort-icon',['field'=>'user_phone'])
+                                                </th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                            </thead>
+
+                                            <tbody>
+                                            @if ($data->count() == 0)
+                                                <tr>
+                                                    <td colspan="5" style="text-align: center">Tidak Ada data yang Akan ditampilkan</td>
+                                                </tr>
+                                            @else
+                                                @foreach ($data as $row)
+                                                <tr>
+                                                    <td>{{$loop->iteration}}</td>
+                                                    <td class="btn waves-effect waves-light" wire:click="showDetailPage('{{ $row->user_id }}')" >{{$row->user_id}}</td>
+                                                    <td>{{$row->user_nama}}</td>
+                                                    <td>{{$row->user_mail}}</td>
+                                                    <td>{{$row->user_phone}}</td>
+                                                    <td>
+                                                        <a wire:click="showDetailPage('{{ $row->user_id }}')" class="btn btn-info btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-eye" style="color: white"></i></a>
+                                                        <a wire:click="delete('{{ $row->user_id }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            @endif
+                                            </tbody>
+                                        </table>
+                                    </div><br>
+
+
+                                    <div class="row justify-content-end">
+                                        <p class="mb-2 mr-2">
+                                            Menampilkan {{ $data->firstItem() }} hingga {{ $data->lastItem() }} dari {{ $data->total() }} item
+                                        </p>
+                                    </div>
+
+                                    <div class="row mb-0  mr-2">
+                                        <div class="col-sm-12">
+                                            <div class="row justify-content-end">
+                                                <p class="mb-2 mr-2"> {{ $data->links() }} </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
-                            </form>
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row -->
+
+                    @endif
+                </div> <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            2020 © Sumbar Mountain Advanture.
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Submit</button>
+                        <div class="col-sm-6">
+                            <div class="text-sm-right d-none d-sm-block">
+                                SIPO Sumber Mountain Advanture
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </footer>
+        </div>
 
-             {{-- TABLE --}}
-             <div class="row">
-                 <div class="col">
-                     <section class="card">
-                         <header class="card-header">
-                             <h2 class="card-title">Data Member</h2>
-                              <div class="card-actions">
-                                  <a href="#" class="card-action card-action-toggle" data-card-toggle></a>
-                              </div>
-                         </header>
-
-                         <div class="card-body">
-                             <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Jenis Alat</th>
-                                        <th>Harga Sewa</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-
-                                </tbody>
-
-                             </table>
-                         </div>
-                     </section>
-                 </div>
-             </div>
-
-         </section>
-     </div>
-</div>
+    </div>
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-</script>
+
+    </script>
