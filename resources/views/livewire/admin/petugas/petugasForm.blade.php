@@ -5,9 +5,9 @@
                 <div class="card-body">
                     <div class="col-lg-12">
                         @if($detailPage)
-                        <h4 class="card-title mb-4">Profile Member</h4>
+                        <h4 class="card-title mb-4">Profile</h4>
                         @else
-                        <h4 class="card-title mb-4">Input Member</h4>
+                        <h4 class="card-title mb-4">Input Petugas</h4>
                         @endif
                         <form id="form" class="form-horizontal">
 
@@ -95,7 +95,7 @@
 
                             @if($fieldPassword)
 
-                                @include('livewire.admin.member.fieldAdd.fieldPassword')
+                                @include('livewire.admin.petugas.fieldAdd.fieldPassword')
 
                             @else
                                 <div class="form-group row">

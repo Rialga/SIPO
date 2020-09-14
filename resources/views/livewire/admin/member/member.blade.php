@@ -31,7 +31,7 @@
                         {{-- Button ADD --}}
                         <div class="col-sm-12">
                             <div class="text-sm-right">
-                                <button wire:click="showFormJenis" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Member</button>
+                                <button wire:click="showFormMember" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Member</button>
                             </div>
                         </div>
 

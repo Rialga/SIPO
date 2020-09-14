@@ -103,7 +103,7 @@
                                                 <td>{{ \Carbon\Carbon::parse($row->sewa_tglkembali)->format('d/m/Y') }}</td>
                                                 <td>{{$row->status_sewa->status_detail}}</td>
                                                 <td>
-                                                    <a wire:click="showDetailPage('{{$row->sewa_no}}'" class="btn btn-success btn-default waves-effect waves-light" title="Accept"><i class="fas fa-eye" style="color: white"></i></a>
+                                                    <a wire:click="showDetailPage('{{$row->sewa_no}}')" class="btn btn-info btn-default waves-effect waves-light" title="Accept"><i class="fas fa-eye" style="color: white"></i></a>
                                                 </td>
                                             </tr>
                                                 @endforeach

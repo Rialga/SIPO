@@ -12,6 +12,7 @@
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between">
                                 <h4 class="mb-0 font-size-18">Petugas</h4>
+                                <h4 wire:loading> Loading . . . </h4>
                             </div>
                         </div>
                     </div>
@@ -30,7 +31,7 @@
                         {{-- Button ADD --}}
                         <div class="col-sm-12">
                             <div class="text-sm-right">
-                                <button wire:click="showFormJenis" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Petugas</button>
+                                <button wire:click="showFormPetugas" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Petugas</button>
                             </div>
                         </div>
 

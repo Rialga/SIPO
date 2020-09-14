@@ -32,7 +32,7 @@
                                 @if($countAlat == 0)
                                     <span class="pt-2" style="color: green"><i class="fas fa-check"></i> Dapat Digunakan</span>
                                     @else
-                                    <span class="pt-2" style="color: red"><i class="fas fa-times"></i> Kode Alat teelah di pakai</span>
+                                    <span class="pt-2" style="color: red"><i class="fas fa-times"></i> Kode Alat telah di pakai</span>
                                 @endif
                             @endif
                         </div>

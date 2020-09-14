@@ -29,6 +29,7 @@ class ListSewa extends Component
     public $inputs = [];
     public $num = 0;
 
+
     public $sortBy = 'sewa_no';
     public $sortDiraction = 'asc';
     public $showPage = 10;

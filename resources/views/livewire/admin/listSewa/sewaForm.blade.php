@@ -7,7 +7,7 @@
                         <h4 class="card-title mb-4">Input Transaksi Sewa</h4>
                         <form id="form" class="form-horizontal">
 
-                            {{--  --}}
+                            {{-- Total Biaya --}}
                             <div class="form-group row">
                                 <label class="col-sm-12 control-label text-sm-right pt-2">
                                     <button wire:click="checkTotal" class="btn btn-default text-sm-right pt-2" id="checkKodeAlat" onclick="return false"><i class="fas fa-sync-alt"></i> Check </button>
@@ -16,7 +16,7 @@
                                 <h2 class="col-sm-12 control-label text-sm-right pt-2">Rp. {{ $hargaTotal }}</h2>
                             </div>
 
-                            {{--  --}}
+                            {{-- Rentang Sewa --}}
                             <div class="form-group row">
                                 <label class="col-sm-4 control-label text-sm-right pt-2">Tanggal Sewa</label>
                                 <div class="col-sm-6">
@@ -30,7 +30,7 @@
                                 {{-- @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror --}}
                             </div>
 
-                            {{--  --}}
+                            {{-- Pilih Alat --}}
                             <div class="form-group row">
                                 <label class="col-sm-4 control-label text-sm-right pt-2">Pilih Alat</label>
                                 <div class="col-sm-6">
@@ -90,7 +90,7 @@
                             @endforeach
 
 
-                            {{--  --}}
+                            {{-- Nama Penyewa --}}
                             <div class="form-group row">
                                 <label class="col-sm-4 control-label text-sm-right pt-2">Nama Penyewa</label>
                                 <div class="col-sm-3">
@@ -101,7 +101,7 @@
                                 {{-- @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror --}}
                             </div>
 
-                            {{--  --}}
+                            {{-- No Hp --}}
                             <div class="form-group row">
                                 <label class="col-sm-4 control-label text-sm-right pt-2">No HP</label>
                                 <div class="col-sm-3">
@@ -112,7 +112,7 @@
                                 {{-- @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror --}}
                             </div>
 
-                             {{--  --}}
+                             {{-- tujuuan Sewa --}}
                             <div class="form-group row">
                                 <label class="col-sm-4 control-label text-sm-right pt-2">Tujuan</label>
                                 <div class="col-sm-3">

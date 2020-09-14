@@ -17,7 +17,7 @@ class Login extends Component
     public function submit(){
         $this->validate([
             'form.email' => 'required|email',
-            'form.password' => 'required'
+            'form.password' => 'required|min:8'
         ]);
 
 
@@ -50,7 +50,7 @@ class Login extends Component
 
     }
 
-
+    
 
 
     public function render()

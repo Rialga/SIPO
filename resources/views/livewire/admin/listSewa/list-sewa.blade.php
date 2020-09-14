@@ -36,7 +36,7 @@
 
                         <div class="col-sm-12">
                             <div class="text-sm-right">
-                                <button wire:click="showFormSewa" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Jenis Alat</button>
+                                <button wire:click="showFormSewa" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Sewa</button>
                             </div>
                         </div>
 

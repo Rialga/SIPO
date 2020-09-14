@@ -9,6 +9,7 @@ use Livewire\Component;
 class KonfirmasiPembayaran extends Component
 {
 
+
     public $detailPage = false;
 
     public $dataSewa;
@@ -39,6 +40,7 @@ class KonfirmasiPembayaran extends Component
         return $this->sortBy = $field;
     }
 
+    // Show Detail
     public function showDetailPage($id){
 
         $this->dataSewa = Penyewaan::find($id);
@@ -59,6 +61,7 @@ class KonfirmasiPembayaran extends Component
 
     }
 
+   // Status change
     public function accept($id){
         $accept = Penyewaan::where('sewa_no' , $id)->first();
         $accept->sewa_status = 3;
@@ -67,6 +70,7 @@ class KonfirmasiPembayaran extends Component
 
     }
 
+    // status Change
     public function refuse($id){
         $accept = Penyewaan::where('sewa_no' , $id)->first();
         $accept->sewa_status = 7;

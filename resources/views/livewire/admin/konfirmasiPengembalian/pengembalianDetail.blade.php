@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="invoice-title">
-                        <h4 class="float-left font-size-20">{{ $dataSewa->sewa_no }}</h4> <br><br>
+                        <h4 class="float-left font-size-20">{{ $currentInvoice }}</h4> <br><br>
                         <h4 class="float-left font-size-15">( {{ $dataSewa->status_sewa->status_detail }} )</h4> <br>
                     </div>
                     <hr>
@@ -51,51 +51,70 @@
                     </div>
 
                     <div class="py-2 mt-3">
-                        <h3 class="font-size-15 font-weight-bold">Detail Sewa</h3>
+                        <div class="row">
+                            <div class="col-sm-6 mt-4">
+                                <h3 class="font-size-15 font-weight-bold">Detail Sewa</h3>
+                            </div>
+                            <div class="col-sm-6 mt-3">
+                                @if($addKondisi)
+                                    <button wire:click="fieldKondisi('{{ false}}')" type="button" class="btn btn-danger btn-primary waves-effect waves-light mb-2 pt-2 float-right"> Cancel</button>
+                                @else
+                                    <button wire:click="fieldKondisi('{{ true }}')" type="button" class="btn btn-success btn-primary waves-effect waves-light mb-2 pt-2 float-right"><i class="mdi mdi-plus mr-1"></i> Masukkan Kondisi Alat</button>
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-nowrap">
-                            <thead>
-                                <tr>
-                                    <th style="width: 50px;">No.</th>
-                                    <th>Item</th>
-                                    <th style="width: 20px;">Jumlah</th>
-                                    <th class="text-right">Harga Sewa</th>
-                                    <th class="text-right"></th>
-                                    <th class="text-right">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($dataSewa->detail_sewa as $item)
-                                <tr>
-                                    <td>{{$loop->iteration}}</td>
-                                    <td>
-                                        ({{ $item->alat->alat_kode }}) <br>
-                                        {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
-                                        Tipe : {{ $item->alat->alat_tipe }}
-                                    </td>
-                                    <td class="text-center"> {{ $item->detail_sewa_total }} Unit</td>
-                                    <td class="text-right"> Rp. {{ $item->alat->jenis_alat->jenis_alat_harga }} </td>
-                                    <td class="text-right"> = </td>
-                                    <td class="text-right"> Rp. {{ number_format($item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga) }}</td>
-                                </tr>
-                                @endforeach
-                                <tr>
-                                    <td colspan="5" class="text-right">Total Alat</td>
-                                    <td class="text-right">Rp. {{ $totalAlat }}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5" class="text-right">Durasi Peminjaman</td>
-                                    <td class="text-right">{{ $totalHari }} Hari</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="5" class="border-0 text-right">
-                                        <strong>Total Sewa</strong></td>
-                                    <td class="border-0 text-right"><h4 class="m-0"> Rp. {{ $totalSewa }}  </h4></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    @if($addKondisi)
+                        @include('livewire.admin.konfirmasiPengembalian.fieldAdd.fieldAddKondisi')
+
+                    @elseif($fullDetail)
+
+                         @include('livewire.admin.konfirmasiPengembalian.fieldAdd.fullDetail')
+                    @else
+                        <div class="table-responsive">
+                            <table class="table table-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 50px;">No.</th>
+                                        <th>Item</th>
+                                        <th style="width: 20px;">Jumlah</th>
+                                        <th class="text-right">Harga Sewa</th>
+                                        <th class="text-right"></th>
+                                        <th class="text-right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($dataSewa->detail_sewa as $item)
+                                    <tr>
+                                        <td>{{$loop->iteration}}</td>
+                                        <td>
+                                            ({{ $item->alat->alat_kode }}) <br>
+                                            {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
+                                            Tipe : {{ $item->alat->alat_tipe }}
+                                        </td>
+                                        <td class="text-center"> {{ $item->detail_sewa_total }} Unit</td>
+                                        <td class="text-right"> Rp. {{ $item->alat->jenis_alat->jenis_alat_harga }} </td>
+                                        <td class="text-right"> = </td>
+                                        <td class="text-right"> Rp. {{ number_format($item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga) }}</td>
+                                    </tr>
+                                    @endforeach
+                                    <tr>
+                                        <td colspan="5" class="text-right">Total Alat</td>
+                                        <td class="text-right">Rp. {{ $totalAlat }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="text-right">Durasi Peminjaman</td>
+                                        <td class="text-right">{{ $totalHari }} Hari</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5" class="border-0 text-right">
+                                            <strong>Total Sewa</strong></td>
+                                        <td class="border-0 text-right"><h4 class="m-0"> Rp. {{ $totalSewa }}  </h4></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                     <div class="d-print-none">
                         <div class="float-right">
                             <button wire:click="clearForm()"  onclick="return false"  class="btn btn-default">Kembali</button>&nbsp; &nbsp;&nbsp;
