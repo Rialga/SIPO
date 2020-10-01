@@ -1,5 +1,8 @@
 <?php
 
+use App\Model\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +16,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+Route::get('/insert', function () {
+
+
+    $nama  = 'rialga Febri Algani';
+    $firstName = explode(' ',trim($nama));
+    $username = $firstName[0];
+
+
+    $i = substr(md5(time()), 0, 3);
+    while(User::where('user_nick',$username)->exists()) {
+        $i++;
+        $username = $firstName[0] .'_'. $i;
+    }
+    $this->attributes['username'] = $username;
+
+    dd($username);
+});
+
+
+
+
 Route::livewire('/','welcome');
 Route::livewire('/login','login');
 
 
+//ADMIN
 
 Route::livewire('/dashboard','admin.dashboard');
 
@@ -35,5 +61,8 @@ Route::livewire('/pengembalian','admin.konfirmasi-pengembalian');
 
 Route::livewire('/report-penyewaan','admin.report-penyewaan');
 
-
-
+// MEMBER
+Route::livewire('/profile','member.profile');
+Route::livewire('/cart','member.cart');
+Route::livewire('/sewa','member.sewa');
+Route::livewire('/notifikasi','member.notifikasi');

@@ -98,7 +98,7 @@
                                                 @foreach ($data as $row)
                                                 <tr>
                                                     <td>{{$loop->iteration}}</td>
-                                                    <td class="btn waves-effect waves-light" wire:click="showDetailPage('{{ $row->user_id }}')" >{{$row->user_id}}</td>
+                                                    <td class="btn waves-effect waves-light" wire:click="showDetailPage('{{ $row->user_id }}')" >{{$row->user_nick}}</td>
                                                     <td>{{$row->user_nama}}</td>
                                                     <td>{{$row->user_mail}}</td>
                                                     <td>{{$row->user_phone}}</td>

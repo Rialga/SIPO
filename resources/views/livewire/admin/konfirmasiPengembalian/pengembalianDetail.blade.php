@@ -12,15 +12,10 @@
                         <div class="col-sm-6">
                             <address>
                                 <strong>Data Penyewa:</strong><br>
-                                @if($dataSewa->sewa_status == 1)
                                     Nama : {{ $dataSewa->user->user_nama }}<br>
                                     Alamat : {{ $dataSewa->user->user_alamat }}<br>
                                     Pekerjaan/Sekolah : {{ $dataSewa->user->user_job }}<br>
                                     HP : {{ $dataSewa->user->user_phone }}<br>
-                                @else
-                                    Nama : {{ $dataSewa->sewa_offnama }}<br>
-                                    HP : {{ $dataSewa->sewa_offphone }}<br>
-                                @endif
                             </address>
                         </div>
                         <div class="col-sm-6 text-sm-right">
@@ -43,7 +38,6 @@
                         <div class="col-sm-6 mt-3 text-sm-right">
                             <address>
                                 <strong>Jenis Pembayaran:</strong><br>
-                                {{ $dataSewa->jenis_sewa->jenis_nama }} <br>
                                 di Bayar pada :<br>
                                 {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('d, M Y') }} | {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('H:i') }} WIB<br>
                             </address>

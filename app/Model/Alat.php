@@ -28,7 +28,7 @@ class Alat extends Model
     }
 
     public function detail_sewa() {
-        return $this->hasMany(DetailSewa::Class, 'detail_sewa_alat_kode', 'alat_kode');
+        return $this->hasMany('App\Model\DetailSewa', 'detail_sewa_alat_kode', 'alat_kode');
     }
 
     //Many to many

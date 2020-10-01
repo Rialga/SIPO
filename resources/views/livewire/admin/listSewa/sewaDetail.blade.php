@@ -13,8 +13,9 @@
                         <div class="col-sm-6">
                             <address>
                                 <strong>Data Penyewa:</strong><br>
-                                Nama : {{ $sewaNama }}<br>
-                                HP : {{ $sewaNohp }}<br>
+                                Member ID : {{ $dataSewa->user->user_id }}<br>
+                                Nama : {{ $dataSewa->user->user_nama }}<br>
+                                HP : {{ $dataSewa->user->user_phone}}<br>
                             </address>
                         </div>
                         <div class="col-sm-6 text-sm-right">
@@ -36,9 +37,7 @@
 
                         <div class="col-sm-6 mt-3 text-sm-right">
                             <address>
-                                <strong>Jenis Pembayaran:</strong><br>
-                                Langsung (Offline) <br>
-                                di Bayar pada :<br>
+                                <strong>Tanggal Pembayaran:</strong><br>
                                 {{ \Carbon\Carbon::parse($tglBayar)->format('d, M Y') }} | {{ \Carbon\Carbon::parse($tglBayar)->format('H:i') }} WIB<br>
                             </address>
                         </div>

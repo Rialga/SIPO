@@ -33,7 +33,7 @@ class Login extends Component
 
         if(Auth::attempt($login)){
 
-            if(Auth::user()->user_role == 2){
+            if(Auth::user()->user_role == 3){
                 return redirect('/');
             }
             else{
@@ -50,7 +50,7 @@ class Login extends Component
 
     }
 
-    
+
 
 
     public function render()

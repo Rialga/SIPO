@@ -25,9 +25,10 @@
                                         <label class="control-label pt-2"> &nbsp; Sampai  &nbsp;</label>
                                         <input type="date" class="form-control" wire:model.lazy="tglKembali" id="tglKembali" name="tglKembali">
                                     </div>
-
+                                    <br>
+                                    @error('tglPinjam') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror<br>
+                                    @error('tglKembali') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                                 </div>
-                                {{-- @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror --}}
                             </div>
 
                             {{-- Pilih Alat --}}
@@ -54,8 +55,11 @@
                                             <button wire:click.prevent="add({{$num}})" class="btn btn-success" onclick="return false"><i class="fas fa-plus"></i></button>
                                         </span>
                                     </div>
+                                    <br>
+                                    @error('alat.0') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+                                    @error('stok.0') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                                 </div>
-                                @error('alat.0') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+
                             </div>
 
                             @foreach($inputs as $key => $value)
@@ -83,11 +87,24 @@
                                             <button wire:click.prevent="remove({{$key}},{{$value}})" class="btn btn-danger" onclick="return false"><i class="fas fa-minus"></i></button>
                                         </span>
                                     </div>
+                                    <br>
+                                    @error('alat.'.$value) <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+                                    @error('stok.'.$value) <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                                 </div>
-                                @error('name.'.$value) <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                             </div>
 
                             @endforeach
+
+                             {{-- tujuuan Sewa --}}
+                             <div class="form-group row">
+                                <label class="col-sm-4 control-label text-sm-right pt-2">Tujuan</label>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        <input type="text" name="sewaTujuan" class="form-control" placeholder="Tujuan..." wire:model.lazy="sewaTujuan"/>
+                                    </div>
+                                </div>   <br>
+                                @error('sewaTujuan') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+                            </div>
 
 
                             {{-- Nama Penyewa --}}
@@ -97,8 +114,19 @@
                                     <div class="input-group">
                                         <input type="text" name="sewaNama" class="form-control" placeholder="Nama..."/ wire:model.lazy="sewaNama">
                                     </div>
-                                </div>
-                                {{-- @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror --}}
+                                </div>   <br>
+                                @error('sewaNama') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+                            </div>
+
+                            {{-- Mail  --}}
+                            <div class="form-group row">
+                                <label class="col-sm-4 control-label text-sm-right pt-2">E - Mail</label>
+                                <div class="col-sm-3">
+                                    <div class="input-group">
+                                        <input type="mail" name="sewaMail" class="form-control" placeholder="email.." wire:model.lazy="sewaMail"/>
+                                    </div>
+                                </div>   <br>
+                                @error('sewaMail') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                             </div>
 
                             {{-- No Hp --}}
@@ -108,19 +136,31 @@
                                     <div class="input-group">
                                         <input type="number" name="sewaNohp" class="form-control" placeholder="HP..." wire:model.lazy="sewaNohp"/>
                                     </div>
-                                </div>
-                                {{-- @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror --}}
+                                </div>   <br>
+                                @error('sewaNohp') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                             </div>
 
-                             {{-- tujuuan Sewa --}}
+
+                            {{-- Pekerjaan  --}}
                             <div class="form-group row">
-                                <label class="col-sm-4 control-label text-sm-right pt-2">Tujuan</label>
+                                <label class="col-sm-4 control-label text-sm-right pt-2">Pekerjaan</label>
                                 <div class="col-sm-3">
                                     <div class="input-group">
-                                        <input type="text" name="sewaTujuan" class="form-control" placeholder="Tujuan..." wire:model.lazy="sewaTujuan"/>
+                                        <input type="text" name="sewaJob" class="form-control" placeholder="Pekerjaan.." wire:model.lazy="sewaJob"/>
                                     </div>
-                                </div>
-                                {{-- @error('fieldJenisAlat') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror --}}
+                                </div>   <br>
+                                @error('sewaJob') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+                            </div>
+
+                            {{-- Alamat  --}}
+                            <div class="form-group row">
+                                <label class="col-sm-4 control-label text-sm-right pt-2">Alamat</label>
+                                <div class="col-sm-4">
+                                    <div class="input-group">
+                                        <textarea type="text" name="sewaAlamat" class="form-control" placeholder="Alamat.." wire:model.lazy="sewaAlamat"/></textarea>
+                                    </div>
+                                </div>   <br>
+                                @error('sewaAlamat') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                             </div>
 
 
@@ -129,7 +169,7 @@
                             <div class="row justify-content-end">
                                 <div class="col-sm-9" style="display: flex; justify-content: flex-end">
                                     <button wire:click="clearForm()"  onclick="return false"  class="btn btn-default">Kembali</button>&nbsp; &nbsp;&nbsp;
-                                      <button class="btn btn-primary" onclick="return false" wire:click="create">Buat</button>
+                                    <button class="btn btn-primary" onclick="return false" wire:click="create">Buat</button>
                                 </div>
                             </div>
 

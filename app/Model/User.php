@@ -18,7 +18,7 @@ class User extends Authenticatable {
     protected $table = 'user';
     protected $primaryKey = 'user_id';
     protected $fillable = [
-        'user_id', 'user_role', 'user_nama', 'user_mail', 'user_alamat', 'user_job','user_password',
+        'user_id', 'user_role', 'user_nick','user_nama', 'user_mail', 'user_alamat', 'user_job','user_password',
     ];
 
         /**
@@ -42,7 +42,7 @@ class User extends Authenticatable {
 
     // Koneksi PrimaryKey User di ForeignKey Tabel Lain :
     public function penyewaan() {
-        return $this->hasMany('App\Model\Penyewaan', 'sewa_user', 'user_nik');
+        return $this->hasMany('App\Model\Penyewaan', 'sewa_user', 'user_id');
     }
 
     public function getAuthPassword(){

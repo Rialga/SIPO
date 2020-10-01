@@ -13,27 +13,27 @@
 
                             {{-- User ID--}}
                             <div class="form-group row">
-                                <label class="col-sm-2 control-label text-sm-right pt-2">User ID</label>
+                                <label class="col-sm-2 control-label text-sm-right pt-2">Nick Name</label>
                                 <div class="col-sm-5">
                                     @if($detailPage)
-                                    <h4 class="col-sm-6 control-label text-sm-left pt-1">{{ $userId }}</h4>
+                                    <h4 class="col-sm-6 control-label text-sm-left pt-1">{{ $userNick }}</h4>
                                     @else
                                         <div class="input-group">
-                                            <input type="text" name="userId" class="form-control" placeholder="User ID"  wire:model.lazy ="userId" required/>
+                                            <input type="text" name="userNick" class="form-control" placeholder="Nick Name"  wire:model.lazy ="userNick" required/>
                                             <span class="input-group-prepend">
-                                                <button wire:click="checkUserId" class="btn btn-default" id="checkUserId" onclick="return false"><i class="fas fa-sync-alt"></i> Check </button>
+                                                <button wire:click="checkUserNick" class="btn btn-default" id="checkUserNick" onclick="return false"><i class="fas fa-sync-alt"></i> Check </button>
                                             </span>
                                         </div>
 
                                         @if($checkUser)
-                                            @if($countUserId == 0)
+                                            @if($countUserNick == 0)
                                                 <span class="pt-2" style="color: green"><i class="fas fa-check"></i> Dapat Digunakan</span>
                                             @else
                                                 <span class="pt-2" style="color: red"><i class="fas fa-times"></i> User Id telah di pakai</span>
                                             @endif
                                         @endif
                                         <br>
-                                        @error('userId') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+                                        @error('userNick') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                                     @endif
                                 </div>
                             </div>

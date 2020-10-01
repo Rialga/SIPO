@@ -131,13 +131,13 @@ class KonfirmasiPengembalian extends Component
             }
 
         }
-        
+
         $this->field = [];
         $this->pilihKondisi  = [];
         $this->jumlahKondisi = [];
         $this->addKondisi = false;
         return $this->arrayField();
-        $this->addKondisi == false;
+        $this->fullDetail == true;
     }
 
 

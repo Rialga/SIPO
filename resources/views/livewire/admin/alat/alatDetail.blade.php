@@ -23,14 +23,14 @@
 
                                         <div class="tab-pane fade show active " id="product-{{ $idPic }}" role="tabpanel" aria-labelledby="product-{{ $idPic }}-tab">
                                             <div>
-                                                <img src="{{ asset("storage/gambarAlat/$detailPic->gambar_file") }}" alt="" class="img-fluid mx-auto d-block">
+                                                <img src="{{ asset("storage/gambarAlat/$detailPic->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; width:  170px; height: 200px;">
                                             </div>
                                         </div>
                                         @foreach ($detailGambar as $item)
                                         <input hidden id="{{ $idPic++ }}">
                                         <div class="tab-pane fade show " id="product-{{ $idPic }}" role="tabpanel" aria-labelledby="product-{{ $idPic }}-tab">
                                             <div>
-                                                <img src="{{ asset("storage/gambarAlat/$item->gambar_file") }}" alt="" class="img-fluid mx-auto d-block">
+                                                <img src="{{ asset("storage/gambarAlat/$item->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; width:  170px; height: 200px;">
                                             </div>
                                         </div>
                                         @endforeach

@@ -19,20 +19,12 @@
                                         <tr>
                                             <td>Nama</td>
                                             <td>:</td>
-                                            @if($dataSewa->sewa_status == 1)
                                             <td>{{ $dataSewa->user->user_nama }}</td>
-                                            @else
-                                            <td>{{ $dataSewa->sewa_offnama }}</td>
-                                            @endif
                                         </tr>
                                         <tr>
                                             <td>No HP</td>
                                             <td>:</td>
-                                            @if($dataSewa->sewa_status == 1)
                                             <td>{{ $dataSewa->user->user_phone }}</td>
-                                            @else
-                                            <td>{{ $dataSewa->sewa_offphone }}</td>
-                                            @endif
                                         </tr>
                                         <tr>
                                             <td> Waktu  </td>

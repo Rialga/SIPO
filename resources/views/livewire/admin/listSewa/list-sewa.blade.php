@@ -103,11 +103,7 @@
                                                 @foreach ($data as $row)
                                                 <tr>
                                                     <td class="btn waves-effect waves-light" title="Detail" wire:click="showDetailPage('{{$row->sewa_no}}')">{{$row->sewa_no}}</td>
-                                                    @if($row->sewa_status == 1)
                                                     <td>{{$row->user->user_nama}}</td>
-                                                    @else
-                                                    <td>{{$row->sewa_offnama}}</td>
-                                                    @endif
                                                     <td>{{$row->sewa_tglsewa}}</td>
                                                     <td>{{$row->sewa_tglkembali}}</td>
                                                     <td>{{$row->status_sewa->status_detail}}</td>

@@ -3,15 +3,16 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Model\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
 class Member extends Component
 {
 
-    public $userId , $userNama , $userMail , $userAlamat , $userJob , $userPhone , $userPassword , $retypePassword;
+    public $userNick , $userNama , $userMail , $userAlamat , $userJob , $userPhone , $userPassword , $retypePassword;
 
-    public $countUserId;
+    public $countUserNick;
 
     public $formMember = false;
     public $detailPage = false;
@@ -25,7 +26,7 @@ class Member extends Component
 
     public function render()
     {
-        $data = User::where('user_role',2)->search($this->search)
+        $data = User::where('user_role',3)->search($this->search)
         ->orderBy($this->sortBy, $this->sortDiraction)
         ->paginate($this->showPage);
         return view('livewire.admin.member.member',['data'=>$data]);
@@ -45,17 +46,17 @@ class Member extends Component
     }
 
 
-    // Check Kode alat
-    public function checkUserId(){
+    // Check NICK
+    public function checkUserNick(){
 
         $this->checkUser = false;
         $this->validate([
-            'userId' => 'required | max:20 | regex:/^\S*$/u',
+            'userNick' => 'required | max:20 | regex:/^\S*$/u',
         ]);
 
         $this->checkUser = true;
-        $userId  = $this->userId;
-        $this->countUserId = User::where('user_id',$userId)->count();
+        $userNick  = $this->userNick;
+        $this->countUserNick = User::where('user_nick',$userNick)->count();
     }
 
 
@@ -65,7 +66,7 @@ class Member extends Component
         $this->checkUser = false;
 
         $this->validate([
-            'userId' => 'required | max:20 | regex:/^\S*$/u ',
+            'userNick' => 'required | max:20 | regex:/^\S*$/u ',
             'userNama' => 'required | max:30',
             'userMail' => 'required | max:35 |email',
             'userAlamat' => 'required | max:100',
@@ -76,13 +77,15 @@ class Member extends Component
         ]);
 
 
-        $this->countUserId = User::where('user_id', $this->userId)->count();
+        $this->countUserNick = User::where('user_nick', $this->userNick)->count();
 
-        if($this->countUserId == 0){
+        if($this->countUserNick == 0){
+            $userId ='M-'.Carbon::now()->format('ymdHis');
             $create = new User();
 
-            $create->user_id = $this->userId;
-            $create->user_role = 2;
+            $create->user_id = $userId;
+            $create->user_nick = $this->userNick;
+            $create->user_role = 3;
             $create->user_nama = $this->userNama;
             $create->user_mail = $this->userMail;
             $create->user_alamat = $this->userAlamat;
@@ -105,14 +108,14 @@ class Member extends Component
     // Update
     public function update(){
 
-        $update = User::where('user_id', $this->userId)->first();
+        $update = User::where('user_nick', $this->userNick)->first();
 
         if($this->fieldPassword){
             $this->validate([
                 'userNama' => 'required | max:30',
                 'userMail' => 'required | max:35 |email',
                 'userAlamat' => 'required | max:100',
-                'userJob' => 'required | max:25',
+                'userJob' => 'required | max:30',
                 'userPhone' => 'required | max:15',
 
                 'userPassword' => 'min:8 | required_with:retypePassword | same:retypePassword' ,
@@ -127,7 +130,7 @@ class Member extends Component
             'userNama' => 'required | max:30',
             'userMail' => 'required | max:35 |email',
             'userAlamat' => 'required | max:100',
-            'userJob' => 'required | max:25',
+            'userJob' => 'required | max:40',
             'userPhone' => 'required | max:15',
         ]);
 
@@ -144,13 +147,19 @@ class Member extends Component
     }
 
 
+    public function delete($id){
+
+        User::where('user_id',$id)->delete();
+
+    }
+
     // show Detail and edit page
     public function showDetailPage($id){
 
 
         $detail = User::where('user_id' , $id)->first();
 
-        $this->userId = $detail->user_id;
+        $this->userNick = $detail->user_nick;
         $this->userNama = $detail->user_nama;
         $this->userAlamat = $detail->user_alamat;
         $this->userMail = $detail->user_mail;
@@ -185,7 +194,7 @@ class Member extends Component
 
         $this->validate([]);
 
-        $this->userId = null;
+        $this->userNick = null;
         $this->userNama = null;
         $this->userMail = null;
         $this->userAlamat = null;
@@ -195,7 +204,7 @@ class Member extends Component
 
         $this->retypePassword = null;
 
-        $this->countUserId = null;
+        $this->countUserNick = null;
 
         $this->formMember = false;
         $this->detailPage = false;

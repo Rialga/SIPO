@@ -5,14 +5,16 @@ namespace App\Http\Livewire\Admin;
 use App\Model\Alat;
 use App\Model\DetailSewa;
 use App\Model\Penyewaan;
+use App\Model\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use phpDocumentor\Reflection\Types\This;
 
 class ListSewa extends Component
 {
 
-    public $invoice, $tglPinjam , $tglKembali , $sewaNohp , $sewaNama , $sewaTujuan, $tglBayar, $sewaStatus, $fullPrice , $totalHari;
+    public $invoice, $tglPinjam , $tglKembali , $sewaNohp , $sewaNama , $sewaJob , $sewaAlamat , $sewaMail, $sewaTujuan, $tglBayar, $sewaStatus, $fullPrice , $totalHari;
 
     public $sewaTglCreate = null;
 
@@ -90,8 +92,6 @@ class ListSewa extends Component
         $this->num = $num;
         array_push($this->inputs ,$num);
 
-        return $this->checkTotal();
-
     }
 
     public function remove($num , $val)
@@ -102,8 +102,6 @@ class ListSewa extends Component
 
         unset($this->inputs[$num]);
 
-        return $this->checkTotal();
-
 
     }
 
@@ -111,23 +109,61 @@ class ListSewa extends Component
     // Create
     public function create(){
 
+        $this->validate([
+            'alat.*' => 'required',
+            'stok.*' => 'required',
+            'sewaNama' => 'required',
+            'sewaMail' => 'required|email',
+            'sewaAlamat' => 'required',
+            'sewaJob' => 'required',
+            'sewaNohp' => 'required',
+            'tglPinjam' => 'required',
+            'tglKembali' => 'required',
+            'sewaTujuan' => 'required',
+        ]);
+
+
+        // Genereate No Invoice
         $invoice = 'INVC/II/'.Carbon::now()->format('Ymd/His');
+        //Generate Id Member
+        $idMember = 'M-'.Carbon::now()->format('ymdHis');
 
+        //Genereate nickname
+        $firstName = explode(' ',trim($this->sewaNama));
+        $nickname = $firstName[0];
+        $uniqcode = substr(md5(time()), 0, 3);
+        if(User::where('user_nick',$nickname)->exists()) {
+            $nickname = $firstName[0] .'_'. $uniqcode;
+        }
+
+
+        // insert data memeber
+        $member = new User();
+        $member->user_id = $idMember;
+        $member->user_nick = $nickname;
+        $member->user_role = 3;
+        $member->user_nama = $this->sewaNama;
+        $member->user_mail = $this->sewaMail;
+        $member->user_alamat = $this->sewaAlamat;
+        $member->user_job = $this->sewaJob;
+        $member->user_phone = $this->sewaNohp;
+        $member->user_password = Hash::make('123qweasd');
+        $member->save();
+
+        //insert penyewaan
         $createSewa = new Penyewaan();
-
         $createSewa->sewa_no = $invoice;
-        $createSewa->sewa_jenis = 2;
         $createSewa->sewa_status = 3;
+        $createSewa->sewa_user = $idMember;
         $createSewa->sewa_tglsewa = $this->tglPinjam;
         $createSewa->sewa_tglkembali = $this->tglKembali;
-        $createSewa->sewa_offphone = $this->sewaNohp;
-        $createSewa->sewa_offnama = $this->sewaNama;
         $createSewa->sewa_buktitf = 'Lunas';
         $createSewa->sewa_tglbayar = Carbon::now();
         $createSewa->sewa_tujuan = $this->sewaTujuan;
-
         $createSewa->save();
 
+
+        //insert fetail penyewaan
         foreach ($this->stok as $key => $value) {
             $detail = new DetailSewa();
 
@@ -178,12 +214,11 @@ class ListSewa extends Component
     // Show Edit page
     public function showDetailPage($id){
 
+
         $this->dataSewa = Penyewaan::find($id);
 
 
         $this->invoice =  $this->dataSewa->sewa_no;
-        $this->sewaNama = $this->dataSewa->sewa_offnama;
-        $this->sewaNohp = $this->dataSewa->sewa_offphone;
         $this->sewaTujuan = $this->dataSewa->sewa_tujuan;
         $this->tglKembali = $this->dataSewa->sewa_tglkembali;
         $this->tglPinjam = $this->dataSewa->sewa_tglsewa;
@@ -219,10 +254,14 @@ class ListSewa extends Component
     //Cleat form
     public function clearForm(){
 
+        $this->validate([]);
         $this->tglPinjam = null;
         $this->tglKembali = null;
         $this->sewaNama = null;
         $this->sewaNohp = null;
+        $this->sewaJob = null;
+        $this->sewaAlamat = null;
+        $this->sewaMail = null;
         $this->sewaTujuan = null;
         $this->invoice = null;
         $this->totalHari = null;
@@ -249,3 +288,6 @@ class ListSewa extends Component
     }
 
 }
+
+
+

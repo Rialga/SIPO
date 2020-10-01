@@ -27,6 +27,8 @@
         <div class="d-flex" style="position:relative;  right:100px;">
 
             @auth
+
+            {{-- Notif --}}
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -70,12 +72,84 @@
                     </div>
                 </div>
             </div>
-            <div type="button" class="d-inline-block">
-                <a wire:click="logout" class="btn header-item waves-effect">
-                    <br>
-                    <i class="fas fa-user-plus"></i>
-                    <span class="d-none d-xl-inline-block ml-1">Logout</span>
-                </a>
+
+            {{-- Cart --}}
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-cart"></i>
+                    @if($cartTotal == 0)
+                    <span class="badge badge-danger badge-pill"></span>
+                    @else
+                    <span class="badge badge-danger badge-pill">{{ $cartTotal }}</span>
+                    @endif
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0"
+                    aria-labelledby="page-header-notifications-dropdown">
+                    <div class="p-3">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="m-0"> Cart </h6>
+                            </div>
+                            <div class="col-auto">
+                                <a href="{{ url('/cart') }}"class="small"> View All</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    @forelse($dataAlat as $item)
+                    <div data-simplebar style="max-height: 230px;">
+                        <a href="#" class="text-reset notification-item">
+                            <div class="media">
+                                <div class="avatar-xs mr-3">
+                                    @foreach ($item->gambar_alat as $file)
+                                        <img class="rounded-circle header-profile-user" src={{ asset("storage/gambarAlat/$file->gambar_file") }} alt="Header Avatar">
+                                    @break
+                                    @endforeach
+                                </div>
+                                <div class="media-body">
+                                    <h6 class="mt-0 mb-1">{{ $item->jenis_alat->jenis_alat_nama }} ({{ $item->merk->merk_nama }})</h6>
+                                    <div class="font-size-6 text-muted">
+                                        <p class="mb-1">{{ $item->alat_tipe }}</p>
+                                    </div>
+                                    <div style="display: flex; justify-content: flex-end">
+                                        <p class="mb-1" style="color: orangered">Rp. {{ $item->jenis_alat->jenis_alat_harga }}</p> &nbsp;
+                                        <p class="mb-1"> x 1</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    @empty
+                    <div data-simplebar style="max-height: 230px;">
+                        <a class="text-reset notification-item">
+                            <div class="media">
+                                <p>Belum Ada Alat</p>
+                            </div>
+                        </a>
+                    </div>
+                    @endforelse
+
+
+                    <div class="p-2 border-top">
+                        <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="{{ url('/cart') }}">
+                            <i class="mdi mdi-arrow-right-circle mr-1"></i> View More..
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown">
+                <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown">
+                    <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar" style="position:relative;  top:-6px;">
+                    <span class="d-none d-xl-inline-block ml-1" style="position:relative;  bottom:5px;"> {{ Auth::user()->user_nama }}</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" id="page-header-user-dropdown">
+                    <!-- item-->
+                    <a class="dropdown-item" href="{{ url('/profile') }}"><i class="bx bx-user font-size-16 align-middle mr-1"></i> Profile</a>
+                    <div class="dropdown-divider"></div>
+                    <a wire:click="logout" class="dropdown-item text-danger" style="cursor: pointer;"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
+                </div>
             </div>
             @endauth
 
