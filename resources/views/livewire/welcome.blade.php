@@ -36,20 +36,25 @@
                                 <div class="card-body">
                                     <div class="product-img position-relative">
                                         <div class="avatar-sm product-ribbon">
+                                            @guest
+                                            <a href="{{ url('/login') }}" class="avatar-title rounded-circle  bg-success" style="cursor: pointer;">
+                                                <i class="fas fa-plus" style="color: white"></i>
+                                            </a>
+                                            @endguest
+                                            @auth
                                             <a class="avatar-title rounded-circle  bg-success" style="cursor: pointer;" wire:click="addToCart('{{ $item->alat_kode }}')">
                                                 <i class="fas fa-plus" style="color: white"></i>
                                             </a>
+                                            @endauth
+
                                         </div>
-                                        @foreach ($item->gambar_alat as $file)
-                                            <a href="#">
-                                                <img src="{{ asset("storage/gambarAlat/$file->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; width:  170px; height: 200px;">
+                                            <a href="{{ url('/produk/'.$item->alat_kode) }}">
+                                                <img src="{{ asset("storage/gambarAlat/".$item->gambar_alat[0]->gambar_file) }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; width:  170px; height: 200px;">
                                             </a>
-                                            @break
-                                        @endforeach
                                     </div>
                                     <div class="mt-4 text-center">
-                                        <h5 class="mb-3 text-truncate"><a href="#" class="text-dark">{{ $item->jenis_alat->jenis_alat_nama }} - {{ $item->merk->merk_nama }}</a></h5>
-                                        <h5 class="mb-3 text-truncate"><a href="#" class="text-dark">({{ $item->alat_tipe }})</a></h5>
+                                        <h5 class="mb-3 text-truncate"><a href="{{ url('/produk/'.$item->alat_kode) }}" class="text-dark">{{ $item->jenis_alat->jenis_alat_nama }} - {{ $item->merk->merk_nama }}</a></h5>
+                                        <h5 class="mb-3 text-truncate"><a href="{{ url('/produk/'.$item->alat_kode) }}" class="text-dark">({{ $item->alat_tipe }})</a></h5>
                                         <h5 class="my-0"><span class="text-muted mr-2"></span> <b>Rp {{ $item->jenis_alat->jenis_alat_harga }} / Hari</b></h5>
                                     </div>
                                 </div>

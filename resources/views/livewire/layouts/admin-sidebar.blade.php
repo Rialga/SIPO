@@ -87,7 +87,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('/pembayaran') }}" class="waves-effect">
+                            <a href="{{ url('/konfirmasi-pembayaran') }}" class="waves-effect">
                                 <i class="mdi mdi-wallet"></i>
                                 <span>Pembayaran</span>
                             </a>

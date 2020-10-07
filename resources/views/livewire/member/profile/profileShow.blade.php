@@ -18,10 +18,10 @@
 
                                 <form id="form" class="form-horizontal">
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label text-sm-right pt-2">User ID</label>
+                                        <label class="col-sm-2 control-label text-sm-right pt-2">Nick Name</label>
                                         <div class="col-sm-5">
                                             <div class="input-group">
-                                                <input type="text" name="userId" class="form-control" placeholder="User ID"  required/>
+                                                <input type="text" name="userId" class="form-control" placeholder="User Nick" wire:model.lazy ="userNick" required/>
                                             </div>
                                         </div>
                                     </div>
@@ -29,7 +29,7 @@
                                         <label class="col-sm-2 control-label text-sm-right pt-2">Nama Lengkap</label>
                                         <div class="col-sm-5">
                                             <div class="input-group">
-                                                <input type="text" name="userId" class="form-control" placeholder="User ID"  required/>
+                                                <input type="text" name="userId" class="form-control" placeholder="Nama" wire:model.lazy ="userNama" required/>
                                             </div>
                                         </div>
                                     </div>
@@ -37,7 +37,7 @@
                                         <label class="col-sm-2 control-label text-sm-right pt-2">Email</label>
                                         <div class="col-sm-5">
                                             <div class="input-group">
-                                                <input type="text" name="userId" class="form-control" placeholder="User ID"  required/>
+                                                <input type="mail" name="userId" class="form-control" placeholder="mail" wire:model.lazy ="userMail" required/>
                                             </div>
                                         </div>
                                     </div>
@@ -45,7 +45,7 @@
                                         <label class="col-sm-2 control-label text-sm-right pt-2">Alamat</label>
                                         <div class="col-sm-5">
                                             <div class="input-group">
-                                                <input type="text" name="userId" class="form-control" placeholder="User ID"  required/>
+                                                <textarea type="text" name="userId" class="form-control" placeholder="Alamat" wire:model.lazy ="userAlamat" required/></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -53,7 +53,7 @@
                                         <label class="col-sm-2 control-label text-sm-right pt-2">Pekerjaan / Sekolah</label>
                                         <div class="col-sm-5">
                                             <div class="input-group">
-                                                <input type="text" name="userId" class="form-control" placeholder="User ID"  required/>
+                                                <input type="text" name="userId" class="form-control" placeholder="User ID" wire:model.lazy ="userJob" required/>
                                             </div>
                                         </div>
                                     </div>
@@ -61,14 +61,30 @@
                                         <label class="col-sm-2 control-label text-sm-right pt-2">No Hp</label>
                                         <div class="col-sm-5">
                                             <div class="input-group">
-                                                <input type="text" name="userId" class="form-control" placeholder="User ID"  required/>
+                                                <input type="text" name="userId" class="form-control" placeholder="User ID" wire:model.lazy ="userPhone" required/>
                                             </div>
                                         </div>
                                     </div>
 
+                                    @if($fieldPassword)
+
+                                    @include('livewire.member.profile.filedAdd.fieldPassword')
+
+                                    @else
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label text-sm-right pt-2">Password</label>
+                                            <div class="col-sm-5">
+                                                <span class="input-group-prepend">
+                                                    <button wire:click="addPassword('{{ true }}')" class="btn btn-warning" id="addPassword" onclick="return false"><i class="dripicons-warning"></i> Ganti Password</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    @endif
+
+
                                     <div class="row justify-content-end">
                                         <div class="col-sm-9" style="display: flex; justify-content: flex-end">
-                                            <button class="btn btn-primary" onclick="return false" wire:click="create">Simpan</button>
+                                            <button class="btn btn-primary" onclick="return false" wire:click="update">Simpan</button>
                                         </div>
                                     </div>
                                 </form>

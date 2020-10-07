@@ -2,33 +2,32 @@
 
 namespace App\Http\Livewire;
 
-
 use App\Model\Alat;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
-class Welcome extends Component
+class DetailProduk extends Component
 {
 
+    public $dataAlat , $idDiv , $idPic;
 
-    public $dataAlat;
+    public function mount($kode){
 
-    public function mount(){
-        $this->dataAlat = Alat::all();
+        $this->dataAlat = Alat::where('alat_kode',$kode)->first();
+
+        $this->idDiv = 0;
+        $this->idPic = 0;
+
     }
+
 
     public function render()
     {
-
-        return view('livewire.welcome');
+        return view('livewire.detail-produk');
     }
 
     public function addToCart($id){
 
         $Alat = Alat::where('alat_kode',$id)->first();
-
-        
-
 
         if (isset($search_array[$id]) == false){
 

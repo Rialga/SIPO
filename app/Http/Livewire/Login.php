@@ -35,6 +35,7 @@ class Login extends Component
 
             if(Auth::user()->user_role == 3){
                 return redirect('/');
+                $this->emit('cartAdded');
             }
             else{
                 return redirect('/dashboard');

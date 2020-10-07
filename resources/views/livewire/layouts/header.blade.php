@@ -6,19 +6,19 @@
             <div class="navbar-brand-box" style="position:relative;  left:40px;">
                 <a href="{{ url('/') }}" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="assets/images/logo.svg" alt="" height="22">
+                        <img src={{ asset("assets/images/logo.svg")}} alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-dark.png" alt="" height="17">
+                        <img src={{ asset("assets/images/logo-dark.png")}} alt="" height="17">
                     </span>
                 </a>
 
                 <a href="index.html" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="assets/images/logo-light.svg" alt="" height="22">
+                        <img src={{ asset("assets/images/logo-light.svg")}} alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-light.png" alt="" height="19">
+                        <img src={{ asset("assets/images/logo-light.png")}} alt="" height="19">
                     </span>
                 </a>
             </div>
@@ -97,38 +97,34 @@
                         </div>
                     </div>
 
-                    @forelse($dataAlat as $item)
+
                     <div data-simplebar style="max-height: 230px;">
-                        <a href="#" class="text-reset notification-item">
-                            <div class="media">
-                                <div class="avatar-xs mr-3">
-                                    @foreach ($item->gambar_alat as $file)
-                                        <img class="rounded-circle header-profile-user" src={{ asset("storage/gambarAlat/$file->gambar_file") }} alt="Header Avatar">
-                                    @break
-                                    @endforeach
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mt-0 mb-1">{{ $item->jenis_alat->jenis_alat_nama }} ({{ $item->merk->merk_nama }})</h6>
-                                    <div class="font-size-6 text-muted">
-                                        <p class="mb-1">{{ $item->alat_tipe }}</p>
+                        @forelse(\Cart::session( auth()->id())->getContent() as $item)
+                            <a href="#" class="text-reset notification-item">
+                                <div class="media">
+                                    <div class="avatar-xs mr-3">
+                                        <img class="rounded-circle header-profile-user" src={{ asset("storage/gambarAlat/".$item->attributes->pic) }} alt="Header Avatar">
                                     </div>
-                                    <div style="display: flex; justify-content: flex-end">
-                                        <p class="mb-1" style="color: orangered">Rp. {{ $item->jenis_alat->jenis_alat_harga }}</p> &nbsp;
-                                        <p class="mb-1"> x 1</p>
+                                    <div class="media-body">
+                                        <h6 class="mt-0 mb-1">{{ $item->name }} ({{ $item->attributes->merk }})</h6>
+                                        <div class="font-size-6 text-muted">
+                                            <p class="mb-1">{{ $item->attributes->type }}</p>
+                                        </div>
+                                        <div  style="display: flex; justify-content: flex-end">
+                                            <p class="mb-1" style="color: orangered">Rp. {{ $item->price }}</p> &nbsp;
+                                            <p class="mb-1"> x {{ $item->quantity }}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        @empty
+                            <a class="text-reset notification-item">
+                                <div class="media">
+                                    <p>Cart Kosong</p>
+                                </div>
+                            </a>
+                        @endforelse
                     </div>
-                    @empty
-                    <div data-simplebar style="max-height: 230px;">
-                        <a class="text-reset notification-item">
-                            <div class="media">
-                                <p>Belum Ada Alat</p>
-                            </div>
-                        </a>
-                    </div>
-                    @endforelse
 
 
                     <div class="p-2 border-top">
@@ -141,7 +137,7 @@
 
             <div class="dropdown">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown">
-                    <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg" alt="Header Avatar" style="position:relative;  top:-6px;">
+                    <img class="rounded-circle header-profile-user" src={{ asset("assets/images/users/avatar-1.jpg")}} alt="Header Avatar" style="position:relative;  top:-6px;">
                     <span class="d-none d-xl-inline-block ml-1" style="position:relative;  bottom:5px;"> {{ Auth::user()->user_nama }}</span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" id="page-header-user-dropdown">

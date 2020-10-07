@@ -1,8 +1,7 @@
 <?php
 
+use App\Http\Livewire\Member\Pembayaran;
 use App\Model\User;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,8 +36,12 @@ Route::get('/insert', function () {
 
 
 
-
+// Guest
 Route::livewire('/','welcome');
+
+Route::livewire('/produk/{kode}','detail-produk');
+
+
 Route::livewire('/login','login');
 
 
@@ -56,7 +59,7 @@ Route::livewire('/merk','admin.merk');
 Route::livewire('/kelola-denda','admin.kelola-denda');
 
 Route::livewire('/list-sewa','admin.list-sewa');
-Route::livewire('/pembayaran','admin.konfirmasi-pembayaran');
+Route::livewire('/konfirmasi-pembayaran','admin.konfirmasi-pembayaran');
 Route::livewire('/pengembalian','admin.konfirmasi-pengembalian');
 
 Route::livewire('/report-penyewaan','admin.report-penyewaan');
@@ -64,5 +67,13 @@ Route::livewire('/report-penyewaan','admin.report-penyewaan');
 // MEMBER
 Route::livewire('/profile','member.profile');
 Route::livewire('/cart','member.cart');
+
 Route::livewire('/sewa','member.sewa');
+Route::livewire('/pembayaran/{invoice}', 'member.pembayaran');
+Route::livewire('/detail/{invoice}', 'member.detail-sewa');
+
+
 Route::livewire('/notifikasi','member.notifikasi');
+
+
+

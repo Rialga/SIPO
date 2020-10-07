@@ -93,9 +93,12 @@
                         <div class="col-sm-6 text-sm-center">
                             <address>
                                 <strong>Bukti Transfer</strong><br><br>
-
-                                <img src="{{ asset("storage/gambarAlat/$dataSewa->sewa_buktitf") }}" width="170" height="200" />
-
+                                <div>
+                                <a class="image-popup-no-margins" href="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}"  target="_blank">
+                                    <img class="img-fluid" alt="" src="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}" width="145">
+                                </a>
+                                {{-- <img src="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}" width="170" height="200" /> --}}
+                                </div>
                             </address>
                         </div>
                     </div>

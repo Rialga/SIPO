@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Layouts;
 
-use App\Facades\Cart;
+
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,20 +10,34 @@ class Header extends Component
 {
 
     public $cartTotal = 0;
+    public $dataAlat = [];
+
 
     protected $listeners = [
         'cartAdded' => 'updateCart',
         'alatRemoved' => 'updateCart'
     ];
 
-    public $dataAlat;
+
 
     public function mount(){
-        $this->dataAlat =  Cart::get()['dataAlat'];
-        $this->cartTotal = count($this->dataAlat);
+
+        if (Auth::guest()) {
+
+        }
+        else{
+            $this->cartTotal = \Cart::session( auth()->id())->getTotalQuantity();
+        }
+
     }
 
     public function logout(){
+
+        $cart = \Cart::session( auth()->id())->getContent();
+
+        foreach ($cart as $key => $item){
+            \Cart::session(auth()->id())->remove($key);
+        }
 
         Auth::logout();
         return redirect('/login');
@@ -35,8 +49,9 @@ class Header extends Component
     }
 
     public function updateCart(){
-        $this->dataAlat =  Cart::get()['dataAlat'];
-        $this->cartTotal = count($this->dataAlat);
+
+        $this->cartTotal = \Cart::session( auth()->id())->getTotalQuantity();
+        // $this->dataAlat = \Cart::session( auth()->id())->getContent();
     }
 
 }

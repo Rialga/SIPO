@@ -6,6 +6,8 @@
                 <div class="row">
                     <div class="col-xl-6">
                         <div class="product-detai-imgs">
+
+                            
                             <div class="row">
                                 <div class="col-md-2 col-sm-3 col-4">
                                     <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
