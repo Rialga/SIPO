@@ -20,19 +20,15 @@
                          </div>
                          <div class="col-lg-2" style="text-align: center">
                             @if($item->sewa_status == 0)
-                                Status :<br> <b style="color: red"> Dibatalkan </b>
+                                Status :<br> <b style="color: red"> {{ $item->status_sewa->status_detail }} </b>
                             @elseif($item->sewa_status == 1)
-                                Status :<br> <b style="color: orange"> Belum Bayar </b>
-                            @elseif($item->sewa_status == 2)
-                                Status :<br> <b style="color: #0AC8C8"> Menunggu Konfirmasi</b>
-                            @elseif($item->sewa_status == 3)
-                                Status :<br> <b style="color: #0AC8C8"> Pembayaran Telah dikonfirmasi </b>
-                            @elseif($item->sewa_status == 4 or 5)
-                                Status :<br> <b style="color: #0AC8C8"> Barang Siap Diambil </b>
+                                Status :<br> <b style="color: orange"> {{ $item->status_sewa->status_detail }}  </b>
+                            @elseif($item->sewa_status == 2 or $item->sewa_status == 3 or $item->sewa_status == 4 or $item->sewa_status == 5)
+                                Status :<br> <b style="color: #0AC8C8"> {{ $item->status_sewa->status_detail }}  </b>
                             @elseif($item->sewa_status == 6)
-                                Status :<br> <b style="color: green"> Dikembalikan </b>
+                                Status :<br> <b style="color: green"> {{ $item->status_sewa->status_detail }}  </b>
                             @else
-                                Status :<br> <b style="color: red"> Pembayaran Ditolak </b>
+                                Status :<br> <b style="color: red"> {{ $item->status_sewa->status_detail }}  </b>
                             @endif
                          </div>
                          <div class="col-lg-4" style="text-align: center">

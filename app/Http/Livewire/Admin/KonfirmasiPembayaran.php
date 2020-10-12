@@ -10,11 +10,6 @@ class KonfirmasiPembayaran extends Component
 {
 
 
-    public $detailPage = false;
-
-    public $dataSewa;
-
-    public $totalHari , $subTotal, $grandTotal;
 
     public $sortBy = 'sewa_no';
     public $sortDiraction = 'asc';
@@ -40,34 +35,12 @@ class KonfirmasiPembayaran extends Component
         return $this->sortBy = $field;
     }
 
-    // Show Detail
-    public function showDetailPage($id){
-
-        $this->dataSewa = Penyewaan::find($id);
-
-        $this->totalHari = Carbon::parse( $this->dataSewa->sewa_tglsewa )->diffInDays( $this->dataSewa->sewa_tglkembali );
-
-
-        foreach($this->dataSewa->detail_sewa as $item){
-
-            $harga[] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
-
-        }
-
-        $this->subTotal = array_sum($harga);
-        $this->grandTotal = $this->subTotal * $this->totalHari;
-
-        $this->detailPage = true;
-
-    }
 
    // Status change
     public function accept($id){
         $accept = Penyewaan::where('sewa_no' , $id)->first();
         $accept->sewa_status = 3;
         $accept->update();
-        $this->detailPage = false;
-
     }
 
     // status Change
@@ -75,18 +48,13 @@ class KonfirmasiPembayaran extends Component
         $accept = Penyewaan::where('sewa_no' , $id)->first();
         $accept->sewa_status = 7;
         $accept->update();
-        $this->detailPage = false;
     }
 
-    public function clearForm(){
+    // Show Detail
+    public function showDetailPage($id){
 
-        $this->detailPage = false;
-
-        $this->sortBy = 'sewa_no';
-        $this->sortDiraction = 'asc';
-        $this->showPage = 10;
-        $this->search='';
+        $invoice = str_replace("/","-",$id);
+        return redirect('detailpembayaran/'.$invoice);
 
     }
-
 }

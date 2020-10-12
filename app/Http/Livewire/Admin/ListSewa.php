@@ -23,17 +23,15 @@ class ListSewa extends Component
 
     public $dataSewa , $dataAlat;
 
-    public $formSewa = false;
-    public $detailPage = false;
-
     public $hargaTotal = 0;
 
     public $inputs = [];
     public $num = 0;
 
+    public $formSewa = false;
 
-    public $sortBy = 'sewa_no';
-    public $sortDiraction = 'asc';
+    public $sortBy = 'created_at';
+    public $sortDiraction = 'desc';
     public $showPage = 10;
     public $search='';
 
@@ -71,11 +69,8 @@ class ListSewa extends Component
         foreach ($this->stok as $key => $value) {
 
             $alat = Alat::where('alat_kode', $this->alat[$key])->first();
-
             $harga = $alat->jenis_alat->jenis_alat_harga;
-
             $total = $harga * $this->stok[$key];
-
             $price[] = $total;
 
         }
@@ -96,13 +91,9 @@ class ListSewa extends Component
 
     public function remove($num , $val)
     {
-
         unset($this->stok[$val]);
         unset($this->alat[$val]);
-
         unset($this->inputs[$num]);
-
-
     }
 
 
@@ -214,36 +205,23 @@ class ListSewa extends Component
     // Show Edit page
     public function showDetailPage($id){
 
+        $invoice = str_replace("/","-",$id);
 
-        $this->dataSewa = Penyewaan::find($id);
-
-
-        $this->invoice =  $this->dataSewa->sewa_no;
-        $this->sewaTujuan = $this->dataSewa->sewa_tujuan;
-        $this->tglKembali = $this->dataSewa->sewa_tglkembali;
-        $this->tglPinjam = $this->dataSewa->sewa_tglsewa;
-        $this->tglBayar = $this->dataSewa->sewa_tglbayar;
-        $this->sewaStatus = $this->dataSewa->status_sewa->status_detail;
-        $this->sewaTglCreate = Carbon::parse($this->dataSewa->created_at)->format('d, M Y');
+        $status = Penyewaan::where('sewa_no' , $id)->first();
+        
 
 
-        foreach($this->dataSewa->detail_sewa as $item){
-
-            $harga[] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
-
+        if($status->sewa_status == 2){
+            return redirect('detailpembayaran/'.$invoice);
+        }
+        elseif($status->sewa_status == 5){
+            return redirect('detailpengembalian/'.$invoice);
+        }
+        else{
+            return redirect('detailsewa/'.$invoice);
         }
 
-        $this->hargaTotal = array_sum($harga);
 
-        $selisih = Carbon::parse( $this->tglPinjam )->diffInDays( $this->tglKembali );
-
-        $this->totalHari = $selisih;
-
-        $this->fullPrice = $this->totalHari * $this->hargaTotal;
-
-
-
-        $this->detailPage = true;
     }
 
     // Show Page Add
@@ -269,7 +247,6 @@ class ListSewa extends Component
 
 
         $this->formSewa = false;
-        $this->detailPage = false;
 
         $this->inputs = [];
         $this->num = 1;

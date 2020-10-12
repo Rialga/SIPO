@@ -13,21 +13,14 @@
                             <div class="page-title-box d-flex align-items-center justify-content-between">
                                 <h4 class="mb-0 font-size-18">Konfirmasi Pengembalian</h4>
 
-                                <h4 wire:loading> Loading . . . </h4>
+                                <div wire:loading class="spinner-border text-warning" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
 
                             </div>
                         </div>
                     </div>
                     <!-- end page title -->
-
-                @if($detailPage)
-
-
-                    @include('livewire.admin.konfirmasiPengembalian.pengembalianDetail')
-
-
-                @else
-
 
                 <div class="row">
 
@@ -97,7 +90,7 @@
                                                 <td>{{$row->user->user_nama}}</td>
                                                 <td>{{ \Carbon\Carbon::parse($row->sewa_tglsewa)->format('d/m/Y') }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($row->sewa_tglkembali)->format('d/m/Y') }}</td>
-                                                <td>{{$row->status_sewa->status_detail}}</td>
+                                                <td><b style="color: #0AC8C8"> {{$row->status_sewa->status_detail}} </b></td>
                                                 <td>
                                                     <a wire:click="showDetailPage('{{$row->sewa_no}}')" class="btn btn-info btn-default waves-effect waves-light" title="Accept"><i class="fas fa-eye" style="color: white"></i></a>
                                                 </td>
@@ -111,8 +104,6 @@
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
-
-                    @endif
                 </div> <!-- container-fluid -->
             </div>
             <!-- End Page-content -->

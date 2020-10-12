@@ -52,7 +52,7 @@
                                     </div>
 
                                     <div class="mt-4 text-center">
-                                        <p>Don't have an account ? <a href="auth-register.html" class="font-weight-medium text-primary"> Signup now </a> </p>
+                                        <p>Belum Jadi Memeber ? <a href={{ url('register') }} class="font-weight-medium text-primary"> Daftar sekarang </a> </p>
                                     </div>
                                 </form>
                             </div>

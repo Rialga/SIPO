@@ -43,7 +43,6 @@ class Pembayaran extends Component
 
     public function bayar(){
 
-
         if($pic = $this->buktiTf){
             $this->validate([
                 'buktiTf' => 'required |max:30000',
@@ -58,6 +57,15 @@ class Pembayaran extends Component
 
             $pic->storeAs('buktiTf',$name);
         }
+        return redirect('/sewa');
+    }
+
+    public function batal($id){
+
+        $accept = Penyewaan::where('sewa_no' , $id)->first();
+        $accept->sewa_status = 0;
+        $accept->update();
+
         return redirect('/sewa');
     }
 

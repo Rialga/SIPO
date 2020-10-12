@@ -17,6 +17,17 @@ class KondisiAlat extends Model
         return $this->hasMany('App\Model\Pengembalian', 'pengembalian_kondisi', 'kondisi_id');
     }
 
+    // Many to Many
+    public function penyewaan_kondisi()
+    {
+            return $this->belongsToMany('App\Model\Penyewaan','pengembalian','pengembalian_kondisi','pengembalian_nosewa');
+    }
+
+    public function alat_kondisi()
+    {
+        return $this->belongsToMany('App\Model\Alat','pengembalian','pengembalian_kondisi','pengembalian_kodealat');
+    }
+
     public function scopeSearch($query,$val){
         return $query
         ->where('kondisi_keterangan','like','%' .$val. '%')

@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Livewire\Member\Pembayaran;
-use App\Model\User;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,33 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/insert', function () {
-
-
-    $nama  = 'rialga Febri Algani';
-    $firstName = explode(' ',trim($nama));
-    $username = $firstName[0];
-
-
-    $i = substr(md5(time()), 0, 3);
-    while(User::where('user_nick',$username)->exists()) {
-        $i++;
-        $username = $firstName[0] .'_'. $i;
-    }
-    $this->attributes['username'] = $username;
-
-    dd($username);
-});
-
-
-
 // Guest
 Route::livewire('/','welcome');
 
 Route::livewire('/produk/{kode}','detail-produk');
 
-
 Route::livewire('/login','login');
+
+Route::livewire('/register','register');
 
 
 //ADMIN
@@ -59,8 +39,13 @@ Route::livewire('/merk','admin.merk');
 Route::livewire('/kelola-denda','admin.kelola-denda');
 
 Route::livewire('/list-sewa','admin.list-sewa');
+Route::livewire('/detailsewa/{invoice}','admin.detail-listsewa');
+
 Route::livewire('/konfirmasi-pembayaran','admin.konfirmasi-pembayaran');
+Route::livewire('/detailpembayaran/{invoice}','admin.detail-pembayaran');
+
 Route::livewire('/pengembalian','admin.konfirmasi-pengembalian');
+Route::livewire('/detailpengembalian/{invoice}','admin.detail-pengembalian');
 
 Route::livewire('/report-penyewaan','admin.report-penyewaan');
 
@@ -71,7 +56,6 @@ Route::livewire('/cart','member.cart');
 Route::livewire('/sewa','member.sewa');
 Route::livewire('/pembayaran/{invoice}', 'member.pembayaran');
 Route::livewire('/detail/{invoice}', 'member.detail-sewa');
-
 
 Route::livewire('/notifikasi','member.notifikasi');
 

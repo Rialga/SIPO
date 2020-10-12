@@ -23,12 +23,14 @@
                         <span>Kelola Data User</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
+                        @if(Auth::user()->user_role == 1)
                         <li>
                             <a href="{{ url('/petugas') }}" class="waves-effect">
                               <i class="fas fa-id-card-alt"></i>
                                 <span>Petugas</span>
                             </a>
                         </li>
+                        @endif
                         <li>
                             <a href="{{ url('/member') }}" class=" waves-effect">
                               <i class="fas fa-id-card"></i>

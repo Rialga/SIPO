@@ -30,6 +30,9 @@ class Alat extends Model
     public function detail_sewa() {
         return $this->hasMany('App\Model\DetailSewa', 'detail_sewa_alat_kode', 'alat_kode');
     }
+    public function pengembalian() {
+        return $this->hasMany('App\Model\Pengembalian', 'pengembalian_kodealat', 'alat_kode');
+    }
 
     //Many to many
     public function alat_sewa()
@@ -39,6 +42,11 @@ class Alat extends Model
     public function alat_kembali()
     {
         return $this->belongsToMany('App\Model\Penyewaan','pengembalian','pengembalian_kodealat','pengembalian_nosewa');
+    }
+
+    public function alat_kondisi()
+    {
+        return $this->belongsToMany('App\Model\KondisiAlat','pengembalian','pengembalian_kodealat','pengembalian_kondisi');
     }
 
 

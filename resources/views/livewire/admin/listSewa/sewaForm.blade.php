@@ -83,7 +83,6 @@
                                         <span class="input-group-prepend">
                                             <input type="number" name="stok" class="form-control col-sm-4" wire:model.lazy="stok.{{ $value }}" required/> &nbsp;
                                             <label class="control-label text-sm-right pt-2">Unit</label>&nbsp;&nbsp;
-
                                             <button wire:click.prevent="remove({{$key}},{{$value}})" class="btn btn-danger" onclick="return false"><i class="fas fa-minus"></i></button>
                                         </span>
                                     </div>

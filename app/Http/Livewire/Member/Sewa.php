@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Sewa extends Component
 {
-    public $all = 'active' , $checkout , $done , $canceled;
+    public $all = 'active' , $checkout , $done , $refuse, $canceled;
 
     public $dataSewa;
 
@@ -19,7 +19,7 @@ class Sewa extends Component
     public $status = 'all';
 
     public function mount(){
-        $this->dataSewa = Penyewaan::where('sewa_user',auth()->id())->orderBy('sewa_status','DESC')->orderBy('created_at', 'DESC')->get();
+        $this->dataSewa = Penyewaan::where('sewa_user',auth()->id())->orderBy('sewa_status','ASC')->orderBy('created_at', 'DESC')->get();
 
         foreach($this->dataSewa as $item){
 
@@ -52,28 +52,41 @@ class Sewa extends Component
             $this->all = 'active';
             $this->checkout = null;
             $this->done = null;
+            $this->refuse = null;
             $this->canceled = null;
-            $this->dataSewa = Penyewaan::where('sewa_user',auth()->id())->orderBy('sewa_status','DESC')->orderBy('created_at', 'DESC')->get();
+            $this->dataSewa = Penyewaan::where('sewa_user',auth()->id())->orderBy('sewa_status','ASC')->orderBy('created_at', 'ASC')->get();
         }
         elseif($id == 'checkout'){
             $this->all = null;
             $this->checkout = 'active';
             $this->done = null;
+            $this->refuse = null;
             $this->canceled = null;
-            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',1]])->orderBy('sewa_status','DESC')->orderBy('created_at', 'DESC')->get();
+            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',1]])->orderBy('created_at', 'ASC')->get();
         }
         elseif($id == 'done'){
             $this->all = null;
             $this->checkout = null;
             $this->done = 'active';
+            $this->refuse = null;
             $this->canceled = null;
-            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',6]])->orderBy('sewa_status','DESC')->orderBy('created_at', 'DESC')->get();        }
+            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',6]])->orderBy('created_at', 'ASC')->get();
+        }
+        elseif($id == 'refuse'){
+            $this->all = null;
+            $this->checkout = null;
+            $this->done = null;
+            $this->refuse = 'active';
+            $this->canceled = null;
+            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',7]])->orderBy('created_at', 'ASC')->get();
+        }
         else{
             $this->all = null;
             $this->checkout = null;
             $this->done = null;
+            $this->refuse = null;
             $this->canceled = 'active';
-            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',0]])->orderBy('sewa_status','DESC')->orderBy('created_at', 'DESC')->get();
+            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',0]])->orderBy('created_at', 'ASC')->get();
         }
 
 
@@ -102,10 +115,6 @@ class Sewa extends Component
         else{
             return redirect('detail/'.$invoice);
         }
-
-
-
-
 
     }
 }

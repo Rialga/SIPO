@@ -158,7 +158,7 @@
                 </a>
             </div>
             <div type="button" class="d-inline-block">
-                <a href="{{ url('/') }}" class="btn header-item waves-effect">
+                <a href="{{ url('/register') }}" class="btn header-item waves-effect">
                     <br>
                     <i class="fas fa-user-plus"></i>
                     <span class="d-none d-xl-inline-block ml-1">Register</span>

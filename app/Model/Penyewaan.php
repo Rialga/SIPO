@@ -23,6 +23,7 @@ class Penyewaan extends Model
     }
 
 
+
     //Many to many
     public function alat_sewa()
     {
@@ -33,10 +34,17 @@ class Penyewaan extends Model
     {
         return $this->belongsToMany('App\Model\Alat','pengembalian','pengembalian_nosewa','pengembalian_kodealat');
     }
+    public function alat_kondisi()
+    {
+        return $this->belongsToMany('App\Model\KondisiAlat','pengembalian','pengembalian_nosewa','pengembalian_kodealat');
+    }
 
     // Foreignkey pada table Lain
     public function detail_sewa() {
         return $this->hasMany('App\Model\DetailSewa', 'detail_sewa_nosewa', 'sewa_no');
+    }
+    public function pengembalian() {
+        return $this->hasMany('App\Model\Pengembalian', 'pengembalian_nosewa', 'sewa_no');
     }
 
 }

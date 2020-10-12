@@ -1,4 +1,5 @@
-                <div>
+            <div>
+                <div class="table-responsive">
                     <table table class="table table-nowrap">
                         <thead>
                             <tr>
@@ -48,8 +49,12 @@
                                                 <span class="input-group-prepend">
                                                     <button wire:click.prevent="addField({{$num}},{{ $idField }})" class="btn btn-success mt-1"  onclick="return false"><i class="fas fa-plus"></i> Tambah Kondisi</button>
                                                 </span>
+
                                             </div>
                                         </div>
+                                        <br>
+                                        @error('pilihKondisi.'.$idField.'.0') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror &nbsp;&nbsp;&nbsp;&nbsp;
+                                        @error('jumlahKondisi.'.$idField.'.0') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                                     </div>
 
                                     @foreach($field[$idField] as $id => $value)
@@ -80,10 +85,13 @@
                                             <div class="form-group">
                                                 <label class="control-label"> </label>
                                                 <span class="input-group-prepend">
-                                                    <button wire:click.prevent="removeField({{$idField}},{{ $id }})" class="btn btn-danger mt-1"  onclick="return false"><i class="fas fa-minus"></i></button>
+                                                    <button wire:click.prevent="removeField({{$idField}},{{ $id }} , {{ $value }})" class="btn btn-danger mt-1"  onclick="return false"><i class="fas fa-minus"></i></button>
                                                 </span>
                                             </div>
                                         </div>
+                                        <br>
+                                        @error('pilihKondisi.'.$idField.'.'.$value) <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror &nbsp;&nbsp;&nbsp;&nbsp;
+                                        @error('jumlahKondisi.'.$idField.'.'.$value) <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
                                     </div>
                                     @endforeach
                                 </td>
@@ -94,3 +102,10 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="d-print-none">
+                    <div class="float-right">
+                        <button class="btn btn-primary" onclick="return false" wire:click="createKondisi">Simpan</button>
+                    </div>
+                </div>
+            </div>

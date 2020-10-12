@@ -17,7 +17,19 @@
                                         <h2 class="mb-5">Detail Sewa</h2>
                                         <div class="invoice-title">
                                             <h4 class="float-left font-size-20">{{ $dataSewa->sewa_no }}</h4> <br><br>
-                                            <h4 class="float-left font-size-15" style="color: orangered">( {{ $dataSewa->status_sewa->status_detail }} )</h4>
+                                            <h4 class="float-left font-size-15">
+                                                @if($dataSewa->sewa_status == 0)
+                                                    <b style="color: red">( {{ $dataSewa->status_sewa->status_detail }} ) </b>
+                                                @elseif($dataSewa->sewa_status == 1)
+                                                    <b style="color: orange">( {{ $dataSewa->status_sewa->status_detail }} )  </b>
+                                                @elseif($dataSewa->sewa_status == 2 or $dataSewa->sewa_status == 3 or $dataSewa->sewa_status == 4 or $dataSewa->sewa_status == 5)
+                                                    <b style="color: #0AC8C8">( {{ $dataSewa->status_sewa->status_detail }} )  </b>
+                                                @elseif($dataSewa->sewa_status == 6)
+                                                    <b style="color: green">( {{ $dataSewa->status_sewa->status_detail }} )  </b>
+                                                @else
+                                                    <b style="color: red">( {{ $dataSewa->status_sewa->status_detail }} )  </b>
+                                                @endif
+                                            </h4>
                                             <br><br>
                                         </div>
                                         <hr>

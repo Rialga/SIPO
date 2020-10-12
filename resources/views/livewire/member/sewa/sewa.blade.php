@@ -34,6 +34,11 @@
                                                 </a>
                                             </li>
                                             <li class="nav-item">
+                                                <a class="nav-link {{ $refuse }}" data-toggle="tab" href="#tolak" role="tab" wire:click="changeStat('refuse')">
+                                                    Ditolak
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
                                                 <a class="nav-link {{ $canceled }}" data-toggle="tab" href="#batal" role="tab" wire:click="changeStat('canceled')">
                                                     Dibatalkan
                                                 </a>

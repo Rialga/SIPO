@@ -11,9 +11,11 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0 font-size-18">Sewa</h4>
+                                <h4 class="mb-0 font-size-18">Konfirmasi Pengembalian</h4>
 
-                                <h4 wire:loading> Loading . . . </h4>
+                                <div wire:loading class="spinner-border text-warning" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
 
                             </div>
                         </div>
@@ -23,49 +25,42 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="invoice-title">
-                                        <h4 class="float-left font-size-20">{{ $dataSewa->sewa_no }}</h4> <br><br>
-                                        <h4 class="float-left font-size-15">( {{ $dataSewa->status_sewa->status_detail }} )</h4>
-                                        <a class="btn btn-danger waves-effect waves-light float-right" title="batal" wire:click="batal('{{ $dataSewa->sewa_no }}')"> <h6 style="color: white"> Batalkan Sewa</h6> </a> <br><br>
+                                        <h4 class="float-left font-size-20">{{ $currentInvoice }}</h4> <br><br>
+                                        <h4 class="float-left font-size-15">( <b style="color: #0AC8C8"> {{$dataSewa->status_sewa->status_detail }} </b> )</h4> <br>
+
                                     </div>
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <address>
                                                 <strong>Data Penyewa:</strong><br>
-                                                Member ID : {{ $dataSewa->user->user_id }}<br>
-                                                Nama : {{ $dataSewa->user->user_nama }}<br>
-                                                HP : {{ $dataSewa->user->user_phone}}<br>
+                                                    Nama : {{ $dataSewa->user->user_nama }}<br>
+                                                    Alamat : {{ $dataSewa->user->user_alamat }}<br>
+                                                    Pekerjaan/Sekolah : {{ $dataSewa->user->user_job }}<br>
+                                                    HP : {{ $dataSewa->user->user_phone }}<br>
                                             </address>
                                         </div>
                                         <div class="col-sm-6 text-sm-right">
                                             <address>
                                                 <strong>Tanggal Pemesanan:</strong><br>
-                                                {{ \Carbon\Carbon::parse($dataSewa->created_at)->format('d, M Y') }}<br><br>
+                                                {{ \Carbon\Carbon::parse($dataSewa->createdAt)->format('d, M Y') }}<br><br>
                                             </address>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6 mt-3">
-                                            @if($editPage == true)
-                                            <address>
-                                                <strong>Rentang Peminjaman :</strong><br>
-                                                Tgl Pinjam : <input type="date" class="form-control col-sm-6" wire:model.lazy = "tglPinjam"> <br>
-                                                Tgl Kembali : <input type="date" class="form-control col-sm-6" wire:model.lazy = "tglKembali">
-                                            </address>
-                                            @else
                                             <address>
                                                 <strong>Rentang Peminjaman :</strong><br>
                                                 {{  \Carbon\Carbon::parse($dataSewa->sewa_tglsewa)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} <br>
                                                 ({{ $totalHari }} Hari) <br>
                                                 Tujuan : {{ $dataSewa->sewa_tujuan }} <br>
                                             </address>
-                                            @endif
-
                                         </div>
 
                                         <div class="col-sm-6 mt-3 text-sm-right">
                                             <address>
-                                                <strong>Tanggal Pembayaran:</strong><br>
+                                                <strong>Jenis Pembayaran:</strong><br>
+                                                di Bayar pada :<br>
                                                 {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('d, M Y') }} | {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('H:i') }} WIB<br>
                                             </address>
                                         </div>
@@ -77,16 +72,22 @@
                                                 <h3 class="font-size-15 font-weight-bold">Detail Sewa</h3>
                                             </div>
                                             <div class="col-sm-6 mt-3">
-                                                @if($editPage == true)
-                                                <button onclick="return false" wire:click = "edit('{{ false }}')" type="button" class="btn btn-danger  waves-effect waves-light mb-2 pt-2 float-right">Cancel</button>
+                                                @if($addKondisi)
+                                                    <button wire:click="fieldKondisi('{{ false}}')" type="button" class="btn btn-danger btn-primary waves-effect waves-light mb-2 pt-2 float-right"> Cancel</button>
+                                                @elseif($fullDetail)
+                                                    <button  type="button" class="btn btn-secondary  waves-effect waves-light mb-2 pt-2 float-right"><i class="fas fa-edit" style="color: white" ></i></button>
                                                 @else
-                                                <button wire:click = "edit('{{ true }}')" type="button" class="btn btn-secondary  waves-effect waves-light mb-2 pt-2 float-right"><i class="fas fa-edit" style="color: white" ></i></button>
+                                                    <button wire:click="fieldKondisi('{{ true }}')" type="button" class="btn btn-success btn-primary waves-effect waves-light mb-2 pt-2 float-right"><i class="mdi mdi-plus mr-1"></i> Masukkan Kondisi Alat</button>
                                                 @endif
                                             </div>
                                         </div>
                                     </div>
-                                    @if($editPage == true)
-                                        @include('livewire.admin.listSewa.fieldAdd.editPage')
+                                    @if($addKondisi)
+                                        @include('livewire.admin.konfirmasiPengembalian.fieldAdd.fieldAddKondisi')
+
+                                    @elseif($fullDetail)
+
+                                         @include('livewire.admin.konfirmasiPengembalian.fieldAdd.fullDetail')
                                     @else
                                         <div class="table-responsive">
                                             <table class="table table-nowrap">
@@ -117,7 +118,7 @@
                                                     @endforeach
                                                     <tr>
                                                         <td colspan="5" class="text-right">Total Alat</td>
-                                                        <td class="text-right">Rp. {{ $hargaTotal }}</td>
+                                                        <td class="text-right">Rp. {{ $totalAlat }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="5" class="text-right">Durasi Peminjaman</td>
@@ -126,7 +127,7 @@
                                                     <tr>
                                                         <td colspan="5" class="border-0 text-right">
                                                             <strong>Total Sewa</strong></td>
-                                                        <td class="border-0 text-right"><h4 class="m-0"> Rp. {{ $fullPrice }}  </h4></td>
+                                                        <td class="border-0 text-right"><h4 class="m-0"> Rp. {{ $totalSewa }}  </h4></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -134,11 +135,11 @@
 
                                         <div class="d-print-none">
                                             <div class="float-right">
-                                                <a href="{{ url('/list-sewa') }}" class="btn btn-secondary">Kembali</a>&nbsp; &nbsp;&nbsp;
-                                                <button class="btn btn-primary" onclick="return false" wire:click="create">Buat</button>
+                                                <a href="{{ url('/pengembalian') }}" class="btn btn-secondary">Kembali</a>&nbsp; &nbsp;&nbsp;
                                             </div>
                                         </div>
                                     @endif
+
                                 </div>
                             </div>
                         </div>
@@ -161,7 +162,6 @@
                 </div>
             </footer>
         </div>
-    </div>
 
 </div>
 
