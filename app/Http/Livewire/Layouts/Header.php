@@ -56,8 +56,13 @@ class Header extends Component
     public function updateCart(){
 
         $this->cartTotal = \Cart::session( auth()->id())->getTotalQuantity();
+        
+    }
+
+    public function updateNotif(){
+
         $this->dataRefuse = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',7)->get();
-        // $this->dataAlat = \Cart::session( auth()->id())->getContent();
+
     }
 
     public function page($id){

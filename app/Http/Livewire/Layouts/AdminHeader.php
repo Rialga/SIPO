@@ -39,7 +39,7 @@ class AdminHeader extends Component
     }
 
 
-    public function updateCart(){
+    public function updateNotif(){
 
         $this->dataNotif = Penyewaan::where('sewa_status',2)->get();
 

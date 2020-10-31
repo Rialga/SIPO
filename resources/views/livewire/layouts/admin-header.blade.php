@@ -28,7 +28,7 @@
             </button>
         </div>
 
-        <div class="d-flex">
+        <div class="d-flex" wire:poll.5000ms="updateNotif">
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -51,7 +51,7 @@
                     </div>
                     <div data-simplebar style="max-height: 230px;">
                     @forelse($dataNotif as $item)
-                    <a wire:click="page('{{ $item->sewa_no }}')" class="text-reset notification-item" style="cursor: pointer;">
+                    <a wire:poll.5000ms wire:click="page('{{ $item->sewa_no }}')" class="text-reset notification-item" style="cursor: pointer;">
                         <div class="media">
                             <div class="avatar-xs mr-3">
                                 <span class="avatar-title bg-warning rounded-circle font-size-16">
