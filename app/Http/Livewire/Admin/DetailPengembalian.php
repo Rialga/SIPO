@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Model\Alat;
 use App\Model\KondisiAlat;
 use App\Model\Pengembalian;
 use App\Model\Penyewaan;
@@ -11,77 +12,85 @@ use Livewire\Component;
 class DetailPengembalian extends Component
 {
 
+
+    //hybrid
+    public $totalSewa , $totalHari;
+    public $totalAlat =[];
+    public $currentInvoice;
+
+    // page Show data
+    public $dataKondisi;
+    public $dataSewa;
+    public $addKondisi = false;
+    public $fullDetail = false;
+
+    //page Add Kondisi
     public $pilihKondisi = [];
     public $jumlahKondisi = [];
     public $alatKode = [];
-
-    public $totalHari, $totalAlat , $totalSewa;
 
     public $field = [];
     public $num = 0;
     public $idField = 0;
 
-    public $dataSewa;
+    // page Konfirmasi pengembalian
+    public $waktuKembali;
+    public $totalDenda = [];
     public $kondisi = [];
-    public $dataPengembalian;
-
-    public $currentInvoice;
-
-    public $addKondisi = false;
-    public $fullDetail = false;
 
 
-
+    // mount data
     public function mount($invoice){
 
         $this->currentInvoice = str_replace("-","/",$invoice);
-
-
-
         return $this->showData();
 
     }
 
 
+    // menampilkan data berdasrkan page (show/addkondisi/detailfull)
     public function showData(){
 
         $this->dataKondisi = KondisiAlat::all();
         $this->dataSewa = Penyewaan::find($this->currentInvoice);
+        $this->totalHari = Carbon::parse( $this->dataSewa->sewa_tglsewa)->diffInDays( $this->dataSewa->sewa_tglkembali );
 
-
+        // full detail page with kondisi alat
         if($this->dataSewa->alat_kembali->count() > 0){
 
-
-
             foreach($this->dataSewa->detail_sewa as $key =>$item){
-
+                $this->totalAlat [] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
                 $this->kondisi [$item->alat->alat_kode] = Pengembalian::where('pengembalian_nosewa' , $this->currentInvoice)->where('pengembalian_kodealat',$item->alat->alat_kode)->get();
 
+                foreach ($this->kondisi[$item->alat->alat_kode] as $id => $data) {
+                    $denda[$item->alat->alat_kode][$id] =  $data->kondisi_alat->kondisi_dendarusak * $data->pengembalian_totalrusak;
+                }
+
+                $this->totalDenda [$item->alat->alat_kode] = array_sum($denda[$item->alat->alat_kode]);
+                $this->waktuKembali = $data->pengembalian_waktu;
+
             }
-
-
+            // dd($denda);
             $this->fullDetail = true;
-            $this->totalAlat = 0;
-            $this->totalHari = Carbon::parse( $this->dataSewa->sewa_tglsewa)->diffInDays( $this->dataSewa->sewa_tglkembali );
-            $this->totalSewa = $this->totalHari * $this->totalAlat;
 
         }
+        // untuk edit page dan show detail saja (tidak full)
         else{
 
             foreach($this->dataSewa->detail_sewa as $item){
-                $harga[] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
+                $this->totalAlat[] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
                 $this->alatKode[] = $item->alat->alat_kode;
                 $this->field[] = $array = [];
             }
 
-            $this->totalAlat = array_sum($harga);
-            $this->totalHari = Carbon::parse( $this->dataSewa->sewa_tglsewa)->diffInDays( $this->dataSewa->sewa_tglkembali );
-            $this->totalSewa = $this->totalHari * $this->totalAlat;
+            $this->totalSewa = $this->totalHari * array_sum($this->totalAlat);
 
         }
 
     }
 
+
+    // jalankan view
     public function render()
     {
         return view('livewire.admin.konfirmasiPengembalian.detail-pengembalian');
@@ -89,32 +98,22 @@ class DetailPengembalian extends Component
 
 
 
-
     // ad or remove field
     public function addField($num , $idField){
-
         $num++;
         $this->num = $num;
         array_push($this->field[$idField] ,$num);
-
-
-
     }
 
     public function removeField($idField,$id ,$value){
-
         unset($this->pilihKondisi[$idField][$value]);
         unset($this->jumlahKondisi[$idField][$value]);
-
         unset($this->field[$idField][$id]);
-
     }
 
 
-    // Create
+    // Create Kondisi
     public function createKondisi(){
-
-
         foreach ($this->field as $key => $item){
             $id = 0;
             $this->validate([
@@ -159,8 +158,27 @@ class DetailPengembalian extends Component
     }
 
 
+    // Konfirmasi pengembalian (tahap akhir)
+    public function konfirmasiPengembalian(){
 
-    // Set mode add or not
+        $this->fullDetail = false;
+
+        foreach ($this->dataSewa->detail_sewa as $data){
+            $alat = Alat::where('alat_kode' , $data->alat->alat_kode)->first();
+            $alat->alat_total = $alat->alat_total + $data->detail_sewa_total;
+            $alat->update();
+        }
+
+        $update  = Penyewaan::find($this->currentInvoice);
+        $update->sewa_status = 6;
+        $update->update();
+
+        return redirect('list-sewa/');
+
+    }
+
+
+    // Set mode add or full detail
     public function fieldKondisi($id){
 
         if($id == true){
@@ -173,7 +191,6 @@ class DetailPengembalian extends Component
             $this->addKondisi = false;
             return $this->clearForm();
         }
-
 
     }
 
@@ -190,9 +207,7 @@ class DetailPengembalian extends Component
         $this->pilihKondisi  = [];
         $this->jumlahKondisi = [];
         $this->alatKode = [];
-
         $this->addKondisi = false;
-
         return $this->showData();
 
     }

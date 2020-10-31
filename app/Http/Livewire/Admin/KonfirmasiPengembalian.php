@@ -13,7 +13,7 @@ class KonfirmasiPengembalian extends Component
 
     public $dataSewa;
 
-    public $sortBy = 'sewa_no';
+    public $sortBy = 'penyewaan.created_at';
     public $sortDiraction = 'asc';
     public $showPage = 10;
     public $search='';
@@ -21,8 +21,12 @@ class KonfirmasiPengembalian extends Component
     // return view
     public function render()
     {
-        $data = Penyewaan::where('sewa_status',5)->orderBy($this->sortBy, $this->sortDiraction)
-        ->paginate($this->showPage);
+        $data = Penyewaan::where('sewa_status',5)
+            ->search($this->search)
+            ->join('user', 'penyewaan.sewa_user', '=', 'user.user_id')
+            ->join('status_sewa', 'penyewaan.sewa_status', '=', 'status_sewa.status_id')
+            ->orderBy($this->sortBy, $this->sortDiraction)
+            ->paginate($this->showPage);
         return view('livewire.admin.konfirmasiPengembalian.konfirmasi-pengembalian',['data'=>$data]);
     }
 

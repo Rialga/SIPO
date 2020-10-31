@@ -56,6 +56,8 @@ class Pembayaran extends Component
             $update->update();
 
             $pic->storeAs('buktiTf',$name);
+
+            $this->emit('notifBayar');
         }
         return redirect('/sewa');
     }
@@ -65,6 +67,9 @@ class Pembayaran extends Component
         $accept = Penyewaan::where('sewa_no' , $id)->first();
         $accept->sewa_status = 0;
         $accept->update();
+
+        $this->emit('notifTolak');
+        $this->emit('notifBayar');
 
         return redirect('/sewa');
     }

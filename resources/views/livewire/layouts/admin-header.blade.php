@@ -33,14 +33,16 @@
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="bx bx-bell bx-tada"></i>
-                    <span class="badge badge-danger badge-pill">3</span>
+                    @if($dataNotif->count() > 0)
+                    <span class="badge badge-danger badge-pill">{{ $dataNotif->count() }}</span>
+                    @endif
                 </button>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0"
                     aria-labelledby="page-header-notifications-dropdown">
                     <div class="p-3">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="m-0"> Notifications </h6>
+                                <h6 class="m-0"> Notifikasi </h6>
                             </div>
                             <div class="col-auto">
                                 <a href="#!" class="small"> View All</a>
@@ -48,22 +50,30 @@
                         </div>
                     </div>
                     <div data-simplebar style="max-height: 230px;">
-                        <a href="#" class="text-reset notification-item">
-                            <div class="media">
-                                <div class="avatar-xs mr-3">
-                                    <span class="avatar-title bg-primary rounded-circle font-size-16">
-                                        <i class="bx bx-cart"></i>
-                                    </span>
-                                </div>
-                                <div class="media-body">
-                                    <h6 class="mt-0 mb-1">Your order is placed</h6>
-                                    <div class="font-size-12 text-muted">
-                                        <p class="mb-1">If several languages coalesce the grammar</p>
-                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> 3 min ago</p>
-                                    </div>
+                    @forelse($dataNotif as $item)
+                    <a wire:click="page('{{ $item->sewa_no }}')" class="text-reset notification-item" style="cursor: pointer;">
+                        <div class="media">
+                            <div class="avatar-xs mr-3">
+                                <span class="avatar-title bg-warning rounded-circle font-size-16">
+                                    <i class="fas fa-money-bill-alt"></i>
+                                </span>
+                            </div>
+                            <div class="media-body">
+                                <h6 class="mt-0 mb-1">{{ $item->sewa_no }}</h6>
+                                <div class="font-size-12 text-muted">
+                                    <p class="mb-1" style="color: orangered">Pembayaran</p>
+                                    <p class="mb-0"><i class="far fa-calendar-alt"></i> {{  \Carbon\Carbon::parse($item->sewa_tglbayar)->format('d, M Y') }} | <i class="mdi mdi-clock-outline"></i> {{  \Carbon\Carbon::parse($item->sewa_tglbayar)->format('h:i') }} WIB</p>
                                 </div>
                             </div>
+                        </div>
+                    </a>
+                    @empty
+                        <a class="text-reset notification-item">
+                            <div class="media">
+                                <p>Tidak Ada Notifikasi</p>
+                            </div>
                         </a>
+                    @endforelse
                     </div>
                     <div class="p-2 border-top">
                         <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="javascript:void(0)">
@@ -83,7 +93,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right" id="page-header-user-dropdown">
                     <!-- item-->
-                    <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle mr-1"></i> Profile</a>
+                    <a class="dropdown-item" href="{{ url('/profile-data') }}"><i class="bx bx-user font-size-16 align-middle mr-1"></i> Profile</a>
                     <div class="dropdown-divider"></div>
                     <a wire:click="logout" class="dropdown-item text-danger" style="cursor: pointer;"><i class="bx bx-power-off font-size-16 align-middle mr-1 text-danger"></i> Logout</a>
                 </div>

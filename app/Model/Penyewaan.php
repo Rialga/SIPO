@@ -47,4 +47,27 @@ class Penyewaan extends Model
         return $this->hasMany('App\Model\Pengembalian', 'pengembalian_nosewa', 'sewa_no');
     }
 
+
+    public function scopeSearch($query,$val){
+        return $query
+            ->where('sewa_no','like','%' .$val. '%')
+            ->Orwhere('sewa_tglsewa','like','%' .$val. '%')
+            ->Orwhere('sewa_tglkembali','like','%' .$val. '%')
+            ->orWhereHas('user',function ($query) use($val){
+                $query->where('user_nama', 'like','%' .$val. '%');
+            })
+            ->orWhereHas('status_sewa',function ($query) use($val){
+                $query->where('status_detail', 'like','%' .$val. '%');
+            });
+    }
+
+    public function scopeSearchReport($query,$val){
+        return $query
+            ->where('sewa_no','like','%' .$val. '%')
+            ->Orwhere('sewa_tujuan','like','%' .$val. '%')
+            ->orWhereHas('user',function ($query) use($val){
+                $query->where('user_nama', 'like','%' .$val. '%');
+            });
+    }
+
 }

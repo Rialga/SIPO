@@ -73,13 +73,17 @@
                                                 Kode Alat
                                                 @include('addOn.sort-icon',['field'=>'alat_kode'])
                                             </th>
-                                            <th wire:click="sortBy('alat_jenis')" style="cursor: pointer;">
+                                            <th wire:click="sortBy('jenis_alat.jenis_alat_nama')" style="cursor: pointer;">
                                                 Jenis Alat
-                                                @include('addOn.sort-icon',['field'=>'alat_jenis'])
+                                                @include('addOn.sort-icon',['field'=>'jenis_alat.jenis_alat_nama'])
                                             </th>
-                                            <th wire:click="sortBy('alat_merk')" style="cursor: pointer;">
+                                            <th wire:click="sortBy('merk.merk_nama')" style="cursor: pointer;">
                                                 Merk
-                                                @include('addOn.sort-icon',['field'=>'alat_merk'])
+                                                @include('addOn.sort-icon',['field'=>'merk.merk_nama'])
+                                            </th>
+                                            <th wire:click="sortBy('alat_tipe')" style="cursor: pointer;">
+                                                Tipe
+                                                @include('addOn.sort-icon',['field'=>'alat_tipe'])
                                             </th>
                                             <th wire:click="sortBy('alat_total')" style="cursor: pointer;">
                                                 Jumlah Stock
@@ -101,6 +105,7 @@
                                                 <td>{{$row->alat_kode}}</td>
                                                 <td>{{$row->jenis_alat->jenis_alat_nama}}</td>
                                                 <td>{{$row->merk->merk_nama}}</td>
+                                                <td>{{$row->alat_tipe}}</td>
                                                 <td>{{$row->alat_total}}</td>
                                                 <td>
                                                     <a wire:click="detailPage('{{ $row->alat_kode }}')" class="btn btn-primary btn-rounded waves-effect waves-light" title="detail"><i class="fas fa-eye" style="color: white"></i></a>

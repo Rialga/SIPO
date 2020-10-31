@@ -51,6 +51,8 @@
                                         </div>
                                     </div>
 
+
+
                                 <!-- end col-->
                                 </div>
                                 <div class="table-responsive">
@@ -61,7 +63,10 @@
                                                 No Invoice
                                                 @include('addOn.sort-icon',['field'=>'sewa_no'])
                                             </th>
-                                            <th> Nama Penyewa </th>
+                                            <th wire:click="sortBy('user.user_nama')" style="cursor: pointer;">
+                                                Nama Penyewa
+                                                @include('addOn.sort-icon',['field'=>'user.user_nama'])
+                                            </th>
                                             <th wire:click="sortBy('sewa_tglsewa')" style="cursor: pointer;">
                                                 Tanggal Pinjam
                                                 @include('addOn.sort-icon',['field'=>'sewa_tglsewa'])
@@ -70,9 +75,9 @@
                                                 Tanggal Kembali
                                                 @include('addOn.sort-icon',['field'=>'sewa_tglkembali'])
                                             </th>
-                                            <th wire:click="sortBy('sewa_status')" style="cursor: pointer;">
+                                            <th wire:click="sortBy('status_sewa.status_detail')" style="cursor: pointer;">
                                                 Status
-                                                @include('addOn.sort-icon',['field'=>'sewa_status'])
+                                                @include('addOn.sort-icon',['field'=>'status_sewa.status_detail'])
                                             </th>
                                             <th>Aksi</th>
                                         </tr>

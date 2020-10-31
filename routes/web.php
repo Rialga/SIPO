@@ -27,6 +27,7 @@ Route::livewire('/register','register');
 
 //ADMIN
 
+Route::livewire('/profile-data','admin.petugas-profile');
 Route::livewire('/dashboard','admin.dashboard');
 
 Route::livewire('/petugas','admin.petugas');
@@ -48,6 +49,7 @@ Route::livewire('/pengembalian','admin.konfirmasi-pengembalian');
 Route::livewire('/detailpengembalian/{invoice}','admin.detail-pengembalian');
 
 Route::livewire('/report-penyewaan','admin.report-penyewaan');
+Route::livewire('/export/{tgl}/{search}','admin.export-report');
 
 // MEMBER
 Route::livewire('/profile','member.profile');

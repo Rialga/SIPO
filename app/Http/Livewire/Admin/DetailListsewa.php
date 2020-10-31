@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\Input;
 class DetailListsewa extends Component
 {
 
-    public  $fullPrice , $totalHari, $tglPinjam , $tglKembali, $noSewa;
+    public  $fullPrice , $totalHari, $tglPinjam , $tglKembali, $noSewa , $idlink;
     public $editConfirm ,$deleteConfirm;
 
     public $alat = [];
@@ -33,6 +33,7 @@ class DetailListsewa extends Component
 
 
     public function mount($invoice){
+        $this->idlink = $invoice;
 
         $this->noSewa = str_replace("-","/",$invoice);
 
@@ -179,6 +180,39 @@ class DetailListsewa extends Component
         }
 
         return $this->clearForm();
+
+    }
+
+    public function updateStatus(){
+        $status = Penyewaan::where('sewa_no' , $this->noSewa)->first();
+
+        if($status->sewa_status == 3){
+
+
+            foreach($status->detail_sewa as $item){
+
+                $updateStok = Alat::where('alat_kode',$item->alat->alat_kode)->first();
+                $stokNow = $updateStok->alat_total - $item->detail_sewa_total;
+
+                $updateStok->alat_total = $stokNow  ;
+                $updateStok->update();
+            }
+
+            $status->sewa_status = 4;
+            $status->update();
+
+            return $this->kalkulasi();
+        }
+
+        elseif($status->sewa_status == 4){
+            $status->sewa_status = 5;
+            $status->update();
+
+            return redirect('detailpengembalian/'.$this->idlink);
+        }
+        else{
+            dd('WTF');
+        }
 
     }
 

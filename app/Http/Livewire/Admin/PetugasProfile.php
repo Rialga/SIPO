@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Member;
+namespace App\Http\Livewire\Admin;
 
 use App\Model\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
-class Profile extends Component
+class PetugasProfile extends Component
 {
 
 
@@ -27,9 +27,9 @@ class Profile extends Component
 
     }
 
-    public function render()    
+    public function render()
     {
-        return view('livewire.member.profile.profileShow');
+        return view('livewire.admin.profile.petugas-profile');
     }
 
 
@@ -78,5 +78,4 @@ class Profile extends Component
         $this->fieldPassword = $id;
 
     }
-
 }

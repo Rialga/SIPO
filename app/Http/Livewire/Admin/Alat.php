@@ -49,9 +49,12 @@ class Alat extends Component
     // Return View
     public function render()
     {
-        $data=   ModelAlat::search($this->search)
-        ->orderBy($this->sortBy, $this->sortDiraction)
-        ->paginate($this->showPage);
+
+        $data=  ModelAlat::search($this->search)
+            ->join('merk', 'alat.alat_merk', '=', 'merk.merk_id')
+            ->join('jenis_alat', 'alat.alat_jenis', '=', 'jenis_alat.jenis_alat_id')
+            ->orderBy($this->sortBy, $this->sortDiraction)
+            ->paginate($this->showPage);
 
         $this->dataMerk = Merk::all();
         $this->dataJenis = JenisAlat::all();

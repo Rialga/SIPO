@@ -25,7 +25,10 @@
                                     <div class="invoice-title">
                                         <h4 class="float-left font-size-20">{{ $dataSewa->sewa_no }}</h4> <br><br>
                                         <h4 class="float-left font-size-15">( {{ $dataSewa->status_sewa->status_detail }} )</h4>
+                                        @if($dataSewa->sewa_status == 1)
                                         <a class="btn btn-danger waves-effect waves-light float-right" title="batal" wire:click="batal('{{ $dataSewa->sewa_no }}')"> <h6 style="color: white"> Batalkan Sewa</h6> </a> <br><br>
+                                        @endif
+                                        <br>
                                     </div>
                                     <hr>
                                     <div class="row">
@@ -76,6 +79,7 @@
                                             <div class="col-sm-6 mt-4">
                                                 <h3 class="font-size-15 font-weight-bold">Detail Sewa</h3>
                                             </div>
+                                            @if($dataSewa->sewa_status == 1)
                                             <div class="col-sm-6 mt-3">
                                                 @if($editPage == true)
                                                 <button onclick="return false" wire:click = "edit('{{ false }}')" type="button" class="btn btn-danger  waves-effect waves-light mb-2 pt-2 float-right">Cancel</button>
@@ -83,6 +87,7 @@
                                                 <button wire:click = "edit('{{ true }}')" type="button" class="btn btn-secondary  waves-effect waves-light mb-2 pt-2 float-right"><i class="fas fa-edit" style="color: white" ></i></button>
                                                 @endif
                                             </div>
+                                            @endif
                                         </div>
                                     </div>
                                     @if($editPage == true)
@@ -135,7 +140,13 @@
                                         <div class="d-print-none">
                                             <div class="float-right">
                                                 <a href="{{ url('/list-sewa') }}" class="btn btn-secondary">Kembali</a>&nbsp; &nbsp;&nbsp;
-                                                <button class="btn btn-primary" onclick="return false" wire:click="create">Buat</button>
+
+                                                @if($dataSewa->sewa_status == 3)
+                                                <a class="btn btn-info"  wire:click="updateStatus" style="color: white">Perbarui Status</a>
+                                                @elseif($dataSewa->sewa_status == 4 )
+                                                <a class="btn btn-success"  wire:click="updateStatus" style="color: white">Konfirmasi Pengambilan</a>
+                                                @else
+                                                @endif
                                             </div>
                                         </div>
                                     @endif

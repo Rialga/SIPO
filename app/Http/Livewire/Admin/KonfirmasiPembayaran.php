@@ -11,15 +11,20 @@ class KonfirmasiPembayaran extends Component
 
 
 
-    public $sortBy = 'sewa_no';
+    public $sortBy = 'penyewaan.created_at';
     public $sortDiraction = 'asc';
     public $showPage = 10;
     public $search='';
 
     public function render()
     {
-        $data = Penyewaan::where('sewa_status' , 2)->orderBy($this->sortBy, $this->sortDiraction)
-        ->paginate($this->showPage);
+        $data = Penyewaan::where('sewa_status' , 2)
+            ->search($this->search)
+            ->join('user', 'penyewaan.sewa_user', '=', 'user.user_id')
+            ->join('status_sewa', 'penyewaan.sewa_status', '=', 'status_sewa.status_id')
+            ->orderBy($this->sortBy, $this->sortDiraction)
+            ->paginate($this->showPage);
+
         return view('livewire.admin.konfirmasiPembayaran.konfirmasi-pembayaran',['data'=>$data]);
     }
 
@@ -41,6 +46,9 @@ class KonfirmasiPembayaran extends Component
         $accept = Penyewaan::where('sewa_no' , $id)->first();
         $accept->sewa_status = 3;
         $accept->update();
+        $this->emit('notifBayar');
+        $this->emit('notifTolak');
+
     }
 
     // status Change

@@ -74,8 +74,7 @@
                                             <div class="col-sm-6 mt-3">
                                                 @if($addKondisi)
                                                     <button wire:click="fieldKondisi('{{ false}}')" type="button" class="btn btn-danger btn-primary waves-effect waves-light mb-2 pt-2 float-right"> Cancel</button>
-                                                @elseif($fullDetail)
-                                                    <button  type="button" class="btn btn-secondary  waves-effect waves-light mb-2 pt-2 float-right"><i class="fas fa-edit" style="color: white" ></i></button>
+
                                                 @else
                                                     <button wire:click="fieldKondisi('{{ true }}')" type="button" class="btn btn-success btn-primary waves-effect waves-light mb-2 pt-2 float-right"><i class="mdi mdi-plus mr-1"></i> Masukkan Kondisi Alat</button>
                                                 @endif
@@ -118,7 +117,7 @@
                                                     @endforeach
                                                     <tr>
                                                         <td colspan="5" class="text-right">Total Alat</td>
-                                                        <td class="text-right">Rp. {{ $totalAlat }}</td>
+                                                        <td class="text-right">Rp. {{ array_sum($totalAlat) }}</td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="5" class="text-right">Durasi Peminjaman</td>

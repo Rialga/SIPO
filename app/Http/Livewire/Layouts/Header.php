@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Layouts;
 
-
+use App\Model\Penyewaan;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,10 +12,13 @@ class Header extends Component
     public $cartTotal = 0;
     public $dataAlat = [];
 
+    public $dataRefuse;
+
 
     protected $listeners = [
         'cartAdded' => 'updateCart',
-        'alatRemoved' => 'updateCart'
+        'alatRemoved' => 'updateCart',
+        'notifTolak' => 'updateCart'
     ];
 
 
@@ -27,6 +30,8 @@ class Header extends Component
         }
         else{
             $this->cartTotal = \Cart::session( auth()->id())->getTotalQuantity();
+            $this->dataRefuse = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',7)->get();
+
         }
 
     }
@@ -51,7 +56,14 @@ class Header extends Component
     public function updateCart(){
 
         $this->cartTotal = \Cart::session( auth()->id())->getTotalQuantity();
+        $this->dataRefuse = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',7)->get();
         // $this->dataAlat = \Cart::session( auth()->id())->getContent();
+    }
+
+    public function page($id){
+        $invoice = str_replace("/","-",$id);
+        return redirect('pembayaran/'.$invoice);
+
     }
 
 }

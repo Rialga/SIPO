@@ -30,7 +30,7 @@ class ListSewa extends Component
 
     public $formSewa = false;
 
-    public $sortBy = 'created_at';
+    public $sortBy = 'penyewaan.created_at';
     public $sortDiraction = 'desc';
     public $showPage = 10;
     public $search='';
@@ -45,8 +45,11 @@ class ListSewa extends Component
     // View
     public function render()
     {
-        $data = Penyewaan::orderBy($this->sortBy, $this->sortDiraction)
-        ->paginate($this->showPage);
+        $data = Penyewaan::search($this->search)
+            ->join('user', 'penyewaan.sewa_user', '=', 'user.user_id')
+            ->join('status_sewa', 'penyewaan.sewa_status', '=', 'status_sewa.status_id')
+            ->orderBy($this->sortBy, $this->sortDiraction)
+            ->paginate($this->showPage);
         return view('livewire.admin.listSewa.list-sewa',['data'=>$data]);
     }
 
@@ -208,7 +211,7 @@ class ListSewa extends Component
         $invoice = str_replace("/","-",$id);
 
         $status = Penyewaan::where('sewa_no' , $id)->first();
-        
+
 
 
         if($status->sewa_status == 2){
