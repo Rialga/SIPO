@@ -25,13 +25,9 @@ class Header extends Component
 
     public function mount(){
 
-        if (Auth::guest()) {
-
-        }
-        else{
+        if (!Auth::guest()) {
             $this->cartTotal = \Cart::session( auth()->id())->getTotalQuantity();
             $this->dataRefuse = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',7)->get();
-
         }
 
     }
@@ -56,7 +52,7 @@ class Header extends Component
     public function updateCart(){
 
         $this->cartTotal = \Cart::session( auth()->id())->getTotalQuantity();
-        
+
     }
 
     public function updateNotif(){

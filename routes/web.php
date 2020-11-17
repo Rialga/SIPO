@@ -28,6 +28,7 @@ Route::livewire('/register','register');
 //ADMIN
 
 Route::livewire('/profile-data','admin.petugas-profile');
+
 Route::livewire('/dashboard','admin.dashboard');
 
 Route::livewire('/petugas','admin.petugas');

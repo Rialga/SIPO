@@ -48,7 +48,7 @@
                                                     <div class="tab-content" id="v-pills-tabContent">
                                                         <div class="tab-pane fade show active " id="product-{{ $idPic }}" role="tabpanel" aria-labelledby="product-{{ $idPic }}-tab">
                                                             <div>
-                                                                <img src="{{ asset("storage/gambarAlat/".$dataAlat->gambar_alat[0]->gambar_file) }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; width:  170px; height: 200px;">
+                                                                <img src="{{ asset("storage/gambarAlat/".$dataAlat->gambar_alat[0]->gambar_file) }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; height: 200px;">
                                                             </div>
                                                         </div>
 
@@ -56,7 +56,7 @@
                                                             <input hidden id="{{ $idPic++ }}">
                                                             <div class="tab-pane fade show " id="product-{{ $idPic }}" role="tabpanel" aria-labelledby="product-{{ $idPic }}-tab">
                                                                 <div>
-                                                                    <img src="{{ asset("storage/gambarAlat/".$item->gambar_file) }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; width:  170px; height: 200px;">
+                                                                    <img src="{{ asset("storage/gambarAlat/".$item->gambar_file) }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; width: height: 200px;">
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -71,7 +71,7 @@
 
                                                         @endguest
                                                         @auth
-                                                        <button type="button" class="btn btn-primary waves-effect waves-light mt-2 mr-1" wire:click="addToCart('{{ $dataAlat->alat_kode }}')">
+                                                        <button {{$button}} type="button" class="btn btn-primary waves-effect waves-light mt-2 mr-1" wire:click="addToCart('{{ $dataAlat->alat_kode }}')">
                                                             <i class="bx bx-cart mr-2"></i> Add to cart
                                                         </button>
                                                         @endauth
@@ -125,6 +125,8 @@
                 </div>
             </div>
         </div>
+
+        
 
         <livewire:layouts.footer />
 

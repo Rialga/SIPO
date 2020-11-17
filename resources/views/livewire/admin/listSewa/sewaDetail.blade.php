@@ -79,7 +79,7 @@
                                             <div class="col-sm-6 mt-4">
                                                 <h3 class="font-size-15 font-weight-bold">Detail Sewa</h3>
                                             </div>
-                                            @if($dataSewa->sewa_status == 1)
+                                            @if($dataSewa->sewa_status == 1 or $dataSewa->sewa_status == 7)
                                             <div class="col-sm-6 mt-3">
                                                 @if($editPage == true)
                                                 <button onclick="return false" wire:click = "edit('{{ false }}')" type="button" class="btn btn-danger  waves-effect waves-light mb-2 pt-2 float-right">Cancel</button>

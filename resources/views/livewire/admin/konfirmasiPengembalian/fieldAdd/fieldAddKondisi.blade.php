@@ -12,7 +12,12 @@
                         <tbody>
                             @foreach ($dataSewa->detail_sewa as $item)
                             <tr>
-                                <td class="text-sm-center"> {{$loop->iteration}}</td>
+                                <td class="text-sm-center">
+                                     {{$loop->iteration}} <br>
+                                     <div wire:loading class="spinner-border text-warning" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </td>
                                 <td>
                                     ({{ $item->alat->alat_kode }}) <br>
                                     {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
@@ -21,9 +26,9 @@
                                 <td class="text-sm-center"> {{ $item->detail_sewa_total }} unit</td>
                                 <td>
                                     <div class="row text-sm-center">
-                                        <div class="col-lg-6">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="control-label">idfield:{{ $idField }} | num = {{ $num }}</label><br>
+                                                {{-- <label class="control-label">idfield:{{ $idField }} | num = {{ $num }}</label><br> --}}
                                                 <label class="control-label">Pilih Kondisi</label>
                                                 <select class="form-control select2" wire:model.lazy="pilihKondisi.{{$idField}}.0">
                                                     @if ($dataKondisi->count() == 0)
@@ -37,21 +42,21 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label class="control-label">Jumlah </label>
                                                 <input class="form-control"  type="number" wire:model.lazy="jumlahKondisi.{{ $idField }}.0"/>
                                             </div>
                                         </div>
-                                        <div class="col-lg-3">
+                                        <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label class="control-label"> </label>
                                                 <span class="input-group-prepend">
                                                     <button wire:click.prevent="addField({{$num}},{{ $idField }})" class="btn btn-success mt-1"  onclick="return false"><i class="fas fa-plus"></i> Tambah Kondisi</button>
                                                 </span>
-
                                             </div>
                                         </div>
+
                                         <br>
                                         @error('pilihKondisi.'.$idField.'.0') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror &nbsp;&nbsp;&nbsp;&nbsp;
                                         @error('jumlahKondisi.'.$idField.'.0') <span class="pt-2" style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
@@ -59,9 +64,9 @@
 
                                     @foreach($field[$idField] as $id => $value)
                                     <div class="row text-sm-center">
-                                        <div class="col-lg-6">
+                                        <div class="col-sm-6">
                                             <div class="form-group">
-                                                <label class="control-label">idfiled:{{ $idField }} | num = {{ $num }} | value = {{ $value }} | id {{ $id }}</label> <br>
+                                                {{-- <label class="control-label">idfiled:{{ $idField }} | num = {{ $num }} | value = {{ $value }} | id {{ $id }}</label> <br> --}}
                                                 <label class="control-label">Pilih Kondisi</label>
                                                 <select class="form-control select2" wire:model.lazy="pilihKondisi.{{ $idField }}.{{ $value }}">
                                                     @if ($dataKondisi->count() == 0)
@@ -75,13 +80,13 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-2">
+                                        <div class="col-sm-2">
                                             <div class="form-group">
                                                 <label class="control-label">Jumlah </label>
                                                 <input class="form-control"  type="number" wire:model.lazy="jumlahKondisi.{{ $idField }}.{{ $value }}"/>
                                             </div>
                                         </div>
-                                        <div class="col-lg-3">
+                                        <div class="col-sm-3">
                                             <div class="form-group">
                                                 <label class="control-label"> </label>
                                                 <span class="input-group-prepend">

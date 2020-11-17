@@ -3,12 +3,14 @@
 namespace App\Http\Livewire\Layouts;
 
 use App\Model\Penyewaan;
+use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
 class AdminHeader extends Component
 {
     public $dataNotif;
+    public $sendWa = true;
 
     protected $listeners = [
         'notifBayar' => 'updateNotif',
@@ -44,4 +46,18 @@ class AdminHeader extends Component
         $this->dataNotif = Penyewaan::where('sewa_status',2)->get();
 
     }
+
+    // public function sendNotif(){
+    //     $today = Carbon::now();
+    //     $datakembali = Penyewaan::where('sewa_status',5)->where('sewa_tglkembali',$today->addDays(1))->get();
+
+    //         if($today->format('H:i') == '15:10'){
+    //             foreach($datakembali as $item){
+    //             }
+    //             dd('yes');
+    //         }
+    //         else{
+    //             dd('not');
+    //         }
+    // }
 }

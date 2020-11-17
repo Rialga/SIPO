@@ -6,19 +6,10 @@
             <div class="navbar-brand-box">
                 <a href="index.html" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{ asset('assets/images/logo.svg') }}" alt="" height="22">
+                        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="20">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="17">
-                    </span>
-                </a>
-
-                <a href="index.html" class="logo logo-light">
-                    <span class="logo-sm">
-                        <img src="{{ asset('assets/images/logo-light.svg') }}" alt="" height="22">
-                    </span>
-                    <span class="logo-lg">
-                        <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="19">
+                        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="40">
                     </span>
                 </a>
             </div>
@@ -27,7 +18,7 @@
                 <i class="fa fa-fw fa-bars"></i>
             </button>
         </div>
-
+        
         <div class="d-flex" wire:poll.5000ms="updateNotif">
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
@@ -51,7 +42,7 @@
                     </div>
                     <div data-simplebar style="max-height: 230px;">
                     @forelse($dataNotif as $item)
-                    <a wire:poll.5000ms wire:click="page('{{ $item->sewa_no }}')" class="text-reset notification-item" style="cursor: pointer;">
+                    <a wire:click="page('{{ $item->sewa_no }}')" class="text-reset notification-item" style="cursor: pointer;">
                         <div class="media">
                             <div class="avatar-xs mr-3">
                                 <span class="avatar-title bg-warning rounded-circle font-size-16">

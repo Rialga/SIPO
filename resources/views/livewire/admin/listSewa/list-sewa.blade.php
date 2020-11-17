@@ -28,11 +28,7 @@
 
                     <div class="row">
 
-                        <div class="col-sm-12">
-                            <div class="text-sm-right">
-                                <button wire:click="showFormSewa" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Sewa</button>
-                            </div>
-                        </div>
+
 
                         <div class="col-12">
                             <div class="card">
@@ -131,6 +127,21 @@
                                             @endif
                                             </tbody>
                                         </table>
+                                    </div>
+
+                                    <div class="row justify-content-end">
+                                        <p class="mb-2 mr-2">
+                                            Menampilkan {{ $data->firstItem() }} hingga {{ $data->lastItem() }} dari {{ $data->total() }} item
+                                        </p>
+                                    </div>
+
+                                    <div class="row mb-0  mr-2">
+                                        <div class="col-sm-12">
+                                            <div class="row justify-content-end">
+                                                <p class="mb-2 mr-2">{{ $data->links() }}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

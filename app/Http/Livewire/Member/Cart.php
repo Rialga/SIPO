@@ -41,13 +41,20 @@ class Cart extends Component
 
     public function addCart($id){
 
+        if($this->stok[$id] > 0){
 
-        \Cart::session( auth()->id())->update($id,[
-            'quantity' => array(
-                'relative' => false,
-                'value' => $this->stok[$id],
-            )
-        ]);
+            \Cart::session( auth()->id())->update($id,[
+                'quantity' => array(
+                    'relative' => false,
+                    'value' => $this->stok[$id],
+                )
+            ]);
+        }
+        else{
+            \Cart::session(auth()->id())->remove($id);
+            $this->emit('cartAdded');
+            return $this->mount();
+        }
 
         $this->emit('cartAdded');
         return $this->mount();

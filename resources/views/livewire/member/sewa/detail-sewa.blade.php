@@ -30,6 +30,11 @@
                                                     <b style="color: red">( {{ $dataSewa->status_sewa->status_detail }} )  </b>
                                                 @endif
                                             </h4>
+                                            @if($dataSewa->sewa_status == 3 or $dataSewa->sewa_status == 4)
+                                            <a class="btn btn-success waves-effect waves-light float-right" title="export" style="color: white"><i class="dripicons-print"></i></a>
+                                            @else
+                                            @endif
+
                                             <br><br>
                                         </div>
                                         <hr>

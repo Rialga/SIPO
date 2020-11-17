@@ -19,7 +19,7 @@ class Sewa extends Component
     public $status = 'all';
 
     public function mount(){
-        $this->dataSewa = Penyewaan::where('sewa_user',auth()->id())->orderBy('sewa_status','ASC')->orderBy('created_at', 'DESC')->get();
+        $this->dataSewa = Penyewaan::where('sewa_user',auth()->id())->orderBy('updated_at','DESC')->orderBy('created_at', 'DESC')->get();
 
         foreach($this->dataSewa as $item){
 
@@ -54,7 +54,7 @@ class Sewa extends Component
             $this->done = null;
             $this->refuse = null;
             $this->canceled = null;
-            $this->dataSewa = Penyewaan::where('sewa_user',auth()->id())->orderBy('sewa_status','ASC')->orderBy('created_at', 'ASC')->get();
+            $this->dataSewa = Penyewaan::where('sewa_user',auth()->id())->orderBy('updated_at','DESC')->orderBy('created_at', 'DESC')->get();
         }
         elseif($id == 'checkout'){
             $this->all = null;
@@ -62,7 +62,7 @@ class Sewa extends Component
             $this->done = null;
             $this->refuse = null;
             $this->canceled = null;
-            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',1]])->orderBy('created_at', 'ASC')->get();
+            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',1]])->orderBy('created_at', 'DESC')->get();
         }
         elseif($id == 'done'){
             $this->all = null;
@@ -70,7 +70,7 @@ class Sewa extends Component
             $this->done = 'active';
             $this->refuse = null;
             $this->canceled = null;
-            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',6]])->orderBy('created_at', 'ASC')->get();
+            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',6]])->orderBy('created_at', 'DESC')->get();
         }
         elseif($id == 'refuse'){
             $this->all = null;
@@ -78,7 +78,7 @@ class Sewa extends Component
             $this->done = null;
             $this->refuse = 'active';
             $this->canceled = null;
-            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',7]])->orderBy('created_at', 'ASC')->get();
+            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',7]])->orderBy('created_at', 'DESC')->get();
         }
         else{
             $this->all = null;
@@ -86,7 +86,7 @@ class Sewa extends Component
             $this->done = null;
             $this->refuse = null;
             $this->canceled = 'active';
-            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',0]])->orderBy('created_at', 'ASC')->get();
+            $this->dataSewa = Penyewaan::where([['sewa_user',auth()->id()],['sewa_status',0]])->orderBy('created_at', 'DESC')->get();
         }
 
 
@@ -109,7 +109,7 @@ class Sewa extends Component
 
         $invoice = str_replace("/","-",$id);
 
-        if($stat == 1){
+        if($stat == 1 or $stat == 7){
             return redirect('pembayaran/'.$invoice);
         }
         else{

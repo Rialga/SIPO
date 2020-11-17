@@ -17,7 +17,7 @@
                                 <div class="col-lg-12">
                                     <h2 class="mb-5">Cart</h2>
 
-                                    <br><br><br><br><br>
+                                    <br>
                                     <h3 class="mb-5" style="text-align: center">
                                         <i style="color: gray" class="bx bx-cart"></i>
                                         <i style="color: gray">Cart Anda Kosong...</i> <br><br>
@@ -27,8 +27,7 @@
                                             </a>
 
                                     </h3>
-                                    <br><br><br><br><br><br>
-
+                                    <br>
                                 </div>
                             </div>
                         </div>
@@ -40,9 +39,9 @@
                                     <div class="card-body">
                                         <h2 class="mb-4">Cart</h2> <br>
 
-                                        <h4 class="card-title mb-3">Tanggal Penyewaan</h4>
+                                        <h4 class="card-title mb-3 text-center">Tanggal Penyewaan</h4>
                                         <div class="form-group row">
-                                            <div class="col-sm-8">
+                                            <div class="col-sm-12">
                                                 <div class="input-group">
                                                     <input type="date" class="form-control" wire:model.lazy="tglPinjam" id="tglPinjam" name="tglPinjam">
                                                     <label class="control-label pt-2"> &nbsp; -  &nbsp;</label>
@@ -54,9 +53,9 @@
                                             </div>
                                         </div>
 
-                                        <h4 class="card-title mb-2">Tujuan Sewa</h4>
+                                        <h4 class="card-title mb-2 text-center">Tujuan Sewa</h4>
                                         <div class="form-group row">
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-12">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" wire:model.lazy="sewaTujuan" id="sewaTujuan" name="sewaTujuan">
                                                 </div>
@@ -95,10 +94,15 @@
                                                         Rp. {{ $item->price }}
                                                     </td>
                                                     <td style="text-align: center;">
-                                                        <div>
-                                                            <input type="number" class="col-sm-7" wire:model.lazy = "stok.{{ $item->id }}" />
-                                                            <a wire:click="addCart('{{ $item->id }}')" class="action-icon text-warning pt-3"> <i class="far fa-edit font-size-18" style="cursor: pointer;"></i></a>
+                                                        <div wire:loading.remove wire:target="addCart">
+                                                            <input type="number" class="col-sm-7"  min="0" wire:model.lazy = "stok.{{ $item->id }}" />
+                                                            <a wire:click="addCart('{{ $item->id }}')" class="action-icon text-warning pt-3" > <i class="far fa-edit font-size-18" style="cursor: pointer;"></i></a>
                                                         </div>
+                                                        <div wire:loading wire:target="addCart" class="spinner-border text-warning" role="status">
+                                                            <span class="sr-only">Loading...</span>
+                                                        </div>
+                                                         @error('stok.*') <span style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+
                                                     </td>
                                                     <td style="text-align: center;">
                                                         Rp. {{ number_format($item->price * $item->quantity)}}

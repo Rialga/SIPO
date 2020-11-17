@@ -17,7 +17,11 @@
                                         <h2 class="mb-5">Pembayaran</h2>
                                         <div class="invoice-title">
                                             <h4 class="float-left font-size-20">{{ $dataSewa->sewa_no }}</h4> <br><br>
+                                            @if($dataSewa->sewa_status == 7)
+                                            <h4 class="float-left font-size-15" style="color: red">( {{ $dataSewa->status_sewa->status_detail }} )</h4>
+                                            @else
                                             <h4 class="float-left font-size-15" style="color: orange">( {{ $dataSewa->status_sewa->status_detail }} )</h4>
+                                            @endif
                                             <a class="btn btn-danger waves-effect waves-light float-right" title="batal" wire:click="batal('{{ $dataSewa->sewa_no }}')"> <h6 style="color: white"> Batal </h6> </a> <br><br>
                                         </div>
                                         <hr>

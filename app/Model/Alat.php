@@ -54,6 +54,7 @@ class Alat extends Model
         return $query
         ->where('alat_kode','like','%' .$val. '%')
         ->Orwhere('alat_total','like','%' .$val. '%')
+        ->Orwhere('alat_tipe','like','%' .$val. '%')
         ->orWhereHas('jenis_alat',function ($query) use($val){
             $query->where('jenis_alat_nama', 'like','%' .$val. '%');
         })

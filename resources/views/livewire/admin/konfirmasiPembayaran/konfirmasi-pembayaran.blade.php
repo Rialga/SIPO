@@ -43,6 +43,7 @@
                                             <div class="search-box mr-5 mb-2 d-inline-block">
                                                 <div class="position-relative">
                                                     <input type="text" class="form-control" placeholder="Search..." wire:model.debounce.300ms="search">
+                                                    {{ $search }}
                                                     <i class="bx bx-search-alt search-icon"></i>
                                                 </div>
                                             </div>

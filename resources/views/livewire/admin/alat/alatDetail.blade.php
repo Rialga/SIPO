@@ -7,7 +7,7 @@
                     <div class="col-xl-6">
                         <div class="product-detai-imgs">
 
-                            
+
                             <div class="row">
                                 <div class="col-md-2 col-sm-3 col-4">
                                     <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -25,14 +25,14 @@
 
                                         <div class="tab-pane fade show active " id="product-{{ $idPic }}" role="tabpanel" aria-labelledby="product-{{ $idPic }}-tab">
                                             <div>
-                                                <img src="{{ asset("storage/gambarAlat/$detailPic->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; width:  170px; height: 200px;">
+                                                <img src="{{ asset("storage/gambarAlat/$detailPic->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover;">
                                             </div>
                                         </div>
                                         @foreach ($detailGambar as $item)
                                         <input hidden id="{{ $idPic++ }}">
                                         <div class="tab-pane fade show " id="product-{{ $idPic }}" role="tabpanel" aria-labelledby="product-{{ $idPic }}-tab">
                                             <div>
-                                                <img src="{{ asset("storage/gambarAlat/$item->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover; width:  170px; height: 200px;">
+                                                <img src="{{ asset("storage/gambarAlat/$item->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover;">
                                             </div>
                                         </div>
                                         @endforeach

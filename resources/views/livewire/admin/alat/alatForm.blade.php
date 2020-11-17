@@ -143,6 +143,10 @@
                                     <br><br>
                                     @endforeach
                                 @endif
+
+                                <div wire:loading class="spinner-border text-warning" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
                             </div>
                         </div>
 

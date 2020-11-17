@@ -47,8 +47,7 @@ class Alat extends Component
 
 
     // Return View
-    public function render()
-    {
+    public function render(){
 
         $data=  ModelAlat::search($this->search)
             ->join('merk', 'alat.alat_merk', '=', 'merk.merk_id')

@@ -3,16 +3,32 @@
 namespace App\Http\Livewire;
 
 use App\Model\Alat;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class DetailProduk extends Component
 {
 
-    public $dataAlat , $idDiv , $idPic;
+    public $dataAlat , $idDiv , $idPic , $button;
 
     public function mount($kode){
 
         $this->dataAlat = Alat::where('alat_kode',$kode)->first();
+
+
+        if(!Auth::guest()){
+
+            if(\Cart::session( auth()->id())->get($kode) == null){
+                $this->button = 'true';
+            }
+            else{
+                if(\Cart::session( auth()->id())->get($kode)->quantity == $this->dataAlat->alat_total){
+                    $this->button = 'disabled';
+                }
+            }
+
+
+        }
 
         $this->idDiv = 0;
         $this->idPic = 0;
@@ -29,7 +45,7 @@ class DetailProduk extends Component
 
         $Alat = Alat::where('alat_kode',$id)->first();
 
-        if (isset($search_array[$id]) == false){
+        if (\Cart::session( auth()->id())->get($id) == null){
 
             \Cart::session( auth()->id())->add(array(
                 'id' => $Alat->alat_kode,
@@ -51,6 +67,11 @@ class DetailProduk extends Component
             \Cart::session( auth()->id())->update($id,[
                 'quantity' => +1,
             ]);
+        }
+
+
+        if(\Cart::session( auth()->id())->get($id)->quantity == $Alat->alat_total){
+            $this->button = 'disabled';
         }
 
         $this->emit('cartAdded');
