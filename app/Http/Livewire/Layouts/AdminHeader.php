@@ -47,17 +47,17 @@ class AdminHeader extends Component
 
     }
 
-    // public function sendNotif(){
-    //     $today = Carbon::now();
-    //     $datakembali = Penyewaan::where('sewa_status',5)->where('sewa_tglkembali',$today->addDays(1))->get();
+    public function sendNotif(){
+        $today = Carbon::now();
+        $datakembali = Penyewaan::where('sewa_status',5)->where('sewa_tglkembali',$today->addDays(1))->get();
 
-    //         if($today->format('H:i') == '15:10'){
-    //             foreach($datakembali as $item){
-    //             }
-    //             dd('yes');
-    //         }
-    //         else{
-    //             dd('not');
-    //         }
-    // }
+            if($today->format('H:i') == '15:10'){
+                foreach($datakembali as $item){
+                }
+                dd('yes');
+            }
+            else{
+                dd('not');
+            }
+    }
 }
