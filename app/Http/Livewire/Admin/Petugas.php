@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use App\Model\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
@@ -13,12 +14,22 @@ class Petugas extends Component
 
     public $userNick , $userNama , $userMail , $userAlamat , $userPhone , $userPassword , $retypePassword , $selectRole;
 
-    public $countUserNick;
+    public $count = [
+        'userNick' => null,
+        'userMail' =>null,
+        'userPhone' => null
+    ];
 
+    public $check = [
+        'nick' => false,
+        'mail' => false,
+        'phone' => false
+    ];
     public $formPetugas = false;
     public $detailPage = false;
-    public $checkUser = false;
     public $fieldPassword = true;
+
+    public $rowId;
 
     public $sortBy = 'user_id';
     public $sortDiraction = 'asc';
@@ -26,9 +37,18 @@ class Petugas extends Component
     public $search='';
 
 
+    public function modal($id){
+
+
+        $this->rowId = $id;
+        $this->dispatchBrowserEvent('mPetugas');
+
+    }
+
     public function render()
     {
-        $data = User::where('user_role','<',3)->search($this->search)
+        $data = User::where('user_role','<',3)->where('user_id' , '!=' , Auth::user()->user_id)
+        ->search($this->search)
         ->orderBy($this->sortBy, $this->sortDiraction)
         ->paginate($this->showPage);
         return view('livewire.admin.petugas.petugas',['data'=>$data]);
@@ -50,40 +70,35 @@ class Petugas extends Component
     // Check NICK
     public function checkUserNick(){
 
-        $this->checkUser = false;
+        $this->check['nick'] = false;
         $this->validate([
             'userNick' => 'required | max:20 | regex:/^\S*$/u',
         ]);
 
-        $this->checkUser = true;
-        $userNick  = $this->userNick;
-        $this->countUserNick = User::where('user_nick',$userNick)->count();
+        $this->check['nick'] = true;
+
+        $this->count['userNick']= User::where('user_nick',$this->userNick)->count();
     }
 
     // create
     public function create(){
 
-        $this->checkUser = false;
 
         $this->validate([
-            'userNick' => 'required | max:20 | regex:/^\S*$/u ',
+            'userNick' => 'required | max:20 | regex:/^\S*$/u|unique:user,user_nick',
             'userNama' => 'required | max:30',
             'selectRole'=>'required',
-            'userMail' => 'required | max:35 |email',
+            'userMail' => 'required | max:35 |email|unique:user,user_mail',
             'userAlamat' => 'required | max:100',
-            'userPhone' => 'required | max:15',
+            'userPhone' => 'required | max:15|unique:user,user_phone',
             'userPassword' => 'min:8 | required_with:retypePassword | same:retypePassword' ,
             'retypePassword' => 'required | min:8'
         ]);
 
 
-        $this->countUserNick = User::where('user_nick', $this->userNick)->count();
 
-        if($this->countUserNick == 0){
-            $userId ='M-'.Carbon::now()->format('ymdHis');
             $create = new User();
 
-            $create->user_id = $userId;
             $create->user_nick = $this->userNick;
             $create->user_role = $this->selectRole;
             $create->user_nama = $this->userNama;
@@ -93,20 +108,28 @@ class Petugas extends Component
             $create->user_password = Hash::make($this->userPassword);
 
             if($this->selectRole == 1){
+                $create->user_id ='A-'.Carbon::now()->format('ymdHis');
                 $create->user_job = 'Admin Sumbar Montain Advanture';
             }
             else{
+                $create->user_id ='P-'.Carbon::now()->format('ymdHis');
                 $create->user_job = 'Petugas Sumbar Montain Advanture';
             }
 
             $create->save();
 
-            return $this->clearForm();
-        }
+            $this->dispatchBrowserEvent('swal', [
+                'title' => 'Data Disimpan',
+                'timer'=>3000,
+                'icon'=>'success',
+                'toast'=>true,
+                'position'=>'top-right',
+                'showConfirmButton' => false
+            ]);
 
-        else{
-            $this->checkUser = true;
-        }
+            return $this->clearForm();
+
+
 
 
     }
@@ -116,43 +139,61 @@ class Petugas extends Component
 
         $update = User::where('user_nick', $this->userNick)->first();
 
-        if($this->fieldPassword){
+
+
+            if($this->fieldPassword){
+                $this->validate([
+                    'userNama' => 'required | max:30',
+                    'userMail' => "required | max:35 |email|unique:user,user_mail,$update->user_id,user_id",
+                    'userAlamat' => 'required | max:100',
+                    'userPhone' => "required | max:15|unique:user,user_phone,$update->user_id,user_id",
+                    'userPassword' => 'min:8 | required_with:retypePassword | same:retypePassword' ,
+                    'retypePassword' => 'required | min:8'
+                ]);
+
+                $update->user_password = Hash::make($this->userPassword);
+
+            }
+
             $this->validate([
                 'userNama' => 'required | max:30',
-                'userMail' => 'required | max:35 |email',
+                'userMail' => "required | max:35 |email|unique:user,user_mail,$update->user_id,user_id",
                 'userAlamat' => 'required | max:100',
-                'userPhone' => 'required | max:15',
-
-                'userPassword' => 'min:8 | required_with:retypePassword | same:retypePassword' ,
-                'retypePassword' => 'required | min:8'
+                'userPhone' => "required | max:15|unique:user,user_phone,$update->user_id,user_id",
             ]);
 
-            $update->user_password = Hash::make($this->userPassword);
+            $update->user_nama = $this->userNama;
+            $update->user_mail = $this->userMail;
+            $update->user_alamat = $this->userAlamat;
+            $update->user_phone = $this->userPhone;
 
-        }
+            $update->update();
 
-        $this->validate([
-            'userNama' => 'required | max:30',
-            'userMail' => 'required | max:35 |email',
-            'userAlamat' => 'required | max:100',
-            'userPhone' => 'required | max:15',
-        ]);
+            $this->dispatchBrowserEvent('swal', [
+                'title' => 'Data Diubah',
+                'timer'=>3000,
+                'icon'=>'success',
+                'toast'=>true,
+                'position'=>'top-right',
+                'showConfirmButton' => false
+            ]);
 
-        $update->user_nama = $this->userNama;
-        $update->user_mail = $this->userMail;
-        $update->user_alamat = $this->userAlamat;
-        $update->user_phone = $this->userPhone;
-
-        $update->update();
-
-        return $this->clearForm();
+            return $this->clearForm();
 
     }
 
     //DELETE
-    public function delete($id){
+    public function delete(){
 
-        User::where('user_id',$id)->delete();
+        User::where('user_id',$this->rowId)->delete();
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Data Dihapus',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
 
     }
 
@@ -205,11 +246,22 @@ class Petugas extends Component
 
         $this->retypePassword = null;
 
-        $this->countUserNick = null;
+         $this->count = [
+            'userNick',
+            'userMail',
+            'userPhone'
+        ];
+
+        $this->check = [
+            'nick' => false,
+            'mail' => false,
+            'phone' => false
+        ];
+
 
         $this->formPetugas = false;
         $this->detailPage = false;
-        $this->checkUser = false;
+
         $this->fieldPassword = true;
 
         $this->sortBy = 'user_id';

@@ -11,6 +11,7 @@ class StatusSewa extends Model
     protected $fillable = [
         'status_detail'
     ];
+    public $timestamps = false;
 
     // Koneksi PrimaryKey StatusSewa di ForeignKey Tabel Lain :
     public function penyewaan() {

@@ -30,7 +30,7 @@
                     {{-- Button ADD --}}
                     <div class="col-sm-12">
                         <div class="text-sm-right">
-                            <button wire:click="addAlat" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Alat</button>
+                            <button wire:click="add('alat')" type="button" class="btn btn-success btn-rounded waves-effect waves-light mb-2 mr-2"><i class="mdi mdi-plus mr-1"></i> Tambah Alat</button>
                         </div>
                     </div>
 
@@ -107,7 +107,8 @@
                                                 <td>
                                                     <a wire:click="detailPage('{{ $row->alat_kode }}')" class="btn btn-primary btn-rounded waves-effect waves-light" title="detail"><i class="fas fa-eye" style="color: white"></i></a>
                                                     <a wire:click="editPage('{{ $row->alat_kode }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-edit" style="color: white"></i></a>
-                                                    <a wire:click="deleteAlat('{{ $row->alat_kode }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
+                                                    <a class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"  wire:click="modal('{{ $row->alat_kode }}','alat')"><i class="fas fa-trash" style="color: white"></i></a>
+
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -134,7 +135,19 @@
                         </div>
                     </div> <!-- end col -->
                 </div> <!-- end row -->
-
+                <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="malatdelete">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body" style="text-align: center">
+                                    <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                    <h4 class="mb-2"> Hapus Data? </h4>
+                                    <h6 class="mb-2" muted> Kode Alat : {{ $rowId }} </h6>
+                                    <button type="button" class="btn btn-success waves-effect mb-2 mt-2 mr-2" data-dismiss="modal" wire:click="deleteAlat">Hapus</button>
+                                    <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Tidak</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @endif
             </div> <!-- container-fluid -->
         </div>
@@ -158,7 +171,10 @@
 </div>
 
 
-<script type="text/javascript">
-
+<script>
+    window.addEventListener('mAlat', event => {
+        $("#malatdelete").modal('show');
+    })
 
 </script>
+

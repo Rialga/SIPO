@@ -32,11 +32,11 @@ class Penyewaan extends Model
 
     public function alat_kembali()
     {
-        return $this->belongsToMany('App\Model\Alat','pengembalian','pengembalian_nosewa','pengembalian_kodealat');
+        return $this->belongsToMany('App\Model\Alat','pengembalian','sewa_no','alat_kode');
     }
     public function alat_kondisi()
     {
-        return $this->belongsToMany('App\Model\KondisiAlat','pengembalian','pengembalian_nosewa','pengembalian_kodealat');
+        return $this->belongsToMany('App\Model\KondisiAlat','pengembalian','sewa_no','alat_kode');
     }
 
     // Foreignkey pada table Lain
@@ -44,7 +44,7 @@ class Penyewaan extends Model
         return $this->hasMany('App\Model\DetailSewa', 'detail_sewa_nosewa', 'sewa_no');
     }
     public function pengembalian() {
-        return $this->hasMany('App\Model\Pengembalian', 'pengembalian_nosewa', 'sewa_no');
+        return $this->hasMany('App\Model\Pengembalian', 'sewa_no', 'sewa_no');
     }
 
 

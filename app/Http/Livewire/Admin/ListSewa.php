@@ -34,7 +34,14 @@ class ListSewa extends Component
     public $sortDiraction = 'desc';
     public $showPage = 10;
     public $search='';
+    public $rowId;
 
+    public function modal($id){
+
+        $this->rowId = $id;
+        $this->dispatchBrowserEvent('mSewa');
+
+    }
 
     public function mount(){
 
@@ -163,7 +170,7 @@ class ListSewa extends Component
 
             $detail->detail_sewa_alat_kode = $this->alat[$key];
             $detail->detail_sewa_nosewa = $invoice;
-            $detail->detail_sewa_total = $this->stok[$key];
+            $detail->total_alat = $this->stok[$key];
 
             $detail->save();
 
@@ -175,8 +182,8 @@ class ListSewa extends Component
 
 
     // Upadate Status
-    public function updateStatus($id){
-        $status = Penyewaan::where('sewa_no' , $id)->first();
+    public function updateStatus(){
+        $status = Penyewaan::where('sewa_no' , $this->rowId)->first();
 
         if($status->sewa_status == 3){
 
@@ -184,7 +191,7 @@ class ListSewa extends Component
             foreach($status->detail_sewa as $item){
 
                 $updateStok = Alat::where('alat_kode',$item->alat->alat_kode)->first();
-                $stokNow = $updateStok->alat_total - $item->detail_sewa_total;
+                $stokNow = $updateStok->alat_total - $item->total_alat;
 
                 $updateStok->alat_total = $stokNow  ;
                 $updateStok->update();
@@ -201,6 +208,15 @@ class ListSewa extends Component
         else{
             dd('WTF');
         }
+
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Status Sewa Diperbarui',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
 
     }
 

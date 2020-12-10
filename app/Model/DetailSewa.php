@@ -8,7 +8,7 @@ class DetailSewa extends Model
 {
     protected $table = 'detail_sewa';
     protected $fillable = [
-        'detail_sewa_alat_kode' , 'detail_sewa_nosewa' , 'detail_sewa_total '
+        'detail_sewa_alat_kode' , 'detail_sewa_nosewa' , 'total_alat' , 'harga_sewa1','harga_sewa2','harga_sewa3'
     ];
 
     // Koneksi field Foreign

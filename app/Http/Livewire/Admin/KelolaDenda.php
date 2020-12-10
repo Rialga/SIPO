@@ -25,6 +25,17 @@ class KelolaDenda extends Component
     public $showPage = 10;
     public $search='';
 
+    public $rowId;
+
+
+    public function modal($id, $type){
+
+        $this->rowId = $id;
+
+        $this->dispatchBrowserEvent('mDenda');
+
+
+    }
 
     //Return View
     public function render()
@@ -60,7 +71,14 @@ class KelolaDenda extends Component
         $create->kondisi_keterangan = $this->fieldKondisiKet;
         $create->kondisi_dendarusak = $this->fieldKondisiDenda;
         $create->save();
-
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Data Disimpan',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
         return $this->clearForm();
     }
 
@@ -80,17 +98,31 @@ class KelolaDenda extends Component
             $update->kondisi_dendarusak = $this->fieldKondisiDenda;
             $update->update();
         }
-
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Data Diubah',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
         return $this->clearForm();
 
     }
 
     // Delete
-    public function delete($id){
-        if($id){
-            KondisiAlat::where('kondisi_id',$id)->delete();
+    public function delete(){
+
+            KondisiAlat::where('kondisi_id',$this->rowId)->delete();
             $this->dataJenis = KondisiAlat::all();
-        }
+            $this->dispatchBrowserEvent('swal', [
+                'title' => 'Data Dihapus',
+                'timer'=>3000,
+                'icon'=>'success',
+                'toast'=>true,
+                'position'=>'top-right',
+                'showConfirmButton' => false
+            ]);
     }
 
     // Show Page Edit

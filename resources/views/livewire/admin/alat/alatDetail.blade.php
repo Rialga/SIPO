@@ -11,31 +11,34 @@
                             <div class="row">
                                 <div class="col-md-2 col-sm-3 col-4">
                                     <div class="nav flex-column nav-pills " id="v-pills-tab" role="tablist" aria-orientation="vertical">
-
-                                        @foreach ($detailGambar as $item)
-                                        <input hidden id="{{ $idDiv++ }}">
-                                        <a class="nav-link " id="product-{{ $idDiv }}-tab" data-toggle="pill" href="#product-{{ $idDiv }}" role="tab" aria-controls="product-{{ $idDiv }}" aria-selected="false">
-                                            <img src="{{ asset("storage/gambarAlat/$item->gambar_file") }}" alt="" class="img-fluid mx-auto d-block rounded">
-                                        </a>
-                                        @endforeach
+                                        @if($detailGambar->count() != 0)
+                                            @foreach ($detailGambar as $item)
+                                            <input hidden id="{{ $idDiv++ }}">
+                                            <a class="nav-link " id="product-{{ $idDiv }}-tab" data-toggle="pill" href="#product-{{ $idDiv }}" role="tab" aria-controls="product-{{ $idDiv }}" aria-selected="false">
+                                                <img src="{{ asset("storage/gambarAlat/$item->gambar_file") }}" alt="" class="img-fluid mx-auto d-block rounded">
+                                            </a>
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-md-7 offset-md-1 col-sm-9 col-8">
                                     <div class="tab-content" id="v-pills-tabContent">
-
+                                        @if($detailGambar->count() != 0)
                                         <div class="tab-pane fade show active " id="product-{{ $idPic }}" role="tabpanel" aria-labelledby="product-{{ $idPic }}-tab">
                                             <div>
                                                 <img src="{{ asset("storage/gambarAlat/$detailPic->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover;">
                                             </div>
                                         </div>
-                                        @foreach ($detailGambar as $item)
-                                        <input hidden id="{{ $idPic++ }}">
-                                        <div class="tab-pane fade show " id="product-{{ $idPic }}" role="tabpanel" aria-labelledby="product-{{ $idPic }}-tab">
-                                            <div>
-                                                <img src="{{ asset("storage/gambarAlat/$item->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover;">
+
+                                            @foreach ($detailGambar as $item)
+                                            <input hidden id="{{ $idPic++ }}">
+                                            <div class="tab-pane fade show " id="product-{{ $idPic }}" role="tabpanel" aria-labelledby="product-{{ $idPic }}-tab">
+                                                <div>
+                                                    <img src="{{ asset("storage/gambarAlat/$item->gambar_file") }}" alt="" class="img-fluid mx-auto d-block" style="object-fit: cover;">
+                                                </div>
                                             </div>
-                                        </div>
-                                        @endforeach
+                                            @endforeach
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +73,7 @@
                                 <tr>
                                     <td> <h8> Harga Sewa </h8> </td>
                                     <td> <h8> : </h8> </td>
-                                    <td> <h8> Rp. {{ $detailAlat->jenis_alat->jenis_alat_harga }} / Hari</h8> </td>
+                                    <td> <h8> Rp. {{ $detailAlat->jenis_alat->jenis_alat_harga1 }} / Malam</h8> </td>
                                 </tr>
 
                             </table>

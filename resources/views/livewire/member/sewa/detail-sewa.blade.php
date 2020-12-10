@@ -31,7 +31,7 @@
                                                 @endif
                                             </h4>
                                             @if($dataSewa->sewa_status == 3 or $dataSewa->sewa_status == 4)
-                                            <a class="btn btn-success waves-effect waves-light float-right" title="export" style="color: white"><i class="dripicons-print"></i></a>
+                                            <a wire:click="export" class="btn btn-success waves-effect waves-light float-right" title="export" style="color: white"><i class="dripicons-print"></i></a>
                                             @else
                                             @endif
 
@@ -57,7 +57,7 @@
                                                             <tr>
                                                                 <td> Waktu  </td>
                                                                 <td>:</td>
-                                                                <td>{{ \Carbon\Carbon::parse($dataSewa->sewa_tglpinjam)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} ({{ $totalHari }} hari)</td>
+                                                                <td>{{ \Carbon\Carbon::parse($dataSewa->sewa_tglpinjam)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} ({{ $totalHari }} malam)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Tujuan</td>
@@ -71,12 +71,12 @@
                                                             <table class="table table-nowrap">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th style="width: 50px;">No.</th>
-                                                                        <th class="text-left">Item</th>
-                                                                        <th style="width: 20px;">Jumlah</th>
-                                                                        <th class="text-right">Harga Sewa</th>
+                                                                        <th style="width: 50px;vertical-align:middle">No.</th>
+                                                                        <th class="text-left" style="vertical-align:middle">Item</th>
+                                                                        <th style="width: 20px;vertical-align:middle">Jumlah</th>
+                                                                        <th class="text-center" style="vertical-align:middle">Harga Sewa <br>({{ $totalHari }} Malam)</th>
                                                                         <th class="text-right"></th>
-                                                                        <th class="text-right">Total</th>
+                                                                        <th class="text-right" style="vertical-align:middle">Total</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -88,10 +88,10 @@
                                                                             {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
                                                                             Tipe : {{ $item->alat->alat_tipe }}
                                                                         </td>
-                                                                        <td class="text-center"> {{ $item->detail_sewa_total }} Unit</td>
-                                                                        <td class="text-right"> Rp. {{ $item->alat->jenis_alat->jenis_alat_harga }} </td>
+                                                                        <td class="text-center"> {{ $item->total_alat }} Unit</td>
+                                                                        <td class="text-right"> Rp. {{ $harga[$item->detail_sewa_alat_kode] }}  </td>
                                                                         <td class="text-right"> = </td>
-                                                                        <td class="text-right"> Rp. {{ number_format($item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga) }}</td>
+                                                                        <td class="text-right"> Rp. {{ number_format( $harga[$item->detail_sewa_alat_kode] * $item->total_alat) }}</td>
                                                                     </tr>
                                                                     @endforeach
                                                                 </tbody>
@@ -101,16 +101,8 @@
                                                         <div  class="float-right">
                                                             <table class="text-sm-left">
                                                                 <tr>
-                                                                    <td style="width:150px"> Total Alat </td>
-                                                                    <td class="text-right"> Rp.  {{ $subTotal }}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style="width:150px"> Durasi Peminjaman </td>
-                                                                    <td class="text-right"> {{ $totalHari }} Hari</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style="width:0px"><strong> Total Sewa </strong></td>
-                                                                    <td class="text-right"><h4> Rp. {{ $grandTotal }}</h4></td>
+                                                                    <td style="width:150px"><strong> Total Sewa </strong></td>
+                                                                    <td class="text-right"><h4> Rp. {{ number_format($grandTotal) }}</h4></td>
                                                                 </tr>
                                                             </table>
                                                         </div>
@@ -122,10 +114,11 @@
 
                                                     <strong>Bukti Transfer</strong><br><br><br>
                                                     <div>
-                                                        <a class="image-popup-no-margins" href="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}">
+                                                        <a href="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}" target="_blank">
                                                             <img class="img-fluid" alt="" src="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}" width="145">
                                                         </a>
                                                     </div>
+
                                                 </address>
                                             </div>
                                         </div>
@@ -133,24 +126,22 @@
                                         @if($detailKembali)
                                         <br><br>
                                         <div class="row">
-                                            <div class="col-sm-8 text-sm-center">
+                                            <div class="col-sm-12 text-sm-center">
                                                 <hr>
                                                 <address>
                                                     <strong>Detail Pengembalian</strong><br><br>
                                                     <div class="text-sm-left">
                                                         <table>
                                                             <tr>
-                                                                <td>Waktu Pengebalian :</td>
+                                                                <td>Waktu Pengebalian : {{ \Carbon\Carbon::parse($waktuKembali)->format('d, M Y') }}</td>
                                                             </tr>
-                                                            <tr>
-                                                                <td> {{ \Carbon\Carbon::parse($waktuKembali)->format('d, M Y') }}</td>
-                                                            </tr>
+
                                                             <tr>
                                                                 <td>pukul : {{ \Carbon\Carbon::parse($waktuKembali)->format('h:i:s') }} WIB</td>
                                                             </tr>
                                                         </table>
 
-                                                    </div><br><br>
+                                                    </div><br>
 
                                                         <div class="table-responsive">
                                                             <table class="table table-nowrap">
@@ -181,7 +172,7 @@
                                                                                         {{ $row->kondisi_alat->kondisi_keterangan}} <br>
                                                                                         Denda : Rp {{ number_format($row->kondisi_alat->kondisi_dendarusak) }}
                                                                                     </td>
-                                                                                    <td>x {{ $row->pengembalian_totalrusak }} kerusakan </td>
+                                                                                    <td>x {{ $row->total_kerusakan }} kerusakan </td>
                                                                                 </tr>
                                                                                 @endforeach
                                                                             </table>
@@ -196,6 +187,12 @@
                                                             </table>
                                                         </div>
 
+                                                        @if(\Carbon\Carbon::parse($dataSewa->sewa_tglkembali) > \Carbon\Carbon::parse($waktuKembali) )
+                                                        <a hidden {{ $rentang =  0}}></a>
+                                                        @else
+                                                        <a hidden {{ $rentang = \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->diffInDays( $waktuKembali) }}></a>
+                                                        @endif
+
                                                         <div  class="float-right">
                                                             <table class="text-sm-left">
                                                                 <tr>
@@ -203,13 +200,12 @@
                                                                     <td class="text-right">Rp. {{number_format(array_sum($totalDenda))  }}</td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td style="width:150px"> Denda Keterlambatan <br> ({{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->diffInDays( $waktuKembali) }} Hari)</td>
-
-                                                                    <td class="text-right">Rp. {{number_format(  \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->diffInDays( $waktuKembali) * $subTotal ) }}</td>
+                                                                    <td style="width:150px"> Denda Keterlambatan <br> ({{ $rentang }} Hari)</td>
+                                                                    <td class="text-right">Rp. {{number_format(  $rentang * array_sum($harga1)  ) }}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td style="width:0px"><strong> Total Denda </strong></td>
-                                                                    <td class="text-right"><h4> Rp. {{number_format(  (\Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->diffInDays( $waktuKembali) * $subTotal) + array_sum($totalDenda)  ) }} </h4></td>
+                                                                    <td class="text-right"><h4> Rp. {{number_format(( $rentang * array_sum($harga1) ) + array_sum($totalDenda)  ) }} </h4></td>
                                                                 </tr>
                                                             </table>
                                                         </div>
@@ -219,7 +215,7 @@
                                         </div>
                                         @endif
 
-                                        <div class="d-print-none">
+                                        <div class="d-print-none mt-4">
                                             <div class="float-right">
                                                 <a class="btn btn-secondary" href="{{ url('/sewa') }}">Kembali</a>&nbsp; &nbsp;&nbsp;
                                             </div>

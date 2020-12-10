@@ -8,19 +8,19 @@ class Pengembalian extends Model
 {
     protected $table = 'pengembalian';
     protected $fillable = [
-        'pengembalian_nosewa' , 'pengembalian_kodealat' , 'pengembalian_kondisi' , 'pengembalian_totalrusak' , 'pengembalian_waktu'
+        'sewa_no' , 'alat_kode' , 'kondisi_id' , 'total_kerusakan' , 'pengembalian_waktu' , 'biaya_denda'
     ];
 
 
 
     // Koneksi field Foreign
     public function alat() {
-        return $this->belongsTo('App\Model\Alat', 'pengembalian_kodealat', 'alat_kode');
+        return $this->belongsTo('App\Model\Alat', 'sewa_no', 'alat_kode');
     }
     public function penyewaan() {
-        return $this->belongsTo('App\Model\Penyewaan', 'pengembalian_nosewa', 'sewa_no');
+        return $this->belongsTo('App\Model\Penyewaan', 'sewa_no', 'sewa_no');
     }
     public function kondisi_alat() {
-        return $this->belongsTo('App\Model\KondisiAlat', 'pengembalian_kondisi', 'kondisi_id');
+        return $this->belongsTo('App\Model\KondisiAlat', 'kondisi_id', 'kondisi_id');
     }
 }

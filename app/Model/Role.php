@@ -12,7 +12,7 @@ class Role extends Model
         'role_nama'
     ];
 
-
+    public $timestamps = false;
     // Koneksi PrimaryKey Role di ForeignKey Tabel Lain :
     public function user() {
         return $this->hasMany('App\Model\User', 'user_role', 'role_id');

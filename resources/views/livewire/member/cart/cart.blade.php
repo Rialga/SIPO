@@ -39,13 +39,21 @@
                                     <div class="card-body">
                                         <h2 class="mb-4">Cart</h2> <br>
 
-                                        <h4 class="card-title mb-3 text-center">Tanggal Penyewaan</h4>
+                                        <div class="form-group row text-sm-center">
+                                            <div class="col-sm-6">
+                                                <span class="card-title ">Tanggal Pinjam </span>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <span class="card-title ">Tanggal Kembali </span>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group row">
                                             <div class="col-sm-12">
                                                 <div class="input-group">
-                                                    <input type="date" class="form-control" wire:model.lazy="tglPinjam" id="tglPinjam" name="tglPinjam">
+                                                    <input disabled type="date" class="form-control" wire:model.lazy="tglPinjam" id="tglPinjam" name="tglPinjam">
                                                     <label class="control-label pt-2"> &nbsp; -  &nbsp;</label>
-                                                    <input type="date" class="form-control" wire:model.lazy="tglKembali" id="tglKembali" name="tglKembali">
+                                                    <input disabled type="date" class="form-control" wire:model.lazy="tglKembali" id="tglKembali" name="tglKembali">
                                                 </div>
                                                 <br>
                                                 @error('tglPinjam') <span style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror<br>
@@ -66,7 +74,7 @@
 
 
                                         <div class="table-responsive">
-                                            <table class="table table-centered mb-0 table-nowrap">
+                                            <table class="table table-centered ">
                                                 <thead class="thead-light">
                                                     <tr>
                                                         <th>Alat</th>
@@ -78,7 +86,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach ($data->sortBy('id') as $item)
+                                                @foreach ($data->sortBy('id') as $key =>$item)
 
                                                 <tr>
                                                     <td>
@@ -91,24 +99,34 @@
                                                         <p class="mb-0">Tipe : <span class="font-weight-medium">{{ $item->attributes->type }}</span></p>
                                                     </td>
                                                     <td style="text-align: center;">
-                                                        Rp. {{ $item->price }}
+                                                        Rp. {{ $harga[$key] }}
                                                     </td>
-                                                    <td style="text-align: center;">
-                                                        <div wire:loading.remove wire:target="addCart">
-                                                            <input type="number" class="col-sm-7"  min="0" wire:model.lazy = "stok.{{ $item->id }}" />
-                                                            <a wire:click="addCart('{{ $item->id }}')" class="action-icon text-warning pt-3" > <i class="far fa-edit font-size-18" style="cursor: pointer;"></i></a>
-                                                        </div>
-                                                        <div wire:loading wire:target="addCart" class="spinner-border text-warning" role="status">
-                                                            <span class="sr-only">Loading...</span>
+                                                    <td>
+                                                        <div class="row ml-2">
+                                                            <div wire:loading wire:target="removeqty" class="spinner-border text-warning" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+
+                                                            <a wire:loading.remove wire:click="removeqty('{{ $item->id }}')" class="btn btn-danger" > <i class="fa fa-minus" style="cursor: pointer; color:white"></i></a>
+
+                                                            <input disabled type="number" class="form-control col-sm-5 text-center"  min="0" wire:model.lazy = "stok.{{ $item->id }}" />
+
+                                                            <a wire:loading.remove wire:click="addqty('{{ $item->id }}')" class="btn btn-success " > <i class="fa fa-plus" style="cursor: pointer; color:white"></i></a>
+
+                                                            <div wire:loading wire:target="addqty" class="spinner-border text-warning" role="status">
+                                                                <span class="sr-only">Loading...</span>
+                                                            </div>
+
                                                         </div>
                                                          @error('stok.*') <span style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
 
                                                     </td>
                                                     <td style="text-align: center;">
-                                                        Rp. {{ number_format($item->price * $item->quantity)}}
+                                                        Rp. {{ number_format($harga[$key] * $item->quantity)}}
                                                     </td>
                                                     <td>
-                                                        <a wire:click="remove('{{ $item->id }}')" class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18" style="cursor: pointer;"></i></a>
+                                                        <a wire:click="modal('{{ $item->id }}')"class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18" style="cursor: pointer;"></i></a>
+
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -140,16 +158,12 @@
                                             <table class="table mb-0">
                                                 <tbody>
                                                     <tr>
-                                                        <td>Total Sewa Alat :</td>
-                                                        <td>Rp. {{ $sumHarga }}</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td>Estimasi Penyewaan : </td>
-                                                        <td> {{  \Carbon\Carbon::parse( $tglPinjam )->diffInDays( $tglKembali )}} Hari</td>
+                                                        <td> {{ $estimasi }} Malam</td>
                                                     </tr>
                                                     <tr>
                                                         <th>Total :</th>
-                                                        <th>Rp. {{ number_format( \Carbon\Carbon::parse( $tglPinjam )->diffInDays( $tglKembali ) * $sumHarga )}}</th>
+                                                        <th>Rp.{{ number_format($sumHarga) }}</th>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -158,6 +172,19 @@
                                     </div>
                                 </div>
                                 <!-- end card -->
+                            </div>
+                            <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mcartdelete">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body" style="text-align: center">
+                                                <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                                <h4 class="mb-2"> Hapus Data? </h4>
+                                                <h6 class="mb-2" muted> Alat Kode : {{ $rowId }} </h6>
+                                                <button type="button" class="btn btn-success waves-effect mb-2 mt-2 mr-2" data-dismiss="modal" wire:click="remove">Hapus</button>
+                                                <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Tidak</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             @endif
@@ -174,3 +201,10 @@
 
 
     </div>
+
+    <script>
+        window.addEventListener('mCart', event => {
+            $("#mcartdelete").modal('show');
+        })
+
+    </script>

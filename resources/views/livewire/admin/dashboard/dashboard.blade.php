@@ -90,18 +90,6 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3">
-                        <div class="card">
-                            <div class="card-body" style="height: 150">
-
-                                <h4 class="card-title mb-4">Rank Pelanggan</h4>
-                                <i style="color: gold" class="mdi mdi-trophy"></i><br>
-                                <i style="color: gold" class="mdi mdi-trophy"></i><i style="color: gold" class="mdi mdi-trophy"></i><br>
-                                <i style="color: gold" class="mdi mdi-trophy"></i><i style="color: gold" class="mdi mdi-trophy"></i><i style="color: gold" class="mdi mdi-trophy"></i>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
 
 

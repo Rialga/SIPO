@@ -26,7 +26,7 @@
                                     <div class="invoice-title">
                                         <h4 class="float-left font-size-20">{{ $dataSewa->sewa_no }}</h4> <br><br>
                                         <h4 class="float-left font-size-15">( <b style="color: orange"> {{$dataSewa->status_sewa->status_detail }} </b> )</h4>
-                                        <a class="btn btn-danger waves-effect waves-light float-right" title="Tolak" wire:click="refuse('{{ $dataSewa->sewa_no }}')"> <h6 style="color: white"> Refuse </h6> </a> <br><br>
+                                        <a class="btn btn-danger waves-effect waves-light float-right" title="Tolak" data-toggle="modal" data-target="#tolak"> <h6 style="color: white"> Tolak </h6> </a> <br><br>
                                     </div>
                                     <hr>
                                     <div class="row">
@@ -49,7 +49,7 @@
                                                         <tr>
                                                             <td> Waktu  </td>
                                                             <td>:</td>
-                                                            <td>{{ \Carbon\Carbon::parse($dataSewa->sewa_tglpinjam)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} ({{ $totalHari }} hari)</td>
+                                                            <td>{{ \Carbon\Carbon::parse($dataSewa->sewa_tglpinjam)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} ({{ $totalHari }} Malam)</td>
                                                         </tr>
                                                         <tr>
                                                             <td>Tujuan</td>
@@ -64,12 +64,12 @@
                                                         <table class="table table-nowrap">
                                                             <thead>
                                                                 <tr>
-                                                                    <th style="width: 50px;">No.</th>
-                                                                    <th class="text-left">Item</th>
-                                                                    <th style="width: 20px;">Jumlah</th>
-                                                                    <th class="text-right">Harga Sewa</th>
+                                                                    <th style="width: 50px;vertical-align:middle">No.</th>
+                                                                    <th class="text-left" style="vertical-align:middle">Item</th>
+                                                                    <th style="width: 20px;vertical-align:middle">Jumlah</th>
+                                                                    <th class="text-center" style="vertical-align:middle">Harga Sewa <br>({{ $totalHari }} Malam)</th>
                                                                     <th class="text-right"></th>
-                                                                    <th class="text-right">Total</th>
+                                                                    <th class="text-right" style="vertical-align:middle">Total</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -81,10 +81,10 @@
                                                                         {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
                                                                         Tipe : {{ $item->alat->alat_tipe }}
                                                                     </td>
-                                                                    <td class="text-center"> {{ $item->detail_sewa_total }} Unit</td>
-                                                                    <td class="text-right"> Rp. {{ $item->alat->jenis_alat->jenis_alat_harga }} </td>
+                                                                    <td class="text-center"> {{ $item->total_alat }} Unit</td>
+                                                                    <td class="text-center"> Rp. {{ $harga[$item->detail_sewa_alat_kode] }} </td>
                                                                     <td class="text-right"> = </td>
-                                                                    <td class="text-right"> Rp. {{ number_format($item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga) }}</td>
+                                                                    <td class="text-right"> Rp. {{ number_format( $harga[$item->detail_sewa_alat_kode] * $item->total_alat) }}</td>
                                                                 </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -94,15 +94,7 @@
                                                     <div  class="float-right">
                                                         <table class="text-sm-left">
                                                             <tr>
-                                                                <td style="width:150px"> Total Alat </td>
-                                                                <td class="text-right"> Rp.  {{ $subTotal }}</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width:150px"> Durasi Peminjaman </td>
-                                                                <td class="text-right"> {{ $totalHari }} Hari</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="width:0px"><strong> Total Sewa </strong></td>
+                                                                <td style="width:150px"><strong> Total Sewa </strong></td>
                                                                 <td class="text-right"><h4> Rp. {{ $grandTotal }}</h4></td>
                                                             </tr>
                                                         </table>
@@ -114,7 +106,7 @@
                                             <address>
                                                 <strong>Bukti Transfer</strong><br><br>
                                                 <div>
-                                                <a class="image-popup-no-margins" href="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}"  target="_blank">
+                                                <a href="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}"  target="_blank">
                                                     <img class="img-fluid" alt="" src="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}" width="145">
                                                 </a>
                                                 {{-- <img src="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}" width="170" height="200" /> --}}
@@ -125,7 +117,7 @@
                                     <div class="d-print-none">
                                         <div class="float-right">
                                             <a  href="{{ url('/konfirmasi-pembayaran') }}" class="btn btn-default">Kembali</a>&nbsp; &nbsp;&nbsp;
-                                            <button class="btn btn-success" onclick="return false" wire:click="accept('{{ $dataSewa->sewa_no }}')"> Accept </button>
+                                            <button class="btn btn-success" onclick="return false" data-toggle="modal" data-target="#accept"> Setuju </button>
                                         </div>
                                     </div>
                                 </div>
@@ -133,6 +125,32 @@
                         </div>
                     </div>
                 </div> <!-- container-fluid -->
+            </div>
+
+            <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="accept">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body" style="text-align: center">
+                                <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                <h4 class="mb-4"> Setujui Bukti Pembayaran? </h4>
+                                <button class="btn btn-success mb-2 mt-2 mr-2" onclick="return false" wire:click="accept('{{ $dataSewa->sewa_no }}')" data-dismiss="modal">Setuju</button>
+                                <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Tidak</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="tolak">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-body" style="text-align: center">
+                                <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                <h4 class="mb-4"> Tolak Bukti Pembayaran? </h4>
+                                <button class="btn btn-success mb-2 mt-2 mr-2" onclick="return false" wire:click="refuse('{{ $dataSewa->sewa_no }}')"  data-dismiss="modal">Tolak</button>
+                                <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Batal</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- End Page-content -->
             <footer class="footer">

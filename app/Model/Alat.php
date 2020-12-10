@@ -31,22 +31,22 @@ class Alat extends Model
         return $this->hasMany('App\Model\DetailSewa', 'detail_sewa_alat_kode', 'alat_kode');
     }
     public function pengembalian() {
-        return $this->hasMany('App\Model\Pengembalian', 'pengembalian_kodealat', 'alat_kode');
+        return $this->hasMany('App\Model\Pengembalian', 'alat_kode', 'alat_kode');
     }
 
     //Many to many
     public function alat_sewa()
     {
-            return $this->belongsToMany('App\Model\Penyewaan','detail_sewa','detail_sewa_alat_kode','detail_sewa_nosewa');
+        return $this->belongsToMany('App\Model\Penyewaan','detail_sewa','detail_sewa_alat_kode','detail_sewa_nosewa');
     }
     public function alat_kembali()
     {
-        return $this->belongsToMany('App\Model\Penyewaan','pengembalian','pengembalian_kodealat','pengembalian_nosewa');
+        return $this->belongsToMany('App\Model\Penyewaan','pengembalian','alat_kode','sewa_no');
     }
 
     public function alat_kondisi()
     {
-        return $this->belongsToMany('App\Model\KondisiAlat','pengembalian','pengembalian_kodealat','pengembalian_kondisi');
+        return $this->belongsToMany('App\Model\KondisiAlat','pengembalian','alat_kode','total_kerusakan');
     }
 
 

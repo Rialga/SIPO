@@ -61,7 +61,7 @@
 
                                         @else
                                         <span class="input-group-prepend">
-                                            <button wire:click="addJenis()" class="btn btn-success" id="btnAddJenis" onclick="return false"><i class="fas fa-plus"></i> Tambah Jenis</button>
+                                            <button wire:click="add('jenis')" class="btn btn-success" id="btnAddJenis" onclick="return false"><i class="fas fa-plus"></i> Tambah Jenis</button>
                                         </span>
                                         @endif
                                     </div>
@@ -94,7 +94,7 @@
 
                                         @else
                                         <span class="input-group-prepend">
-                                            <button wire:click="addMerk()" class="btn btn-success" id="btnAddMerk" onclick="return false"><i class="fas fa-plus"></i> Tambah Merk</button>
+                                            <button wire:click="add('merk')" class="btn btn-success" id="btnAddMerk" onclick="return false"><i class="fas fa-plus"></i> Tambah Merk</button>
                                         </span>
                                         @endif
                                     </div>
@@ -132,16 +132,20 @@
                                 <div class="input-group">
                                     <input type="file"  id="gambar" name="gambar[]" wire:model.lazy="gambar" multiple/>
                                 </div>
+                                <span style="color: orange">(* Ukuran File max: 1MB harus bertipe gambar : png,jpg,gif,dll )</span> <br>
+                                @error('gambar.*') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
                                 <br>
                                 <div id="showGambar"></div>
                                 <br>
                                 @if($updateMode)
                                     <span> Gambar Alat :</span><br>
-                                    @foreach ($dataGambar as $list)
-                                    <img src="{{ asset("storage/gambarAlat/$list->gambar_file") }}" width="100" height="100" />
-                                    <a wire:click="deletePict({{ $list->gambar_id }})" class="btn btn-danger btn-default waves-effect waves-light" title="hapus"><i class="fas fa-window-close" style="color: white"></i></a>
-                                    <br><br>
-                                    @endforeach
+                                    @if($dataGambar->count() != 0)
+                                        @foreach ($dataGambar as $list)
+                                            <img src="{{ asset("storage/gambarAlat/$list->gambar_file") }}" width="100" height="100" />
+                                            <a wire:click="modal({{ $list->gambar_id }},'gambar')"  class="btn btn-danger btn-default waves-effect waves-light" title="hapus"><i class="fas fa-window-close" style="color: white"></i></a>
+                                            <br><br>
+                                        @endforeach
+                                    @endif
                                 @endif
 
                                 <div wire:loading class="spinner-border text-warning" role="status">
@@ -153,27 +157,64 @@
                         {{-- Button --}}
                         <div class="row justify-content-end">
                             <div class="col-sm-9" style="display: flex; justify-content: flex-end">
-                                <button wire:click="clearForm()"  onclick="return false"  class="btn btn-default">Kembali</button>&nbsp; &nbsp;&nbsp;
+                                <div wire:loading class="spinner-border text-warning" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            <button wire:loading.remove wire:click="clearForm()"  onclick="return false"  class="btn btn-default">Kembali</button>&nbsp; &nbsp;&nbsp;
+
                             @if($updateMode)
-                                <button class="btn btn-primary" onclick="return false" wire:click="update">Ubah</button>
+                            <button wire:loading.remove type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Ubah</button>
                             @else
-                                <button class="btn btn-primary" onclick="return false" wire:click="create">Simpan</button>
+                            <button wire:loading.remove class="btn btn-primary" onclick="return false" wire:click="create" data-dismiss="modal">Simpan</button>
                             @endif
+
                             </div>
                         </div>
-
                     </form>
+
+
+                    {{-- MODAL UPDATE --}}
+                    <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="update">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body" style="text-align: center">
+                                        <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                        <h4 class="mb-4"> Ubah Data? </h4>
+                                        <button class="btn btn-success mb-2 mt-2 mr-2" onclick="return false" wire:click="update" data-dismiss="modal">Ubah</button>
+                                        <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- MODAL DELETE --}}
+                    <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mgambar">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body" style="text-align: center">
+                                        <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                        <h4 class="mb-2"> Hapus Gambar? </h4>
+                                        <button type="button" class="btn btn-success waves-effect mb-2 mt-2 mr-2" data-dismiss="modal" wire:click="deletePict">Hapus</button>
+                                        <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 </div>
+
 <script>
-
-
-
+    window.addEventListener('mGambar', event => {
+        $("#mgambar").modal('show');
+    })
 
 </script>
+
+
 
 

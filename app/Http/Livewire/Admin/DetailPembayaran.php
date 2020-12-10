@@ -11,7 +11,8 @@ class DetailPembayaran extends Component
 
     public $dataSewa;
 
-    public $totalHari , $subTotal, $grandTotal;
+    public $totalHari ,$grandTotal;
+    public $harga = [];
 
     // Show Detail
     public function mount($invoice){
@@ -25,14 +26,26 @@ class DetailPembayaran extends Component
 
         foreach($this->dataSewa->detail_sewa as $item){
 
-            $harga[] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
+            if($this->totalHari == 1){
+                $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa1  ;
+            }
+            elseif($this->totalHari == 2){
+                $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa2;
+            }
+            elseif($this->totalHari == 3){
+                $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa3;
+            }
+            else{
+                $lama = $this->totalHari - 3;
+                $this->harga[$item->detail_sewa_alat_kode] =  ($item->harga_sewa1 * $lama) + $item->harga_sewa3;
+            }
+
+            $hargaXqtt[] = $this->harga[$item->detail_sewa_alat_kode] * $item->total_alat;
 
         }
 
-        $this->subTotal = array_sum($harga);
-        $this->grandTotal = $this->subTotal * $this->totalHari;
 
-        $this->detailPage = true;
+        $this->grandTotal = array_sum($hargaXqtt);
 
     }
 
@@ -50,6 +63,15 @@ class DetailPembayaran extends Component
         $accept->update();
         $this->emit('notifBayar');
 
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Pembayaran Disetujui',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
+
         return redirect('/list-sewa');
     }
 
@@ -60,6 +82,14 @@ class DetailPembayaran extends Component
         $accept->update();
 
         $this->emit('notifTolak');
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Penolakan Berhasil',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
         return redirect('/list-sewa');
 
     }

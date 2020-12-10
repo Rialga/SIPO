@@ -43,8 +43,14 @@
                                         <div class="col-sm-6 text-sm-right">
                                             <address>
                                                 <strong>Tanggal Pemesanan:</strong><br>
-                                                {{ \Carbon\Carbon::parse($dataSewa->createdAt)->format('d, M Y') }}<br><br>
+                                                {{ \Carbon\Carbon::parse($dataSewa->created_at)->format('d, M Y') }}<br><br>
                                             </address>
+                                            @if($fullDetail)
+                                            <address>
+                                                <strong>Tanggal Pengembalian:</strong><br>
+                                                {{ \Carbon\Carbon::parse($waktuKembali)->format('d, M Y') }}<br><br>
+                                            </address>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="row">
@@ -52,7 +58,7 @@
                                             <address>
                                                 <strong>Rentang Peminjaman :</strong><br>
                                                 {{  \Carbon\Carbon::parse($dataSewa->sewa_tglsewa)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} <br>
-                                                ({{ $totalHari }} Hari) <br>
+                                                ({{ $totalHari }} Malam) <br>
                                                 Tujuan : {{ $dataSewa->sewa_tujuan }} <br>
                                             </address>
                                         </div>
@@ -75,6 +81,7 @@
                                                 @if($addKondisi)
                                                     <button wire:click="fieldKondisi('{{ false}}')" type="button" class="btn btn-danger btn-primary waves-effect waves-light mb-2 pt-2 float-right"> Cancel</button>
 
+                                                @elseif($fullDetail)
                                                 @else
                                                     <button wire:click="fieldKondisi('{{ true }}')" type="button" class="btn btn-success btn-primary waves-effect waves-light mb-2 pt-2 float-right"><i class="mdi mdi-plus mr-1"></i> Masukkan Kondisi Alat</button>
                                                 @endif
@@ -92,41 +99,33 @@
                                             <table class="table table-nowrap">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width: 50px;">No.</th>
-                                                        <th>Item</th>
-                                                        <th style="width: 20px;">Jumlah</th>
-                                                        <th class="text-right">Harga Sewa</th>
+                                                        <th style="width: 50px;vertical-align:middle">No.</th>
+                                                        <th class="text-left" style="vertical-align:middle">Item</th>
+                                                        <th style="width: 20px;vertical-align:middle">Jumlah</th>
+                                                        <th class="text-right" style="vertical-align:middle">Harga Sewa <br>({{ $totalHari }} Malam)</th>
                                                         <th class="text-right"></th>
-                                                        <th class="text-right">Total</th>
+                                                        <th class="text-right" style="vertical-align:middle">Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach ($dataSewa->detail_sewa as $item)
                                                     <tr>
                                                         <td>{{$loop->iteration}}</td>
-                                                        <td>
+                                                        <td class="text-left">
                                                             ({{ $item->alat->alat_kode }}) <br>
                                                             {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
                                                             Tipe : {{ $item->alat->alat_tipe }}
                                                         </td>
-                                                        <td class="text-center"> {{ $item->detail_sewa_total }} Unit</td>
-                                                        <td class="text-right"> Rp. {{ $item->alat->jenis_alat->jenis_alat_harga }} </td>
+                                                        <td class="text-center"> {{ $item->total_alat }} Unit</td>
+                                                        <td class="text-right"> Rp. {{ $harga[$item->detail_sewa_alat_kode] }} </td>
                                                         <td class="text-right"> = </td>
-                                                        <td class="text-right"> Rp. {{ number_format($item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga) }}</td>
+                                                        <td class="text-right"> Rp. {{ number_format( $harga[$item->detail_sewa_alat_kode] * $item->total_alat) }}</td>
                                                     </tr>
                                                     @endforeach
                                                     <tr>
-                                                        <td colspan="5" class="text-right">Total Alat</td>
-                                                        <td class="text-right">Rp. {{ array_sum($totalAlat) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="5" class="text-right">Durasi Peminjaman</td>
-                                                        <td class="text-right">{{ $totalHari }} Hari</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td colspan="5" class="border-0 text-right">
                                                             <strong>Total Sewa</strong></td>
-                                                        <td class="border-0 text-right"><h4 class="m-0"> Rp. {{ $totalSewa }}  </h4></td>
+                                                        <td class="border-0 text-right"><h4 class="m-0"> Rp. {{ number_format($totalSewa) }}  </h4></td>
                                                     </tr>
                                                 </tbody>
                                             </table>

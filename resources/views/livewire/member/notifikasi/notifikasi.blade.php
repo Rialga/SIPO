@@ -17,7 +17,7 @@
 
                                 <div class="col-lg-12">
                                     <h2 class="mb-5">Notifikasi</h2>
-                                    @if($dataRefuse->count() == 0)
+                                    @if($dataRefuse->count() + $dataKembali->count()== 0)
                                     <br><br>
                                     <h3 class="mb-5" style="text-align: center">
                                         <i style="color: red" class="mdi mdi-bell-off"></i>
@@ -44,6 +44,22 @@
                                             <div class="font-size-12 text-muted">
                                                 <p class="mb-0"><i class="mdi mdi-clock-outline"></i> {{ Carbon\Carbon::parse($item->updated_at)->format('d, M Y - H:i A ') }} </p>
                                             </div>
+                                        </a>
+
+                                    </div>
+                                    @endforeach
+
+                                    @foreach ($dataKembali as $item)
+                                    <div class="tab-content crypto-buy-sell-nav-content p-4">
+
+                                        <h5 style="color: orange"><i style="color: orange" class="fas fa-bahai"></i> <b>Reminder Pengembalian Barang !!!</b> </h5>
+                                        <a wire:click = "page('{{ $item->sewa_no }}' , 7)" style="cursor: pointer;">
+                                            <p>
+                                                No Invoice  <b>{{ $item->sewa_no }}</b>.
+                                                Untuk penyewan <b>{{ Carbon\Carbon::parse($item->sewa_tglsewa)->format('d, M Y') }}</b> -
+                                                <b>{{ Carbon\Carbon::parse($item->sewa_tglkembali)->format('d, M Y') }}</b>.
+                                                Tujuan <b>{{ $item->sewa_tujuan }}</b>
+                                            </p>
                                         </a>
 
                                     </div>

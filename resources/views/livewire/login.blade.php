@@ -12,12 +12,12 @@
                             <div class="row">
                                 <div class="col-7">
                                     <div class="text-primary p-4">
-                                        <h5 class="text-primary">Welcome Back !</h5>
-                                        <p>Sign in to continue to Skote.</p>
+                                        <h5 class="text-primary">Haii !</h5>
+                                        <p>Ayo Login untuk dapat mengakses fitur lainnya.</p>
                                     </div>
                                 </div>
                                 <div class="col-5 align-self-end">
-                                    <img src="assets/images/profile-img.png" alt="" class="img-fluid">
+                                    <img src="https://www.pinclipart.com/picdir/big/488-4886416_camping-png-background-image-camping-png-clipart.png" class="img-fluid">
                                 </div>
                             </div>
                         </div>
@@ -25,8 +25,8 @@
                             <div>
                                 <a href="index.html">
                                     <div class="avatar-md profile-user-wid mb-4">
-                                <span class="avatar-title rounded-circle bg-light">
-                                    <img src="assets/images/logo.svg" alt="" class="rounded-circle" height="34">
+                                <span class="avatar-title rounded-circle" style="background: rgb(235, 243, 242)">
+                                    <img src="{{ asset("assets/images/logo-dark.png")}}" alt="" class="rounded-circle" height="34">
                                 </span>
                                     </div>
                                 </a>
@@ -35,7 +35,7 @@
                                 <form class="form-horizontal" wire:submit.prevent="submit">
 
                                     <div class="form-group">
-                                        <label for="username">Username</label>
+                                        <label for="username">E-mail</label>
                                         <input type="text" class="form-control" id="username" placeholder="Enter username" wire:model.lazy="form.email">
                                         @error('form.email') <span style="color: red"> {{$message}} </span> @enderror
 
@@ -52,7 +52,7 @@
                                     </div>
 
                                     <div class="mt-4 text-center">
-                                        <p>Belum Jadi Memeber ? <a href={{ url('register') }} class="font-weight-medium text-primary"> Daftar sekarang </a> </p>
+                                        <p>Belum Punya Akun ? <a href={{ url('register') }} class="font-weight-medium text-primary"> Daftar sekarang </a> </p>
                                     </div>
                                 </form>
                             </div>

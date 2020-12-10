@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Layouts;
 
 use App\Model\Penyewaan;
+use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,6 +14,7 @@ class Header extends Component
     public $dataAlat = [];
 
     public $dataRefuse;
+    public $dataNotif;
 
 
     protected $listeners = [
@@ -28,6 +30,11 @@ class Header extends Component
         if (!Auth::guest()) {
             $this->cartTotal = \Cart::session( auth()->id())->getTotalQuantity();
             $this->dataRefuse = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',7)->get();
+            $this->dataNotif = Penyewaan::where('sewa_user', Auth::User()->user_id)
+                                ->where('sewa_status',5)
+                                ->whereDate('sewa_tglkembali','<=',Carbon::now())
+                                ->get();
+
         }
 
     }
@@ -58,12 +65,13 @@ class Header extends Component
     public function updateNotif(){
 
         $this->dataRefuse = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',7)->get();
+        $this->dataNotif = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',5)->whereDate('sewa_tglkembali','<=',Carbon::now())->get();
+
 
     }
 
     public function page($id){
-        $invoice = str_replace("/","-",$id);
-        return redirect('pembayaran/'.$invoice);
+        return redirect('notifikasi/');
 
     }
 

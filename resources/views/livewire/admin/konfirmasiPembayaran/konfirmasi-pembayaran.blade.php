@@ -93,8 +93,7 @@
                                                     <td>{{ \Carbon\Carbon::parse($row->sewa_tglkembali)->format('d/m/Y') }}</td>
                                                     <td><b style="color: orange"> {{$row->status_sewa->status_detail}} </b></td>
                                                     <td>
-                                                        <a wire:click="accept('{{ $row->sewa_no }}')" class="btn btn-success btn-default waves-effect waves-light" title="Accept"><i class="mdi mdi-check-bold" style="color: white"></i></a>
-                                                        <a wire:click="refuse('{{ $row->sewa_no }}')" class="btn btn-danger btn-default waves-effect waves-light" title="Tolak"><i class="dripicons-cross" style="color: white"></i></a>
+                                                        <a wire:click="showDetailPage('{{$row->sewa_no}}')" class="btn btn-info btn-default waves-effect waves-light" title="Accept"><i class="mdi mdi-eye" style="color: white"></i></a>
                                                     </td>
                                                 </tr>
                                                     @endforeach

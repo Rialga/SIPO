@@ -23,7 +23,7 @@
                                     {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
                                     Tipe : {{ $item->alat->alat_tipe }}
                                 </td>
-                                <td class="text-sm-center"> {{ $item->detail_sewa_total }} unit</td>
+                                <td class="text-sm-center"> {{ $item->total_alat }} unit</td>
                                 <td>
                                     <div class="row text-sm-center">
                                         <div class="col-sm-6">
@@ -44,7 +44,7 @@
                                         </div>
                                         <div class="col-sm-2">
                                             <div class="form-group">
-                                                <label class="control-label">Jumlah </label>
+                                                <label class="control-label">Total Kerusakan </label>
                                                 <input class="form-control"  type="number" wire:model.lazy="jumlahKondisi.{{ $idField }}.0"/>
                                             </div>
                                         </div>
@@ -110,7 +110,21 @@
 
                 <div class="d-print-none">
                     <div class="float-right">
-                        <button class="btn btn-primary" onclick="return false" wire:click="createKondisi">Simpan</button>
+                        <button class="btn btn-primary" onclick="return false" data-toggle="modal" data-target="#save">Simpan</button>
+                    </div>
+                </div>
+
+
+                <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="save">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-body" style="text-align: center">
+                                    <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                    <h4 class="mb-4"> Simpan Kondisi? </h4>
+                                    <button class="btn btn-success mb-2 mt-2 mr-2" onclick="return false" wire:click="createKondisi" data-dismiss="modal">Simpan</button>
+                                    <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Batal</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

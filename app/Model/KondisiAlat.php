@@ -14,18 +14,18 @@ class KondisiAlat extends Model
 
     // Koneksi PrimaryKey KondisiAlat di ForeignKey Tabel Lain :
     public function pengembalian() {
-        return $this->hasMany('App\Model\Pengembalian', 'pengembalian_kondisi', 'kondisi_id');
+        return $this->hasMany('App\Model\Pengembalian', 'kondisi_id', 'kondisi_id');
     }
 
     // Many to Many
     public function penyewaan_kondisi()
     {
-            return $this->belongsToMany('App\Model\Penyewaan','pengembalian','pengembalian_kondisi','pengembalian_nosewa');
+            return $this->belongsToMany('App\Model\Penyewaan','pengembalian','kondisi_id','sewa_no');
     }
 
     public function alat_kondisi()
     {
-        return $this->belongsToMany('App\Model\Alat','pengembalian','pengembalian_kondisi','pengembalian_kodealat');
+        return $this->belongsToMany('App\Model\Alat','pengembalian','kondisi_id','alat_kode');
     }
 
     public function scopeSearch($query,$val){

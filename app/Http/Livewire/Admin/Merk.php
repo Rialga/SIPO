@@ -21,9 +21,17 @@ class Merk extends Component
     public $showPage = 10;
     public $search='';
 
+    public $rowId;
+
+
+    public function modal($id, $type){
+        $this->rowId = $id;
+        $this->dispatchBrowserEvent('mMerk');
+
+    }
+
     //Show View
-    public function render()
-    {
+    public function render(){
         $data = ModelMerk::search($this->search)
         ->orderBy($this->sortBy, $this->sortDiraction)
         ->paginate($this->showPage);
@@ -54,6 +62,14 @@ class Merk extends Component
         $merk->merk_nama = $this->fieldMerkNama;
         $merk->save();
 
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Data Disimpan',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
         return $this->clearForm();
     }
 
@@ -69,17 +85,34 @@ class Merk extends Component
             $update->update();
         }
 
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Data Diubah',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
         return $this->clearForm();
 
     }
 
 
     // Delete
-    public function delete($id){
-        if($id){
-            ModelMerk::where('merk_id',$id)->delete();
+    public function delete(){
+
+            ModelMerk::where('merk_id',$this->rowId)->delete();
             $this->dataMerk = ModelMerk::all();
-        }
+
+            $this->dispatchBrowserEvent('swal', [
+                'title' => 'Data Dihapus',
+                'timer'=>3000,
+                'icon'=>'success',
+                'toast'=>true,
+                'position'=>'top-right',
+                'showConfirmButton' => false
+            ]);
+
     }
 
 

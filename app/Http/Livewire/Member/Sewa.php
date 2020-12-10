@@ -13,6 +13,7 @@ class Sewa extends Component
     public $dataSewa;
 
     public $totalAll = [];
+    public $denda = [];
 
     public $counter = 0;
 
@@ -23,16 +24,48 @@ class Sewa extends Component
 
         foreach($this->dataSewa as $item){
 
-            foreach($item->detail_sewa as $data){
-                $harga =  $data->alat->jenis_alat->jenis_alat_harga  * $data->detail_sewa_total;
-                $totalAlat[] = $harga;
-            }
-
             $estimasi = Carbon::parse( $item->sewa_tglsewa)->diffInDays( $item->sewa_tglkembali);
 
-            $total = $estimasi * array_sum($totalAlat);
 
-            $this->totalAll[] = $total;
+            foreach($item->detail_sewa as $data){
+
+                if($item->sewa_status == 6){
+                    foreach($item->pengembalian->where('alat_kode',$data->alat->alat_kode) as $val){
+                            $denda_rusak[$item->sewa_no][]=  $val->biaya_denda * $val->total_kerusakan;
+                    }
+
+                    if($item->sewa_tglkembali > $val->pengembalian_waktu){
+                        $denda_telat[$item->sewa_no] = 0;
+                    }
+                    else{
+                        $denda_telat[$item->sewa_no] = Carbon::parse($item->sewa_tglkembali)->diffInDays($val->pengembalian_waktu);
+                    }
+
+                }
+
+                if($estimasi == 1){
+                    $harga =  $data->harga_sewa1  * $data->total_alat;
+                }
+                elseif($estimasi == 2){
+                    $harga =  $data->harga_sewa2  * $data->total_alat;
+                }
+                elseif($estimasi == 3){
+                    $harga =  $data->harga_sewa3  * $data->total_alat;
+                }
+                else{
+                    $lama = $estimasi - 3;
+                    $harga =  (($data->harga_sewa1 * $lama) + $data->harga_sewa3)  * $data->total_alat;
+                }
+
+                $harga1[$item->sewa_no][] = $data->harga_sewa1  * $data->total_alat;
+                $totalAlat[$item->sewa_no][] = $harga;
+            }
+
+            if($item->sewa_status == 6){
+                $this->denda[$item->sewa_no] = array_sum($denda_rusak[$item->sewa_no]) + (array_sum($harga1) * $denda_telat[$item->sewa_no] );
+            }
+
+            $this->totalAll[] = array_sum($totalAlat[$item->sewa_no]);
         }
 
 
@@ -94,7 +127,7 @@ class Sewa extends Component
         foreach($this->dataSewa as $item){
 
             foreach($item->detail_sewa as $data){
-                $harga =  $data->alat->jenis_alat->jenis_alat_harga  * $data->detail_sewa_total;
+                $harga =  $data->harga_sewa  * $data->total_alat;
                 $totalAlat[] = $harga;
             }
 

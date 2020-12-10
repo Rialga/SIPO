@@ -104,7 +104,7 @@
                                                     <td>{{$row->user_phone}}</td>
                                                     <td>
                                                         <a wire:click="showDetailPage('{{ $row->user_id }}')" class="btn btn-info btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-eye" style="color: white"></i></a>
-                                                        <a wire:click="delete('{{ $row->user_id }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
+                                                        <a wire:click="modal('{{ $row->user_id }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -133,6 +133,20 @@
                         </div> <!-- end col -->
                     </div> <!-- end row -->
 
+                    <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mpenyewadelete">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body" style="text-align: center">
+                                        <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                        <h4 class="mb-2"> Hapus Data? </h4>
+                                        <h6 class="mb-2" muted> Penyewa ID : {{ $rowId }} </h6>
+                                        <button type="button" class="btn btn-success waves-effect mb-2 mt-2 mr-2" data-dismiss="modal" wire:click="delete">Hapus</button>
+                                        <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     @endif
                 </div> <!-- container-fluid -->
             </div>
@@ -156,7 +170,9 @@
     </div>
 
 
-    <script type="text/javascript">
-
+    <script>
+        window.addEventListener('mPenyewa', event => {
+            $("#mpenyewadelete").modal('show');
+        })
 
     </script>

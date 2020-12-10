@@ -27,7 +27,7 @@ class Profile extends Component
 
     }
 
-    public function render()    
+    public function render()
     {
         return view('livewire.member.profile.profileShow');
     }
@@ -39,12 +39,12 @@ class Profile extends Component
 
         if($this->fieldPassword){
             $this->validate([
-                'userNick' => 'required | max:20 | regex:/^\S*$/u ',
+                'userNick' => "required | max:20 | regex:/^\S*$/u|unique:user,user_nick,$update->user_id,user_id",
                 'userNama' => 'required | max:30',
-                'userMail' => 'required | max:35 |email',
+                'userMail' => "required | max:35 |email|unique:user,user_mail,$update->user_id,user_id",
                 'userAlamat' => 'required | max:100',
                 'userJob' => 'required | max:30',
-                'userPhone' => 'required | max:15',
+                'userPhone' => "required | max:15|unique:user,user_phone,$update->user_id,user_id",
 
                 'userPassword' => 'min:8 | required_with:retypePassword | same:retypePassword' ,
                 'retypePassword' => 'required | min:8'
@@ -55,14 +55,15 @@ class Profile extends Component
         }
 
         $this->validate([
-            'userNick' => 'required | max:20 | regex:/^\S*$/u ',
+            'userNick' => "required | max:20 | regex:/^\S*$/u|unique:user,user_nick,$update->user_id,user_id",
             'userNama' => 'required | max:30',
-            'userMail' => 'required | max:35 |email',
+            'userMail' => "required | max:35 |email|unique:user,user_mail,$update->user_id,user_id",
             'userAlamat' => 'required | max:100',
             'userJob' => 'required | max:40',
-            'userPhone' => 'required | max:15',
+            'userPhone' => "required | max:15|unique:user,user_phone,$update->user_id,user_id",
         ]);
 
+        $update->user_nick = $this->userNick;
         $update->user_nama = $this->userNama;
         $update->user_mail = $this->userMail;
         $update->user_alamat = $this->userAlamat;
@@ -70,6 +71,15 @@ class Profile extends Component
         $update->user_phone = $this->userPhone;
 
         $update->update();
+
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Data Diubah',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
 
     }
 

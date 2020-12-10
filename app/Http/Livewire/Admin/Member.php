@@ -24,6 +24,19 @@ class Member extends Component
     public $showPage = 10;
     public $search='';
 
+    public $rowId;
+
+
+
+    public function modal($id){
+
+
+        $this->rowId = $id;
+        $this->dispatchBrowserEvent('mPenyewa');
+
+    }
+
+
     public function render()
     {
         $data = User::where('user_role',3)->search($this->search)
@@ -63,23 +76,19 @@ class Member extends Component
         // create
     public function create(){
 
-        $this->checkUser = false;
-
         $this->validate([
-            'userNick' => 'required | max:20 | regex:/^\S*$/u ',
+            'userNick' => 'required | max:20 | regex:/^\S*$/u|unique:user,user_nick',
             'userNama' => 'required | max:30',
-            'userMail' => 'required | max:35 |email',
+            'userMail' => 'required | max:35 |email|unique:user,user_mail',
             'userAlamat' => 'required | max:100',
-            'userJob' => 'required | max:25',
-            'userPhone' => 'required | max:15',
+            'userPhone' => 'required | max:15|unique:user,user_phone',
             'userPassword' => 'min:8 | required_with:retypePassword | same:retypePassword' ,
-            'retypePassword' => 'required | min:8'
+            'retypePassword' => 'required | min:8',
+            'userJob' => 'required | max:25',
         ]);
 
 
-        $this->countUserNick = User::where('user_nick', $this->userNick)->count();
 
-        if($this->countUserNick == 0){
             $userId ='M-'.Carbon::now()->format('ymdHis');
             $create = new User();
 
@@ -95,12 +104,16 @@ class Member extends Component
 
             $create->save();
 
-            return $this->clearForm();
-        }
+            $this->dispatchBrowserEvent('swal', [
+                'title' => 'Data Disimpan',
+                'timer'=>3000,
+                'icon'=>'success',
+                'toast'=>true,
+                'position'=>'top-right',
+                'showConfirmButton' => false
+            ]);
 
-        else{
-            $this->checkUser = true;
-        }
+            return $this->clearForm();
     }
 
 
@@ -113,13 +126,13 @@ class Member extends Component
         if($this->fieldPassword){
             $this->validate([
                 'userNama' => 'required | max:30',
-                'userMail' => 'required | max:35 |email',
+                'userMail' => "required | max:35 |email|unique:user,user_mail,$update->user_id,user_id",
                 'userAlamat' => 'required | max:100',
+                'userPhone' => "required | max:15|unique:user,user_phone,$update->user_id,user_id",
                 'userJob' => 'required | max:30',
-                'userPhone' => 'required | max:15',
 
                 'userPassword' => 'min:8 | required_with:retypePassword | same:retypePassword' ,
-                'retypePassword' => 'required | min:8'
+                'retypePassword' => 'required | min:8',
             ]);
 
             $update->user_password = Hash::make($this->userPassword);
@@ -128,10 +141,10 @@ class Member extends Component
 
         $this->validate([
             'userNama' => 'required | max:30',
-            'userMail' => 'required | max:35 |email',
+            'userMail' => "required | max:35 |email|unique:user,user_mail,$update->user_id,user_id",
             'userAlamat' => 'required | max:100',
+            'userPhone' => "required | max:15|unique:user,user_phone,$update->user_id,user_id",
             'userJob' => 'required | max:40',
-            'userPhone' => 'required | max:15',
         ]);
 
         $update->user_nama = $this->userNama;
@@ -142,6 +155,16 @@ class Member extends Component
 
         $update->update();
 
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Data Diubah',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
+
+
         return $this->clearForm();
 
     }
@@ -149,7 +172,16 @@ class Member extends Component
 
     public function delete($id){
 
-        User::where('user_id',$id)->delete();
+
+        User::where('user_id',$this->rowId)->delete();
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Data Dihapus',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
 
     }
 

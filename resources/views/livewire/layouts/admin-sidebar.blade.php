@@ -34,7 +34,7 @@
                         <li>
                             <a href="{{ url('/member') }}" class=" waves-effect">
                               <i class="fas fa-id-card"></i>
-                                <span>Member</span>
+                                <span>Penyewa</span>
                             </a>
                         </li>
 
@@ -68,7 +68,14 @@
 
                     </ul>
                 </li>
-
+                @if(Auth::user()->user_role == 1)
+                <li>
+                    <a href="{{ url('/rekening') }}" class=" waves-effect">
+                        <i class="bx bx-credit-card"></i>
+                        <span>Rekening</span>
+                    </a>
+                </li>
+                @endif
                 <li>
                     <a href="{{ url('/kelola-denda') }}" class=" waves-effect">
                         <i class="fas fa-money-bill-wave"></i>

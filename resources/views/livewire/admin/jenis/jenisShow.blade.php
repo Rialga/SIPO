@@ -72,9 +72,17 @@
                                                     Jenis Alat
                                                     @include('addOn.sort-icon',['field'=>'jenis_alat_nama'])
                                                 </th>
-                                                <th wire:click="sortBy('jenis_alat_harga')" style="cursor: pointer;">
-                                                    Harga
-                                                    @include('addOn.sort-icon',['field'=>'jenis_alat_harga'])
+                                                <th wire:click="sortBy('jenis_alat_harga1')" style="cursor: pointer;">
+                                                    Harga I
+                                                    @include('addOn.sort-icon',['field'=>'jenis_alat_harga1'])
+                                                </th>
+                                                <th wire:click="sortBy('jenis_alat_harga2')" style="cursor: pointer;">
+                                                    Harga II
+                                                    @include('addOn.sort-icon',['field'=>'jenis_alat_harga2'])
+                                                </th>
+                                                <th wire:click="sortBy('jenis_alat_harga3')" style="cursor: pointer;">
+                                                    Harga III
+                                                    @include('addOn.sort-icon',['field'=>'jenis_alat_harga3'])
                                                 </th>
                                                 <th>Aksi</th>
                                             </tr>
@@ -90,10 +98,12 @@
                                                 <tr>
                                                     <td>{{$loop->iteration}}</td>
                                                     <td>{{$row->jenis_alat_nama}}</td>
-                                                    <td>Rp. {{$row->jenis_alat_harga}}</td>
+                                                    <td>Rp. {{ number_format($row->jenis_alat_harga1) }}</td>
+                                                    <td>Rp. {{ number_format($row->jenis_alat_harga2) }}</td>
+                                                    <td>Rp. {{ number_format($row->jenis_alat_harga3) }}</td>
                                                     <td>
                                                         <a wire:click="editPage('{{ $row->jenis_alat_id }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-edit" style="color: white"></i></a>
-                                                        <a wire:click="delete('{{ $row->jenis_alat_id }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
+                                                        <a wire:click="modal('{{ $row->jenis_alat_id }}')" class="btn btn-danger btn-rounded waves-effect waves-light" title="hapus"><i class="fas fa-trash" style="color: white"></i></a>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -121,6 +131,19 @@
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
+                    <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mjenisdelete">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body" style="text-align: center">
+                                        <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                        <h4 class="mb-2"> Hapus Data? </h4>
+                                        <h6 class="mb-2" muted> Jenis Alat Id : {{ $rowId }} </h6>
+                                        <button type="button" class="btn btn-success waves-effect mb-2 mt-2 mr-2" data-dismiss="modal" wire:click="delete">Hapus</button>
+                                        <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Tidak</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     @endif
                 </div> <!-- container-fluid -->
@@ -145,7 +168,9 @@
     </div>
 
 
-    <script type="text/javascript">
-
+    <script>
+        window.addEventListener('mJenis', event => {
+            $("#mjenisdelete").modal('show');
+        })
 
     </script>

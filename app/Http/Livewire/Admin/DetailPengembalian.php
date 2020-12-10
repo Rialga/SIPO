@@ -15,8 +15,9 @@ class DetailPengembalian extends Component
 
     //hybrid
     public $totalSewa , $totalHari;
-    public $totalAlat =[];
     public $currentInvoice;
+    public $harga = [];
+    public $harga1 = [];
 
     // page Show data
     public $dataKondisi;
@@ -59,16 +60,33 @@ class DetailPengembalian extends Component
         if($this->dataSewa->alat_kembali->count() > 0){
 
             foreach($this->dataSewa->detail_sewa as $key =>$item){
-                $this->totalAlat [] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
-                $this->kondisi [$item->alat->alat_kode] = Pengembalian::where('pengembalian_nosewa' , $this->currentInvoice)->where('pengembalian_kodealat',$item->alat->alat_kode)->get();
+
+                $this->kondisi [$item->alat->alat_kode] = Pengembalian::where('sewa_no' , $this->currentInvoice)->where('alat_kode',$item->alat->alat_kode)->get();
 
                 foreach ($this->kondisi[$item->alat->alat_kode] as $id => $data) {
-                    $denda[$item->alat->alat_kode][$id] =  $data->kondisi_alat->kondisi_dendarusak * $data->pengembalian_totalrusak;
+                    $denda[$item->alat->alat_kode][$id] =  $data->biaya_denda * $data->total_kerusakan;
                 }
 
                 $this->totalDenda [$item->alat->alat_kode] = array_sum($denda[$item->alat->alat_kode]);
                 $this->waktuKembali = $data->pengembalian_waktu;
 
+
+                if($this->totalHari == 1){
+                    $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa1;
+                }
+                elseif($this->totalHari == 2){
+                    $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa2;
+                }
+                elseif($this->totalHari == 3){
+                    $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa3;
+                }
+                else{
+                    $lama = $this->totalHari - 3;
+                    $this->harga[$item->detail_sewa_alat_kode] =  ($item->harga_sewa1 * $lama) + $item->harga_sewa3;
+                }
+
+                $this->harga1[] = $item->harga_sewa1 * $item->total_alat;
+                $hargaXqtt[] = $this->harga[$item->detail_sewa_alat_kode] * $item->total_alat;
             }
             // dd($denda);
             $this->fullDetail = true;
@@ -78,14 +96,30 @@ class DetailPengembalian extends Component
         else{
 
             foreach($this->dataSewa->detail_sewa as $item){
-                $this->totalAlat[] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
                 $this->alatKode[] = $item->alat->alat_kode;
                 $this->field[] = $array = [];
+
+                if($this->totalHari == 1){
+                    $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa1;
+                }
+                elseif($this->totalHari == 2){
+                    $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa2;
+                }
+                elseif($this->totalHari == 3){
+                    $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa3;
+                }
+                else{
+                    $lama = $this->totalHari - 3;
+                    $this->harga[$item->detail_sewa_alat_kode] =  ($item->harga_sewa1 * $lama) + $item->harga_sewa3;
+                }
+
+                $hargaXqtt[] = $this->harga[$item->detail_sewa_alat_kode] * $item->total_alat;
+
             }
 
-            $this->totalSewa = $this->totalHari * array_sum($this->totalAlat);
-
         }
+
+        $this->totalSewa = array_sum($hargaXqtt);
 
     }
 
@@ -139,16 +173,26 @@ class DetailPengembalian extends Component
             foreach ($this->pilihKondisi[$key] as $nomor =>  $data){
 
                 $create = new Pengembalian();
-                $create->pengembalian_nosewa = $this->currentInvoice;
-                $create->pengembalian_kodealat = $this->alatKode[$key];
-                $create->pengembalian_kondisi =  $data;
-                $create->pengembalian_totalrusak =  $this->jumlahKondisi[$key][$nomor];
+                $create->sewa_no = $this->currentInvoice;
+                $create->alat_kode = $this->alatKode[$key];
+                $create->kondisi_id =  $data;
+                $create->total_kerusakan =  $this->jumlahKondisi[$key][$nomor];
+                $create->biaya_denda = KondisiAlat::where('kondisi_id',$data)->first()->kondisi_dendarusak;
                 $create->pengembalian_waktu = Carbon::now();
                 $create->save();
 
             }
 
         }
+
+        $this->dispatchBrowserEvent('swal', [
+            'title' => 'Berhasil Tambah Kondisi',
+            'timer'=>3000,
+            'icon'=>'success',
+            'toast'=>true,
+            'position'=>'top-right',
+            'showConfirmButton' => false
+        ]);
 
         $this->field = [];
         $this->pilihKondisi  = [];
@@ -165,7 +209,7 @@ class DetailPengembalian extends Component
 
         foreach ($this->dataSewa->detail_sewa as $data){
             $alat = Alat::where('alat_kode' , $data->alat->alat_kode)->first();
-            $alat->alat_total = $alat->alat_total + $data->detail_sewa_total;
+            $alat->alat_total = $alat->alat_total + $data->total_alat;
             $alat->update();
         }
 

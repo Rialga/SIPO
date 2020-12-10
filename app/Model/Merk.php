@@ -14,7 +14,7 @@ class Merk extends Model
 
 
     // Koneksi PrimaryKey Merk di ForeignKey Tabel Lain :
-    public function gambar() {
+    public function alat() {
         return $this->hasMany('App\Model\Alat', 'alat_merk', 'merk_id');
     }
 

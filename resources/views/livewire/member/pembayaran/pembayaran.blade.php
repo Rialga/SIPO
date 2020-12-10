@@ -44,7 +44,7 @@
                                                             <tr>
                                                                 <td> Waktu  </td>
                                                                 <td>:</td>
-                                                                <td>{{ \Carbon\Carbon::parse($dataSewa->sewa_tglpinjam)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} ({{ $totalHari }} hari)</td>
+                                                                <td>{{ \Carbon\Carbon::parse($dataSewa->sewa_tglpinjam)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} ({{ $totalHari }} malam)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Tujuan</td>
@@ -58,12 +58,12 @@
                                                             <table class="table table-nowrap">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th style="width: 50px;">No.</th>
-                                                                        <th class="text-left">Item</th>
-                                                                        <th style="width: 20px;">Jumlah</th>
-                                                                        <th class="text-right">Harga Sewa</th>
+                                                                        <th style="width: 50px;vertical-align:middle">No.</th>
+                                                                        <th class="text-left" style="vertical-align:middle">Item</th>
+                                                                        <th style="width: 20px;vertical-align:middle">Jumlah</th>
+                                                                        <th class="text-center" style="vertical-align:middle">Harga Sewa <br>({{ $totalHari }} Malam)</th>
                                                                         <th class="text-right"></th>
-                                                                        <th class="text-right">Total</th>
+                                                                        <th class="text-right" style="vertical-align:middle">Total</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -75,10 +75,10 @@
                                                                             {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
                                                                             Tipe : {{ $item->alat->alat_tipe }}
                                                                         </td>
-                                                                        <td class="text-center"> {{ $item->detail_sewa_total }} Unit</td>
-                                                                        <td class="text-right"> Rp. {{ $item->alat->jenis_alat->jenis_alat_harga }} </td>
+                                                                        <td class="text-center"> {{ $item->total_alat }} Unit</td>
+                                                                        <td class="text-center"> Rp. {{ $harga[$item->detail_sewa_alat_kode] }} </td>
                                                                         <td class="text-right"> = </td>
-                                                                        <td class="text-right"> Rp. {{ number_format($item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga) }}</td>
+                                                                        <td class="text-right"> Rp. {{ number_format( $harga[$item->detail_sewa_alat_kode] * $item->total_alat) }}</td>
                                                                     </tr>
                                                                     @endforeach
                                                                 </tbody>
@@ -88,30 +88,33 @@
                                                         <div  class="float-right">
                                                             <table class="text-sm-left">
                                                                 <tr>
-                                                                    <td style="width:150px"> Total Alat </td>
-                                                                    <td class="text-right"> Rp.  {{ $subTotal }}</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style="width:150px"> Durasi Peminjaman </td>
-                                                                    <td class="text-right"> {{ $totalHari }} Hari</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style="width:0px"><strong> Total Sewa </strong></td>
-                                                                    <td class="text-right"><h4> Rp. {{ $grandTotal }}</h4></td>
+                                                                    <td style="width:150px""><strong> Total Sewa </strong></td>
+                                                                    <td class="text-right"><h4> Rp. {{ number_format($grandTotal) }}</h4></td>
                                                                 </tr>
                                                             </table>
                                                         </div>
 
                                                 </address>
                                             </div>
-                                            <div class="col-sm-4 text-sm-center">
+                                            <div class="col-sm-4">
                                                 <address>
+                                                    <div style="text-align: center">
+                                                        <strong>Transfer Ke Rek :</strong>
+                                                    </div>
 
-                                                    <strong>Transfer Ke Rek :</strong> <br>
-                                                    <img src="{{ asset("storage/bni.png") }}" style="width:  60px; height: 30px;" />
-                                                    <strong>0583695906 (Sdr Alex)</strong>
+                                                    <div text-sm-left>
+                                                        @foreach ($dataRek as $rek)
+                                                        <i class="fas fa-credit-card fa-lg mt-3" style="color: rgb(19, 65, 53)"></i>
+                                                        <span> Bank {{ $rek->rekening_bank }}</span><br>
+                                                        <span class="ml-4"> {{ $rek->rekening_no }} a.n ({{ $rek->rekening_an }})</span> <br>
+                                                        @endforeach
+                                                    </div>
+
                                                     <hr>
-                                                    <strong>Upload Bukti Transfer</strong><br><br><br>
+                                                    <div class="mb-5" style="text-align: center">
+                                                        <strong>Upload Bukti Transfer</strong>
+                                                    </div>
+
                                                     <div>
                                                         <div wire:loading class="spinner-border text-warning m-1" role="status">
                                                             <span class="sr-only">Loading...</span>

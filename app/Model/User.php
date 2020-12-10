@@ -55,7 +55,7 @@ class User extends Authenticatable {
     {
         $this->have_role = $this->getUserRole();
 
-        if($this->have_role->role_name == ['Admin','Penyewa']) {
+        if($this->have_role->role_nama == ['Admin', 'Petugas' , 'Penyewa']) {
             return true;
         }
         if(is_array($roles)){
@@ -79,7 +79,7 @@ class User extends Authenticatable {
     //Validasi Role User
     private function cekUserRole($role)
     {
-        return (strtolower($role)==strtolower($this->have_role->role_name)) ? true : false;
+        return (strtolower($role)==strtolower($this->have_role->role_nama)) ? true : false;
     }
 
     public function scopeSearch($query,$val){

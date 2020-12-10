@@ -7,11 +7,18 @@
                 <div class="col-lg-9">
                     <div>
                         <h2> Laporan Penyewaan </h2>
-                        @if($estimasi[0] != null)
-                        <span> Tanggal : {{ \Carbon\Carbon::parse($estimasi[0][0])->format('d, M Y') }} - {{ \Carbon\Carbon::parse($estimasi[0][1])->format('d, M Y') }} </span>
-                        @else
-                        <span> Semua Rentang Waktu </span>
-                        @endif
+
+
+                            @isset($estimasi['all'])
+                            <span> Semua Rentang Waktu </span>
+                            @endisset
+
+                            @isset($estimasi[0])
+
+                            <span> Tanggal : {{ \Carbon\Carbon::parse($estimasi[0][0])->format('d, M Y') }} - {{ \Carbon\Carbon::parse($estimasi[0][1])->format('d, M Y') }} </span>
+                            @endisset
+
+
                     </div>
                 </div>
                 <div class="col-lg-3" style="display: flex; justify-content: flex-end">
@@ -64,7 +71,7 @@
                 <tr>
                     <td> Tanggal Sewa</td>
                     <td> : </td>
-                    <td> {{ \Carbon\Carbon::parse($item->sewa_tglsewa)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($item->sewa_tglkembali)->format('d, M Y') }} ({{ $estimasiSewa[$item->sewa_no] }} Hari) </td>
+                    <td> {{ \Carbon\Carbon::parse($item->sewa_tglsewa)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($item->sewa_tglkembali)->format('d, M Y') }} ({{ $estimasiSewa[$item->sewa_no] }} Malam) </td>
                 </tr>
                 <tr>
                     <td> Pengembalian</td>
@@ -80,12 +87,12 @@
                 <table class="table table-nowrap table-bordered">
                     <thead>
                         <tr>
-                            <th style="width: 50px;">No.</th>
-                            <th class="text-center">Item</th>
-                            <th class="text-center" style="width: 20px;">Jumlah</th>
-                            <th class="text-center">Biaya Sewa</th>
-                            <th class="text-center" width="20">Kondisi Pengembalian</th>
-                            <th class="text-center">Denda</th>
+                            <th style="width: 50px;vertical-align: middle">No.</th>
+                            <th class="text-center" style="vertical-align: middle">Item</th>
+                            <th class="text-center" style="vertical-align: middle">Biaya Sewa <br> ({{ $estimasiSewa[$item->sewa_no] }} malam)</th>
+                            <th class="text-center" style="width: 20px;vertical-align: middle">Jumlah</th>
+                            <th class="text-center" style="vertical-align: middle" width="20">Kondisi Pengembalian</th>
+                            <th class="text-center" style="vertical-align: middle">Denda</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -96,12 +103,10 @@
                                 ({{ $row->alat->alat_kode }}) <br>
                                 {{ $row->alat->jenis_alat->jenis_alat_nama }} - {{ $row->alat->merk->merk_nama }} <br>
                                 Tipe : {{ $row->alat->alat_tipe }}<br>
-                                Harga : Rp. {{ number_format($row->alat->jenis_alat->jenis_alat_harga) }} / Hari
+                                Harga : Rp. {{ number_format($row->alat->jenis_alat->jenis_alat_harga1) }} / Malam
                             </td>
-
-                            <td class="text-center" style="vertical-align: middle;"> {{ $row->detail_sewa_total }} Unit</td>
-                            <td class="text-center" style="vertical-align: middle;"> Rp. {{ number_format($row->detail_sewa_total * $row->alat->jenis_alat->jenis_alat_harga) }}</td>
-
+                            <td class="text-center" style="vertical-align: middle;"> Rp. {{ number_format($harga[$item->sewa_no][$row->detail_sewa_alat_kode] )}}</td>
+                            <td class="text-center" style="vertical-align: middle;"> {{ $row->total_alat }} Unit</td>
                             <td style="vertical-align: middle;">
                                 <table class="table table-borderless">
                                     @foreach($kondisi[$item->sewa_no][$row->alat->alat_kode] as $val)
@@ -110,7 +115,7 @@
                                             {{ $val->kondisi_alat->kondisi_keterangan}} <br>
                                             Denda : Rp {{ number_format($val->kondisi_alat->kondisi_dendarusak) }}
                                         </td>
-                                        <td>x {{ $val->pengembalian_totalrusak }} kerusakan </td>
+                                        <td>x {{ $val->total_kerusakan }} kerusakan </td>
                                     </tr>
                                     @endforeach
                                 </table>
@@ -119,24 +124,19 @@
                         </tr>
                         @endforeach
                         <tr>
-                            <td colspan="3" class="text-right">Total alat</td>
-                            <td class="text-right">Rp {{number_format(array_sum($totalSewa[$item->sewa_no]))}}</td>
+                            <td colspan="3" class="text-right"><strong> Total Sewa </strong></td>
+                            <td class="text-right"><h4 class="m-0" style="color: #20b71b"> Rp {{number_format($totalSewa[$item->sewa_no])}}  </h4></td>
                             <td class="text-right">Total Denda Kerusakan</td>
                             <td class="text-right"> Rp {{ number_format(array_sum($totalDendaRusak[$item->sewa_no]))}}</td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="text-right">Durasi Peminjaman</td>
-                            <td class="text-right">{{ $estimasiSewa[$item->sewa_no] }} Hari</td>
-
-                            <td class="text-right">Denda Keterlambatan <br> <b style="color: #d08b22"> ({{ $estimasiTerlambat[$item->sewa_no] }} Hari) </b></td>
-                            <td class="text-right"> Rp {{number_format(array_sum($totalSewa[$item->sewa_no] ) * $estimasiTerlambat[$item->sewa_no] )}}  </td>
+                            <td colspan="5" class="text-right">Denda Keterlambatan <br> <b style="color: #d08b22"> ({{ $estimasiTerlambat[$item->sewa_no] }} Hari) </b></td>
+                            <td class="text-right"> Rp {{number_format(array_sum($harga1[$item->sewa_no] ) * $estimasiTerlambat[$item->sewa_no] )}}  </td>
                         </tr>
                         <tr>
-                            <td colspan="3" class="text-right"><strong> Total Sewa </strong></td>
-                            <td class="text-right"><h4 class="m-0" style="color: #20b71b"> Rp {{number_format(array_sum($totalSewa[$item->sewa_no] ) * $estimasiSewa[$item->sewa_no] )}}  </h4></td>
-                            <td class="text-right">
+                            <td colspan="5" class="text-right">
                                 <strong>Total Denda</strong></td>
-                            <td class="text-right"><h4 class="m-0" style="color: #d04830"> Rp {{number_format((array_sum($totalSewa[$item->sewa_no] ) * $estimasiTerlambat[$item->sewa_no]) + array_sum($totalDendaRusak[$item->sewa_no]))}}   </h4></td>
+                            <td class="text-right"><h4 class="m-0" style="color: #d04830"> Rp {{number_format((array_sum($harga1[$item->sewa_no] ) * $estimasiTerlambat[$item->sewa_no]) + array_sum($totalDendaRusak[$item->sewa_no]))}}   </h4></td>
                         </tr>
                         <hr width="100%">
                     </tbody>

@@ -13,11 +13,11 @@
                                     <div class="col-7">
                                         <div class="text-primary p-4">
                                             <h5 class="text-primary">Gratis Daftar !</h5>
-                                            <p>Bergabungah menjadi member Sumbar mountain Advanture secar gratis.</p>
+                                            <p>Bergabunglah menjadi member Sumbar mountain Advanture secara gratis.</p>
                                         </div>
                                     </div>
                                     <div class="col-5 align-self-end">
-                                        <img src="assets/images/profile-img.png" alt="" class="img-fluid">
+                                        <img src="https://www.pinclipart.com/picdir/big/488-4886416_camping-png-background-image-camping-png-clipart.png" alt="" class="img-fluid">
                                     </div>
                                 </div>
                             </div>
@@ -25,9 +25,9 @@
                                 <div>
                                     <a href="index.html">
                                         <div class="avatar-md profile-user-wid mb-4">
-                                    <span class="avatar-title rounded-circle bg-light">
-                                        <img src="assets/images/logo.svg" alt="" class="rounded-circle" height="34">
-                                    </span>
+                                            <span class="avatar-title rounded-circle" style="background: rgb(235, 243, 242)">
+                                                <img src="{{ asset("assets/images/logo-dark.png")}}" alt="" class="rounded-circle" height="34">
+                                            </span>
                                         </div>
                                     </a>
                                 </div>

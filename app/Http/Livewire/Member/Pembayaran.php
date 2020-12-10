@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Member;
 
 
 use App\Model\Penyewaan;
+use App\Model\Rekening;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -14,8 +15,9 @@ class Pembayaran extends Component
 
     use WithFileUploads;
 
-    public $totalHari , $subTotal, $grandTotal , $buktiTf;
+    public $totalHari , $grandTotal , $buktiTf;
     public $dataSewa;
+    public $harga = [];
 
 
     public function mount($invoice){
@@ -27,17 +29,32 @@ class Pembayaran extends Component
 
         foreach($this->dataSewa->detail_sewa as $item){
 
-            $harga[] = $item->detail_sewa_total * $item->alat->jenis_alat->jenis_alat_harga;
+            if($this->totalHari == 1){
+                $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa1  ;
+            }
+            elseif($this->totalHari == 2){
+                $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa2;
+            }
+            elseif($this->totalHari == 3){
+                $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa3;
+            }
+            else{
+                $lama = $this->totalHari - 3;
+                $this->harga[$item->detail_sewa_alat_kode] =  ($item->harga_sewa1 * $lama) + $item->harga_sewa3;
+            }
+
+            $hargaXqtt[] = $this->harga[$item->detail_sewa_alat_kode] * $item->total_alat;
 
         }
 
-        $this->subTotal = array_sum($harga);
-        $this->grandTotal = $this->subTotal * $this->totalHari;
+
+        $this->grandTotal = array_sum($hargaXqtt);
     }
 
     public function render()
     {
-        return view('livewire.member.pembayaran.pembayaran');
+        $dataRek = Rekening::all();
+        return view('livewire.member.pembayaran.pembayaran',['dataRek'=>$dataRek]);
     }
 
 
@@ -45,7 +62,7 @@ class Pembayaran extends Component
 
         if($pic = $this->buktiTf){
             $this->validate([
-                'buktiTf' => 'required |max:30000',
+                'buktiTf' => 'required |max:1024|image',
             ]);
             $name =  Auth::user()->user_nick.'_'.Carbon::now()->format('d-m-y').'.jpg';
 
@@ -53,6 +70,7 @@ class Pembayaran extends Component
             $update = $this->dataSewa;
             $update->sewa_buktitf = $name;
             $update->sewa_status = 2;
+            $update->sewa_tglbayar = Carbon::now();
             $update->update();
 
             $pic->storeAs('buktiTf',$name);

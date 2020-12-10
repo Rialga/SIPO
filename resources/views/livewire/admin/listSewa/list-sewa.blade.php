@@ -20,16 +20,7 @@
                     </div>
                     <!-- end page title -->
 
-                    @if($formSewa)
-
-                         @include('livewire.admin.listSewa.sewaForm')
-
-                    @else
-
                     <div class="row">
-
-
-
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-body">
@@ -105,7 +96,7 @@
                                                         @elseif($row->sewa_status == 1)
                                                             <b style="color: #9db325 "> {{$row->status_sewa->status_detail}} </b>
                                                         @elseif($row->sewa_status == 3 or $row->sewa_status == 4 or $row->sewa_status == 5)
-                                                            <b style="color: #0AC8C8"> {{$row->status_sewa->status_detail}} </b>
+                                                            <b style="color: black"> {{$row->status_sewa->status_detail}} </b>
                                                         @elseif($row->sewa_status == 2)
                                                             <b style="color: orange"> {{$row->status_sewa->status_detail}} </b>
                                                         @elseif($row->sewa_status == 6)
@@ -117,7 +108,7 @@
                                                     </td>
                                                     <td>
                                                         @if($row->sewa_status == 3 or $row->sewa_status == 4)
-                                                        <a wire:click="updateStatus('{{ $row->sewa_no }}')" class="btn btn-info btn-rounded waves-effect waves-light" title="Update Status"><i class="fas fa-sync-alt" style="color: white"></i></a>
+                                                        <a wire:click="modal('{{ $row->sewa_no }}')" class="btn btn-info btn-rounded waves-effect waves-light" title="Update Status"><i class="fas fa-sync-alt" style="color: white"></i></a>
                                                         @else
                                                             -
                                                         @endif
@@ -147,8 +138,20 @@
                             </div>
                         </div> <!-- end col -->
                     </div> <!-- end row -->
+                    <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="msewadelete">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-body" style="text-align: center">
+                                        <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                        <h4 class="mb-2"> Update Status? </h4>
+                                        <h6 class="mb-2" muted> No Invoice : {{ $rowId }} </h6>
+                                        <button type="button" class="btn btn-success waves-effect mb-2 mt-2 mr-2" data-dismiss="modal" wire:click="updateStatus">Update</button>
+                                        <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Batal</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    @endif
                 </div> <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
@@ -170,3 +173,10 @@
     </div>
 
 </div>
+
+<script>
+    window.addEventListener('mSewa', event => {
+        $("#msewadelete").modal('show');
+    })
+
+</script>

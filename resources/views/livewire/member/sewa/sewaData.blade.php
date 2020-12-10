@@ -34,12 +34,16 @@
                          <div class="col-lg-4" style="text-align: center">
                              Tanggal Sewa : {{ Carbon\Carbon::parse($item->sewa_tglsewa)->format('d, M Y') }} <br>
                              Tanggal Kembali : {{ Carbon\Carbon::parse($item->sewa_tglkembali)->format('d, M Y') }}<br>
-                             Estimasi : {{  Carbon\Carbon::parse( $item->sewa_tglsewa)->diffInDays( $item->sewa_tglkembali) }} Hari
+                             Estimasi : {{  Carbon\Carbon::parse( $item->sewa_tglsewa)->diffInDays( $item->sewa_tglkembali) }} Malam
                          </div>
                          <div class="col-lg-3" style="text-align: right">
                               Total Pembayaran : <br>
-                              <h4 style="color: orange"> Rp {{ $totalAll[$loop->iteration - 1] }} </h4>
-                         </div>
+                              @if($item->sewa_status == 6)
+                              <h4 style="color: orange"> Rp {{ number_format($totalAll[$loop->iteration - 1] + $denda[$item->sewa_no] ) }} </h4>
+                              @else
+                              <h4 style="color: orange"> Rp {{ number_format($totalAll[$loop->iteration - 1]) }} </h4>
+                              @endif
+                        </div>
                      </div>
                      <hr width="100%">
 
@@ -53,7 +57,7 @@
                                 <div class="mt-2 mb-4 text-center">
                                     <h5 class="card-title">{{ $data->detail_sewa_alat_kode }}</h5>
                                     <p class="card-text">{{ $data->alat->jenis_alat->jenis_alat_nama }} <br>( {{ $data->alat->merk->merk_nama }} ) <br> {{ $data->alat->alat_tipe }}</p>
-                                    <p class="card-text"><b class="text-muted">Rp. {{ $data->alat->jenis_alat->jenis_alat_harga }} x {{ $data->detail_sewa_total}} unit</b></p>
+                                    <p class="card-text"><b class="text-muted">{{ $data->total_alat}} unit</b></p>
                                 </div>
                             </div>
                         </div>

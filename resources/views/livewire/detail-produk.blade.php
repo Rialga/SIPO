@@ -62,20 +62,7 @@
                                                         @endforeach
 
                                                     </div>
-                                                    <div class="text-center mt-5 mt-xl-5">
 
-                                                        @guest
-                                                        <a href="{{ url('/login') }}" class="btn btn-primary waves-effect waves-light mt-2 mr-1">
-                                                            <i class="bx bx-cart mr-2"></i> Add to cart
-                                                        </a>
-
-                                                        @endguest
-                                                        @auth
-                                                        <button {{$button}} type="button" class="btn btn-primary waves-effect waves-light mt-2 mr-1" wire:click="addToCart('{{ $dataAlat->alat_kode }}')">
-                                                            <i class="bx bx-cart mr-2"></i> Add to cart
-                                                        </button>
-                                                        @endauth
-                                                    </div>
                                                     <br>
                                                 </div>
                                             </div>
@@ -103,11 +90,11 @@
                                                         <td> <h4>{{ $dataAlat->alat_tipe }}</h4></td>
                                                     </tr>
 
-                                                    <td colspan="3" style="text-align: left">( {{ $dataAlat->alat_total }} stok tersedia )</td>
-
                                                     <tr >
-                                                        <td colspan="3" style="text-align: right">
-                                                           <p style="font-size: 15px"> Harga :  <b style="color: orangered;font-size: 20px">Rp {{ $dataAlat->jenis_alat->jenis_alat_harga }}</b> / Hari </p>
+                                                        <td colspan="3" style="text-align: left">
+                                                           <p style="font-size: 15px"> Harga :  <b style="color: orangered;font-size: 20px">Rp {{ $dataAlat->jenis_alat->jenis_alat_harga1 }}</b> / 1 Malam </p>
+                                                           <p style="font-size: 15px"> Harga :  <b style="color: orangered;font-size: 20px">Rp {{ $dataAlat->jenis_alat->jenis_alat_harga2 }}</b> / 2 Malam </p>
+                                                           <p style="font-size: 15px"> Harga :  <b style="color: orangered;font-size: 20px">Rp {{ $dataAlat->jenis_alat->jenis_alat_harga3 }}</b> / 3 Malam </p>
                                                         </td>
                                                     </tr>
 
@@ -126,7 +113,7 @@
             </div>
         </div>
 
-        
+
 
         <livewire:layouts.footer />
 
