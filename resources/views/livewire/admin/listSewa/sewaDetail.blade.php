@@ -26,7 +26,7 @@
                                         <h4 class="float-left font-size-20">{{ $dataSewa->sewa_no }}</h4> <br><br>
                                         <h4 class="float-left font-size-15">( {{ $dataSewa->status_sewa->status_detail }} )</h4>
                                         @if($dataSewa->sewa_status == 1)
-                                        <a class="btn btn-danger waves-effect waves-light float-right" title="batal" wire:click="batal('{{ $dataSewa->sewa_no }}')"> <h6 style="color: white"> Batalkan Sewa</h6> </a> <br><br>
+                                        <a class="btn btn-danger float-right"  data-toggle="modal" data-target="#mbatal" style="color: white">Batalkan Sewa</a> <br><br>
                                         @endif
                                         <br>
                                     </div>
@@ -64,6 +64,9 @@
                                             <address>
                                                 <strong>Waktu Pembayaran:</strong><br>
                                                 {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('d, M Y') }} | {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('H:i') }} WIB<br>
+                                                @if($dataSewa->sewa_status > 1)
+                                                    Pembayaran via : Bank {{ $dataSewa->rekening->rekening_bank }}
+                                                @endif
                                             </address>
                                         </div>
 
@@ -82,9 +85,9 @@
                                                 <div class="col-sm-6 mt-4">
                                                     <h3 class="font-size-15 font-weight-bold">Detail Sewa</h3>
                                                 </div>
-                                                @if($dataSewa->sewa_status == 1 or $dataSewa->sewa_status == 7)
+                                                @if($dataSewa->sewa_status == 1)
                                                 <div class="col-sm-6 mt-3">
-                                                    <button wire:click = "edit('{{ true }}')" type="button" class="btn btn-secondary  waves-effect waves-light mb-2 pt-2 float-right"><i class="fas fa-edit" style="color: white" ></i></button>
+                                                    <a class="btn btn-success float-right"  data-toggle="modal" data-target="#mupdate" style="color: white">Pembayaran Lunas (Transaksi Dilokasi)</a>
                                                 </div>
                                                 @endif
                                             </div>
@@ -214,13 +217,35 @@
                                         <div class="modal-content">
                                             <div class="modal-body" style="text-align: center">
                                                     <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
-                                                    @if($dataSewa->sewa_status == 3)
+                                                    @if($dataSewa->sewa_status == 3 )
                                                     <h4 class="mb-2"> Perbarui Status? </h4>
+                                                    @elseif($dataSewa->sewa_status == 1)
+                                                    <h4 class="mb-2"> Konfirmasi Transkasi di Lokasi? </h4>
                                                     @else
                                                     <h4 class="mb-2"> Konfirmasi Pengambilan? </h4>
                                                     @endif
                                                     <h6 class="mb-2" muted> No Invoice : {{ $dataSewa->sewa_no }} </h6>
-                                                    <a class="btn btn-success"  wire:click="updateStatus" style="color: white">Ya</a>
+                                                    @if($dataSewa->sewa_status == 1 )
+                                                    <a class="btn btn-success"  wire:click="konfirmasi" style="color: white" data-dismiss="modal">Ya</a>
+                                                    @else
+                                                    <a class="btn btn-success"  wire:click="updateStatus" style="color: white" data-dismiss="modal">Ya</a>
+                                                    @endif
+                                                    <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Batal</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mbatal">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-body" style="text-align: center">
+                                                    <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                    
+                                                    <h4 class="mb-2"> Batalkan Sewa? </h4>
+                    
+                                                    <h6 class="mb-2" muted> No Invoice : {{ $dataSewa->sewa_no }} </h6>
+                                                    <a class="btn btn-success"  wire:click="batal" style="color: white" data-dismiss="modal">Ya</a>
                                                     <button type="button" class="btn btn-danger waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">Batal</button>
                                             </div>
                                         </div>

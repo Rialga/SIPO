@@ -9,7 +9,7 @@ class Penyewaan extends Model
     protected $table = 'penyewaan';
     protected $primaryKey = 'sewa_no';
     protected $fillable = [
-        'sewa_no' , 'sewa_jenis' , 'sewa_status' , 'sewa_user' , 'sewa_tglsewa' , 'sewa_tglbayar' , 'sewa_tglkembali' , 'sewa_tujuan', 'sewa_buktitf'
+        'sewa_no' , 'sewa_jenis' , 'sewa_rek', 'sewa_status' , 'sewa_user' , 'sewa_tglsewa' , 'sewa_tglbayar' , 'sewa_tglkembali' , 'sewa_tujuan', 'sewa_buktitf'
     ];
 
     public $incrementing = false;
@@ -20,6 +20,9 @@ class Penyewaan extends Model
     }
     public function status_sewa() {
         return $this->belongsTo('App\Model\StatusSewa', 'sewa_status', 'status_id');
+    }
+    public function rekening() {
+        return $this->belongsTo('App\Model\Rekening', 'sewa_rek', 'rekening_no');
     }
 
 

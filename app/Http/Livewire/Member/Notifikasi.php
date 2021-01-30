@@ -15,7 +15,7 @@ class Notifikasi extends Component
     public function mount(){
 
         $this->dataRefuse = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',7)->get();
-        $this->dataKembali = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',5)->whereDate('sewa_tglkembali','<=',Carbon::now())->get();
+        $this->dataKembali = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',5)->whereDate('sewa_tglkembali','<=',Carbon::now()->addDays(1))->get();
         // dd($this->dataKembali = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',5)->whereDate('sewa_tglkembali','>',Carbon::now())->get());
 
     }
@@ -29,7 +29,11 @@ class Notifikasi extends Component
 
         $invoice = str_replace("/","-",$inv);
 
+        if($stat == 0){
+        return redirect('pembayaran/'.$invoice);
+        }
+        else{
         return redirect('detail/'.$invoice);
-
+        }
     }
 }

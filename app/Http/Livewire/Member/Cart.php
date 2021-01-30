@@ -12,7 +12,7 @@ use Livewire\Component;
 class Cart extends Component
 {
 
-    public $tglPinjam , $tglKembali, $sumHarga , $estimasi, $sewaTujuan,$rowId ;
+    public $tglPinjam , $tglKembali, $sumHarga , $estimasi, $sewaTujuan,$rowId , $button , $invoice;
     public $stok = [];
     public $harga = [];
     public $stokTerpakai = [];
@@ -26,6 +26,7 @@ class Cart extends Component
     }
 
     public function mount(){
+        $this->button= '';
         $this->stokTerpakai = [];
         $this->stokNow = [];
         $hargaXqtt = [];
@@ -51,22 +52,23 @@ class Cart extends Component
             }
             elseif($this->estimasi == 2){
                 // dd($item->attributes->harga2);
-                $this->harga[$key] = $item->attributes->harga2 ;
+                $this->harga[$key] = $item->associatedModel->jenis_alat->jenis_alat_harga2 ;
             }
             elseif($this->estimasi == 3){
 
-                $this->harga[$key] = $item->attributes->harga3 ;
+                $this->harga[$key] = $item->associatedModel->jenis_alat->jenis_alat_harga3 ;
             }
             else{
                 // dd($item->attributes->harga3);
                 $lama = $this->estimasi - 3;
-                $this->harga[$key] =  ($item->price * $lama) + $item->attributes->harga3 ;
+                $this->harga[$key] =  ($item->price * $lama) + $item->associatedModel->jenis_alat->jenis_alat_harga3 ;
             }
 
             $this->stok[$key] = $item->quantity;
             $hargaXqtt[] = $this->harga[$key] * $this->stok[$key] ;
 
         }
+
 
 
         $this->sumHarga = array_sum($hargaXqtt);
@@ -130,6 +132,8 @@ class Cart extends Component
             }
         }
 
+
+
         foreach(Alat::all() as $item){
 
             $this->stokNow[$item->alat_kode] = $item->alat_total;
@@ -139,6 +143,8 @@ class Cart extends Component
             }
 
         }
+
+        // dd($this->stokTerpakai , $this->stokNow);
 
     }
 
@@ -152,7 +158,7 @@ class Cart extends Component
 
     public function addqty($id){
 
-        if($this->stokNow[$id] == $this->stok[$id]){
+        if($this->stokNow[$id] <= $this->stok[$id]){
             $this->dispatchBrowserEvent('swal', [
                 'title' => 'Stok sudah Maximal',
                 'timer'=>3000,
@@ -248,6 +254,16 @@ class Cart extends Component
 
     public function checkout(){
 
+        foreach ($this->stok as $key => $value) {
+            $valid = Alat::where('alat_kode',$key)->first();
+
+            if($valid->alat_total < $value){
+                return $this->mount();
+            }
+
+
+        }
+
 
         $this->validate([
             'stok.*' => 'required',
@@ -256,11 +272,11 @@ class Cart extends Component
             'sewaTujuan' => 'required',
         ]);
 
-        $invoice = 'INVC/II/'.Carbon::now()->format('Ymd/His');
+        $this->invoice = 'INVC/II/'.Carbon::now()->format('Ymd/His');
 
         //insert penyewaan
         $createSewa = new Penyewaan();
-        $createSewa->sewa_no = $invoice;
+        $createSewa->sewa_no = $this->invoice;
         $createSewa->sewa_status = 1;
         $createSewa->sewa_user = auth()->id();
         $createSewa->sewa_tglsewa = $this->tglPinjam;
@@ -270,18 +286,26 @@ class Cart extends Component
         $createSewa->save();
 
 
+
         // detail sewa
         foreach ($this->stok as $key => $value) {
 
             $detail = new DetailSewa();
 
             $detail->detail_sewa_alat_kode = $key;
-            $detail->detail_sewa_nosewa = $invoice;
+            $detail->detail_sewa_nosewa = $this->invoice;
             $detail->total_alat = $value;
             $detail->harga_sewa1 = \Cart::session( auth()->id())->get($key)->price;
-            $detail->harga_sewa2 = \Cart::session( auth()->id())->get($key)->attributes->harga2;
-            $detail->harga_sewa3 = \Cart::session( auth()->id())->get($key)->attributes->harga3;
+            $detail->harga_sewa2 = \Cart::session( auth()->id())->get($key)->associatedModel->jenis_alat->jenis_alat_harga2;
+            $detail->harga_sewa3 = \Cart::session( auth()->id())->get($key)->associatedModel->jenis_alat->jenis_alat_harga3;
             $detail->save();
+
+
+
+            $updateStok = Alat::where('alat_kode',$key)->first();
+            $stokNow = $updateStok->alat_total - $value;
+            $updateStok->alat_total = $stokNow  ;
+            $updateStok->update();
 
             \Cart::session(auth()->id())->remove($key);
 
@@ -309,6 +333,9 @@ class Cart extends Component
         $this->stok = [];
         $this->harga = [];
         $this->emit('cartAdded');
-        return redirect('/sewa');
+
+        $id = str_replace("/","-",$this->invoice);
+        return redirect('pembayaran/'.$id);
+
     }
 }

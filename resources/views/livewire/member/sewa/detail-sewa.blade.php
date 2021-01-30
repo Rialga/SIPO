@@ -57,12 +57,17 @@
                                                             <tr>
                                                                 <td> Waktu  </td>
                                                                 <td>:</td>
-                                                                <td>{{ \Carbon\Carbon::parse($dataSewa->sewa_tglpinjam)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} ({{ $totalHari }} malam)</td>
+                                                                <td>{{ \Carbon\Carbon::parse($dataSewa->sewa_tglsewa)->format('d, M Y') }} - {{ \Carbon\Carbon::parse($dataSewa->sewa_tglkembali)->format('d, M Y') }} ({{ $totalHari }} malam)</td>
                                                             </tr>
                                                             <tr>
                                                                 <td>Tujuan</td>
                                                                 <td>:</td>
                                                                 <td>{{ $dataSewa->sewa_tujuan }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Pembayaran</td>
+                                                                <td>:</td>
+                                                                <td>Bank {{ $dataSewa->rekening->rekening_bank }}</td>
                                                             </tr>
                                                         </table>
                                                     </div><br><br>

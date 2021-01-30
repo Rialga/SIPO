@@ -19,7 +19,7 @@
                     ({{ $item->alat->alat_kode }}) <br>
                     {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
                     Tipe : {{ $item->alat->alat_tipe }}<br>
-                    Harga : Rp. {{ number_format($item->harga_sewa1) }} / Malam
+                    Kondisi : {{ $item->alat->kondisi_terbaru }}
                 </td>
 
                 <td class="text-center" style="vertical-align: middle;"> {{ $item->total_alat }} Unit</td>

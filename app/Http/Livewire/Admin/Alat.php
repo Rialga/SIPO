@@ -24,7 +24,7 @@ class Alat extends Component
 
     public $detailAlat, $detailGambar;
 
-    public $selectJenisAlat, $inputJenisAlat , $selectMerk, $inputMerk, $inputJumlah, $inputTipe, $inputKodeAlat;
+    public $selectJenisAlat, $inputJenisAlat , $selectMerk, $inputMerk, $inputJumlah, $inputTipe, $inputKodeAlat, $kondisiTerbaru;
     public $inputJenisHarga = [
         '1' => '',
         '2' => '',
@@ -130,6 +130,7 @@ class Alat extends Component
                     'inputTipe' => 'required',
                     'inputJumlah' => 'required',
                     'inputKodeAlat' => 'required',
+                    'kondisiTerbaru' => 'required',
                     'gambar.*' => 'required|max:1024|image',
                 ]);
 
@@ -155,6 +156,7 @@ class Alat extends Component
                     'inputTipe' => 'required',
                     'inputJumlah' => 'required',
                     'inputKodeAlat' => 'required',
+                    'kondisiTerbaru' => 'required',
                     'selectMerk' => 'required',
                     'gambar.*' => 'required|max:1024|image',
                 ]);
@@ -179,6 +181,7 @@ class Alat extends Component
                     'inputJumlah' => 'required',
                     'inputKodeAlat' => 'required',
                     'selectJenisAlat' => 'required',
+                    'kondisiTerbaru' => 'required',
                     'gambar.*' => 'required|max:1024|image',
                 ]);
 
@@ -198,6 +201,7 @@ class Alat extends Component
                     'inputTipe' => 'required',
                     'inputJumlah' => 'required',
                     'inputKodeAlat' => 'required',
+                    'kondisiTerbaru' => 'required',
                     'gambar.*' => 'required|max:1024|image',
                 ]);
 
@@ -219,6 +223,7 @@ class Alat extends Component
         $alat->alat_merk = $alatMerk;
         $alat->alat_tipe = $this->inputTipe;
         $alat->alat_total = $this->inputJumlah;
+        $alat->kondisi_terbaru = $this->kondisiTerbaru;
         $alat->save();
 
         return $this->createImage();
@@ -239,7 +244,7 @@ class Alat extends Component
                 $modelGambar->gambar_kodealat = $this->inputKodeAlat;
                 $modelGambar->gambar_file = $name;
                 $modelGambar->save();
-                $fileGambar->storePubliclyAs('gambarAlat',$name);
+                $fileGambar->storePubliclyAs('gambarAlat/',$name );
             }
 
             $this->dispatchBrowserEvent('swal', [
@@ -274,10 +279,25 @@ class Alat extends Component
             $update->alat_merk = $this->selectMerk;
             $update->alat_tipe = $this->inputTipe;
             $update->alat_total = $this->inputJumlah;
+            $update->kondisi_terbaru = $this->kondisiTerbaru;
             $update->update();
         }
 
-        return $this->createImage();
+        if($this->gambar){
+            return $this->createImage();
+        }
+        else{
+            $this->dispatchBrowserEvent('swal', [
+                'title' => 'Data Disimpan',
+                'timer'=>3000,
+                'icon'=>'success',
+                'toast'=>true,
+                'position'=>'top-right',
+                'showConfirmButton' => false
+            ]);
+
+            return $this->clearForm();
+        }
     }
 
     //Delete Alat
@@ -314,8 +334,13 @@ class Alat extends Component
 
         if($this->rowId){
 
-            GambarAlat::where('gambar_id',$this->rowId)->delete();;
+            // dd($this->rowId);
+            $gambar =  GambarAlat::where('gambar_id',$this->rowId)->first();
+            Storage::disk('public')->delete('gambarAlat/'.$gambar->gambar_file);
+            $gambar->delete();
             $this->dataGambar = GambarAlat::where('gambar_kodealat',$this->inputKodeAlat)->get();
+
+
 
             $this->dispatchBrowserEvent('swal', [
                 'title' => 'Gambar Dihapus',
@@ -342,6 +367,7 @@ class Alat extends Component
         $this->selectMerk = $fieldAlat->alat_merk;
         $this->inputTipe = $fieldAlat->alat_tipe;
         $this->inputJumlah = $fieldAlat->alat_total;
+        $this->kondisiTerbaru = $fieldAlat->kondisi_terbaru;
 
         $this->updateMode = true;
         $this->formAlat = true;
@@ -419,6 +445,7 @@ class Alat extends Component
         $this->selectJenisAlat = null;
         $this->selectMerk = null;
         $this->gambar = null;
+        $this->kondisiTerbaru = null;
 
         $this->formAlat = false;
         $this->updateMode = false;

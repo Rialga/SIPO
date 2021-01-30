@@ -86,6 +86,10 @@
                                                 Jumlah Stock
                                                 @include('addOn.sort-icon',['field'=>'alat_total'])
                                             </th>
+                                            <th wire:click="sortBy('kondisi_terbaru')" style="cursor: pointer;">
+                                                Kondisi Terbaru
+                                                @include('addOn.sort-icon',['field'=>'kondisi_terbaru'])
+                                            </th>
                                             <th>Aksi</th>
                                         </tr>
                                         </thead>
@@ -104,6 +108,7 @@
                                                 <td>{{$row->merk->merk_nama}}</td>
                                                 <td>{{$row->alat_tipe}}</td>
                                                 <td>{{$row->alat_total}}</td>
+                                                <td>{{$row->kondisi_terbaru}}</td>
                                                 <td>
                                                     <a wire:click="detailPage('{{ $row->alat_kode }}')" class="btn btn-primary btn-rounded waves-effect waves-light" title="detail"><i class="fas fa-eye" style="color: white"></i></a>
                                                     <a wire:click="editPage('{{ $row->alat_kode }}')" class="btn btn-warning btn-rounded waves-effect waves-light" title="edit"><i class="fas fa-edit" style="color: white"></i></a>

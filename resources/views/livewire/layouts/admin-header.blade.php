@@ -4,7 +4,7 @@
         <div class="d-flex">
             <!-- LOGO -->
             <div class="navbar-brand-box">
-                <a href="index.html" class="logo logo-dark">
+                <a href="{{ url('dashboard/') }}" class="logo logo-dark">
                     <span class="logo-sm">
                         <img src="{{ asset('assets/images/logo-dark.png') }}" alt="" height="20">
                     </span>

@@ -18,6 +18,7 @@ class Penyewaan extends Migration
             $table->string('sewa_no',30)->primary();
             $table->integer('sewa_status');
             $table->string('sewa_user',25);
+            $table->string('sewa_rek',20)->nullable();
             $table->timestamp('sewa_tglsewa')->default(DB::raw('CURRENT_TIMESTAMP'));;
             $table->timestamp('sewa_tglbayar')->default(DB::raw('CURRENT_TIMESTAMP'));;
             $table->timestamp('sewa_tglkembali')->default(DB::raw('CURRENT_TIMESTAMP'));;
@@ -27,6 +28,7 @@ class Penyewaan extends Migration
 
             $table->foreign('sewa_status')->references('status_id')->on('status_sewa')->onDelete('cascade');
             $table->foreign('sewa_user')->references('user_id')->on('user')->onDelete('cascade');
+            $table->foreign('sewa_rek')->references('rekening_no')->on('rekekning');
         });
     }
 

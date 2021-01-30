@@ -2,12 +2,14 @@
 
 namespace App\Http\Livewire\Member;
 
-
+use App\Model\Alat;
 use App\Model\Penyewaan;
 use App\Model\Rekening;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
 
 class Pembayaran extends Component
@@ -15,7 +17,7 @@ class Pembayaran extends Component
 
     use WithFileUploads;
 
-    public $totalHari , $grandTotal , $buktiTf;
+    public $totalHari , $grandTotal , $buktiTf , $rek;
     public $dataSewa;
     public $harga = [];
 
@@ -53,8 +55,9 @@ class Pembayaran extends Component
 
     public function render()
     {
-        $dataRek = Rekening::all();
-        return view('livewire.member.pembayaran.pembayaran',['dataRek'=>$dataRek]);
+        $dataRek = Rekening::where('rekening_an' ,'not like' , '%Di Lokasi%' )->get();
+        $bank = Rekening::where('rekening_no' ,$this->rek )->first();
+        return view('livewire.member.pembayaran.pembayaran',['dataRek'=>$dataRek , 'bank'=>$bank]);
     }
 
 
@@ -63,17 +66,22 @@ class Pembayaran extends Component
         if($pic = $this->buktiTf){
             $this->validate([
                 'buktiTf' => 'required |max:1024|image',
+                'rek' => 'required',
             ]);
-            $name =  Auth::user()->user_nick.'_'.Carbon::now()->format('d-m-y').'.jpg';
+            $name =  Auth::user()->user_nick.'_'.Carbon::now()->format('d-m-y').Str::random(3).'.jpg';
 
-            // dd($name);
+
             $update = $this->dataSewa;
+            if($update->sewa_buktitf != 'belum bayar'){
+                Storage::disk('public')->delete('buktiTf/'.$update->sewa_buktitf);
+            }
             $update->sewa_buktitf = $name;
             $update->sewa_status = 2;
+            $update->sewa_rek = $this->rek;
             $update->sewa_tglbayar = Carbon::now();
             $update->update();
 
-            $pic->storeAs('buktiTf',$name);
+            $pic->storePubliclyAs('buktiTf/',$name);
 
             $this->emit('notifBayar');
         }
@@ -85,6 +93,12 @@ class Pembayaran extends Component
         $accept = Penyewaan::where('sewa_no' , $id)->first();
         $accept->sewa_status = 0;
         $accept->update();
+
+        foreach ($accept->detail_sewa as $data){
+            $alat = Alat::where('alat_kode' , $data->alat->alat_kode)->first();
+            $alat->alat_total = $alat->alat_total + $data->total_alat;
+            $alat->update();
+        }
 
         $this->emit('notifTolak');
         $this->emit('notifBayar');

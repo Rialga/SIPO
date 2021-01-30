@@ -51,6 +51,11 @@
                                     <td> <h4> {{ $detailAlat->alat_kode }} </h4> </td>
                                 </tr>
                                 <tr>
+                                    <td> <h8> Kondisi </h8> </td>
+                                    <td> <h8> : </h8> </td>
+                                    <td> <h8> {{ $detailAlat->kondisi_terbaru }} </h8> </td>
+                                </tr>
+                                <tr>
                                     <td> <h8> Jenis Alat </h8> </td>
                                     <td> <h8> : </h8> </td>
                                     <td> <h8> {{ $detailAlat->jenis_alat->jenis_alat_nama }} </h8> </td>
@@ -71,9 +76,11 @@
                                     <td> <h8> {{ $detailAlat->alat_total }} unit</h8> </td>
                                 </tr>
                                 <tr>
-                                    <td> <h8> Harga Sewa </h8> </td>
-                                    <td> <h8> : </h8> </td>
-                                    <td> <h8> Rp. {{ $detailAlat->jenis_alat->jenis_alat_harga1 }} / Malam</h8> </td>
+                                    <td style="vertical-align: top"> <h8> Harga Sewa </h8> </td>
+                                    <td style="vertical-align: top"> <h8> : </h8> </td>
+                                    <td> <h8> Rp. {{ $detailAlat->jenis_alat->jenis_alat_harga1 }} / Malam</h8>
+                                     <br><h8> Rp. {{ $detailAlat->jenis_alat->jenis_alat_harga2 }} / 2 Malam</h8>
+                                     <br><h8> Rp. {{ $detailAlat->jenis_alat->jenis_alat_harga3 }} / 3 Malam</h8> </td>
                                 </tr>
 
                             </table>

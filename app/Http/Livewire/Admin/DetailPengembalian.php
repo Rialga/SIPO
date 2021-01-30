@@ -27,6 +27,7 @@ class DetailPengembalian extends Component
 
     //page Add Kondisi
     public $pilihKondisi = [];
+    public $kTerbaru = [];
     public $jumlahKondisi = [];
     public $alatKode = [];
 
@@ -98,7 +99,7 @@ class DetailPengembalian extends Component
             foreach($this->dataSewa->detail_sewa as $item){
                 $this->alatKode[] = $item->alat->alat_kode;
                 $this->field[] = $array = [];
-
+                $this->kTerbaru[$item->alat->alat_kode] = $item->alat->kondisi_terbaru;
                 if($this->totalHari == 1){
                     $this->harga[$item->detail_sewa_alat_kode] =  $item->harga_sewa1;
                 }
@@ -148,6 +149,8 @@ class DetailPengembalian extends Component
 
     // Create Kondisi
     public function createKondisi(){
+
+
         foreach ($this->field as $key => $item){
             $id = 0;
             $this->validate([
@@ -163,15 +166,27 @@ class DetailPengembalian extends Component
                 ]);
             }
 
+            $counts  = array_count_values($this->pilihKondisi[$key]);
+
+            foreach($this->pilihKondisi[$key] as $jml){
+
+                if($counts[$jml] > 1){
+                    // dd('yo wassap');
+
+                    return $this->dispatchBrowserEvent('handling');
+
+                }
+
+            }
+
         }
 
-        // dd($this->alatKode, $this->pilihKondisi , $this->jumlahKondisi);
+        // dd($this->pilihKondisi , $this->jumlahKondisi);
+        // dd($this->pilihKondisi[1] , 'done lewat' , $this->field);
 
         foreach ($this->field as $key => $item){
 
-
             foreach ($this->pilihKondisi[$key] as $nomor =>  $data){
-
                 $create = new Pengembalian();
                 $create->sewa_no = $this->currentInvoice;
                 $create->alat_kode = $this->alatKode[$key];
@@ -180,8 +195,14 @@ class DetailPengembalian extends Component
                 $create->biaya_denda = KondisiAlat::where('kondisi_id',$data)->first()->kondisi_dendarusak;
                 $create->pengembalian_waktu = Carbon::now();
                 $create->save();
-
             }
+        }
+
+        foreach ($this->kTerbaru as $key => $item){
+
+            $update = Alat::where('alat_kode',$key)->first();
+            $update->kondisi_terbaru = $item;
+            $update->update();
 
         }
 

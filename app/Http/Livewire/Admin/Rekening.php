@@ -79,6 +79,7 @@ class Rekening extends Component
 
     // Update Data
     public function update(){
+        // dd($this->fieldNoRek,$this->fieldNamaBank,$this->fieldAtasNama);
         $this->validate([
             'fieldNamaBank' => 'required',
             'fieldAtasNama' => 'required',

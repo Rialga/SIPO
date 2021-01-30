@@ -24,6 +24,8 @@ class User extends Migration
             $table->string('user_phone',15)->unique();
             $table->string('user_password',255);
             $table->timestamps();
+            $table->string('google_id',255)->nullable();
+
 
             $table->foreign('user_role')->references('role_id')->on('role')->onDelete('cascade');
         });

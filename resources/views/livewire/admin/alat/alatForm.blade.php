@@ -125,6 +125,36 @@
                             @error('inputJumlah') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
                         </div>
 
+                        {{-- Kondisi Terbaru --}}
+                        <div class="form-group row">
+                            <label class="col-sm-4 control-label text-sm-right pt-2">Kondisi Terbaru</label>
+                            <div class="col-sm-4">
+
+                                    <div class="custom-control custom-radio custom-radio-danger mb-3 ml-2">
+                                        <input type="radio" id="1" name="radio"  value="0% - 20%" class="custom-control-input" wire:model.lazy="kondisiTerbaru">
+                                        <label class="custom-control-label" for="1">0% - 20%</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-radio-warning mb-3 ml-2">
+                                        <input type="radio" id="2" name="radio"  value="21% - 40%" class="custom-control-input" wire:model.lazy="kondisiTerbaru">
+                                        <label class="custom-control-label" for="2">21% - 40%</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-radio-success mb-3 ml-2">
+                                        <input type="radio" id="3" name="radio"  value="41% - 60%" class="custom-control-input" wire:model.lazy="kondisiTerbaru">
+                                        <label class="custom-control-label" for="3">41% - 60%</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-radio-info mb-3 ml-2">
+                                        <input type="radio" id="4" name="radio"  value="61% - 80%" class="custom-control-input" wire:model.lazy="kondisiTerbaru">
+                                        <label class="custom-control-label" for="4">61% - 80%</label>
+                                    </div>
+                                    <div class="custom-control custom-radio custom-radio-primary mb-3 ml-2">
+                                        <input type="radio" id="5" name="radio"  value="81% - 100%" class="custom-control-input" wire:model.lazy="kondisiTerbaru">
+                                        <label class="custom-control-label" for="5">81% - 100%</label>
+                                    </div>
+                                @error('kondisiTerbaru') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
+
+                            </div>
+                        </div>
+
                         {{-- Gambar --}}
                         <div class="form-group row">
                             <label class="col-sm-4 control-label text-sm-right pt-2">Gambar</label>
@@ -134,6 +164,7 @@
                                 </div>
                                 <span style="color: orange">(* Ukuran File max: 1MB harus bertipe gambar : png,jpg,gif,dll )</span> <br>
                                 @error('gambar.*') <span class="pt-2" style="color: red">{{ $message }}</span> @enderror
+
                                 <br>
                                 <div id="showGambar"></div>
                                 <br>
@@ -148,9 +179,6 @@
                                     @endif
                                 @endif
 
-                                <div wire:loading class="spinner-border text-warning" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
                             </div>
                         </div>
 
@@ -160,13 +188,13 @@
                                 <div wire:loading class="spinner-border text-warning" role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
-                            <button wire:loading.remove wire:click="clearForm()"  onclick="return false"  class="btn btn-default">Kembali</button>&nbsp; &nbsp;&nbsp;
+                                <button wire:loading.remove wire:click="clearForm()"  onclick="return false"  class="btn btn-default">Kembali</button>&nbsp; &nbsp;&nbsp;
 
-                            @if($updateMode)
-                            <button wire:loading.remove type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Ubah</button>
-                            @else
-                            <button wire:loading.remove class="btn btn-primary" onclick="return false" wire:click="create" data-dismiss="modal">Simpan</button>
-                            @endif
+                                @if($updateMode)
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#update">Ubah</button>
+                                @else
+                                <button wire:loading.remove class="btn btn-primary" onclick="return false" wire:click="create" data-dismiss="modal">Simpan</button>
+                                @endif
 
                             </div>
                         </div>

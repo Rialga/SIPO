@@ -113,6 +113,15 @@
                                             <button class="btn btn-primary btn-block waves-effect waves-light" type="submit" wire:click.prevent="regist">Daftar</button>
                                         </div>
 
+                                        <div class="mt-3 text-center">
+                                            <span>  -- Or -- </span>
+                                        </div>
+
+                                        <div class="mt-3">
+                                            <a type="submit" class="btn btn-primary btn-block waves-effect waves-light" href="{{ url('auth/google') }}">
+                                                <i class="mdi mdi-google"> </i> Daftar dengan Google
+                                            </a>
+                                        </div>
 
                                     </form>
                                 </div>

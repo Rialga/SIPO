@@ -31,9 +31,7 @@ class DetailListsewa extends Component
 
     public function mount($invoice){
         $this->idlink = $invoice;
-
         $this->noSewa = str_replace("-","/",$invoice);
-
         return $this->kalkulasi();
 
     }
@@ -82,14 +80,14 @@ class DetailListsewa extends Component
         if($status->sewa_status == 3){
 
 
-            foreach($status->detail_sewa as $item){
+            // foreach($status->detail_sewa as $item){
 
-                $updateStok = Alat::where('alat_kode',$item->alat->alat_kode)->first();
-                $stokNow = $updateStok->alat_total - $item->total_alat;
+            //     $updateStok = Alat::where('alat_kode',$item->alat->alat_kode)->first();
+            //     $stokNow = $updateStok->alat_total - $item->total_alat;
 
-                $updateStok->alat_total = $stokNow  ;
-                $updateStok->update();
-            }
+            //     $updateStok->alat_total = $stokNow  ;
+            //     $updateStok->update();
+            // }
 
             $status->sewa_status = 4;
             $status->update();
@@ -104,12 +102,38 @@ class DetailListsewa extends Component
             return redirect('detailpengembalian/'.$this->idlink);
         }
         else{
-            dd('WTF');
+            dd('ops');
         }
 
     }
 
 
+    public function konfirmasi(){
+        // dd('hai');
+        $status = Penyewaan::where('sewa_no' , $this->noSewa)->first();
+        $status->sewa_status = 4;
+        $status->sewa_rek = 1010;
+        $status->sewa_tglbayar = Carbon::now();
+        $status->sewa_buktitf = 'offline.jpg';
+        $status->update();
+
+        return $this->kalkulasi();
+    }
+
+    public function batal(){
+
+        $accept = Penyewaan::where('sewa_no' , $this->noSewa)->first();
+        $accept->sewa_status = 0;
+        $accept->update();
+
+        foreach ($accept->detail_sewa as $data){
+            $alat = Alat::where('alat_kode' , $data->alat->alat_kode)->first();
+            $alat->alat_total = $alat->alat_total + $data->total_alat;
+            $alat->update();
+        }
+
+        return $this->kalkulasi();
+    }
 
     public function clearForm(){
 
@@ -122,7 +146,6 @@ class DetailListsewa extends Component
 
         $this->editConfirm =null;
         $this->deleteConfirm =null;
-
 
         $this->editPage = false;
 

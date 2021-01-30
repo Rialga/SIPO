@@ -32,12 +32,12 @@ use Illuminate\Support\Facades\Hash;
 
 // Guest
 Route::livewire('/','welcome');
-
 Route::livewire('/produk/{kode}','detail-produk');
-
 Route::livewire('/login','login')->name('login');
-
 Route::livewire('/register','register');
+
+Route::get('auth/google', 'GoogleController@redirectToGoogle');
+Route::get('auth/google/callback', 'GoogleController@handleGoogleCallback');
 
 
 // Admin

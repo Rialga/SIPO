@@ -18,7 +18,7 @@ class User extends Authenticatable {
     protected $table = 'user';
     protected $primaryKey = 'user_id';
     protected $fillable = [
-        'user_id', 'user_role', 'user_nick','user_nama', 'user_mail', 'user_alamat', 'user_job','user_password',
+        'user_id', 'user_role', 'user_nick','user_nama', 'user_mail', 'user_alamat', 'user_job','user_password','google_id','user_phone'
     ];
 
         /**
@@ -88,7 +88,6 @@ class User extends Authenticatable {
         ->Orwhere('user_nama','like','%' .$val. '%')
         ->Orwhere('user_mail','like','%' .$val. '%')
         ->Orwhere('user_phone','like','%' .$val. '%');
-
 
     }
 }

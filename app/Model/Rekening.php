@@ -12,6 +12,11 @@ class Rekening extends Model
         'rekening_no' , 'rekening_bank' , 'rekening_an'
     ];
 
+    public $incrementing = false;
+
+    public function penyewaan() {
+        return $this->hasMany('App\Model\penyewaan', 'rekening_no', 'sewa_rekening');
+    }
 
     public function scopeSearch($query,$val){
         return $query

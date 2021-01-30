@@ -14,30 +14,46 @@
                     </div>
                 </div>
 
-
                 <div class="row">
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <div class="card">
                             <div class="card-body">
-                                <h4 class="card-title mb-4">Sewa Hari Ini</h4>
+                                <h4 class="card-title mb-4 text-muted">Sewa Hari Ini</h4>
                                 <h1 style="color: #46A07E"> {{ $sewa_hariini->count() }}  </h1>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-5">
+
+                    <div class="col-lg-9">
+
                         <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">Total Penyewaan Bulan ini</h4>
-                                <h2 style="color: #17B5DB"> Rp. {{ number_format($sewa_bulanini['pendapatan']) }} </h2>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title mb-4">Total Pendapatan</h4>
-                                <h1 style="color: #17B5DB">  Rp. {{ number_format(array_sum($totalBiaya)) }}  </h1>
+
+                            <div class="card-body row">
+
+                                <div class="col-lg-4">
+                                    <h4 class="card-title mb-4 text-muted">Jumlah Sewa ({{ $filter }})</h4>
+                                    <h1 style="color: #17B5DB">  {{ count($totalBiaya) }} </h1>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <h4 class="card-title mb-4 text-muted">Total Pendapatan ({{ $filter }})</h4>
+                                    <h1 style="color: #17B5DB">  Rp. {{ number_format(array_sum($totalBiaya)) }}  </h1>
+                                </div>
+
+                                <div class="col-lg-4" style="text-align: right">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Pendapatan Berdasarkan  <i class="mdi mdi-chevron-down"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" wire:click="filter('Semua')" style="cursor: pointer;">Semua</a>
+                                            <a class="dropdown-item" wire:click="filter('Bulan Ini')" style="cursor: pointer;">Bulan Ini</a>
+                                            <a class="dropdown-item" wire:click="filter('Tahun Ini')" style="cursor: pointer;">Tahun Ini</a>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -45,7 +61,7 @@
 
 
                 <div class="row">
-                    <div class="col-lg-9">
+                    <div class="col-lg-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -104,7 +120,7 @@
                                 <canvas class="chart" id="bar-chart" width="400" height="150"></canvas>
                             </div>
                         </div>
-                    </div> <!-- end col -->
+                    </div>
 
                 </div>
 
@@ -130,143 +146,152 @@
 </div>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="{{ asset('assets/libs/chart/Chart.min.js') }}"></script>
 
 
 <script type="text/javascript">
 
-var lineMinggu = document.getElementById('line-minggu').getContext('2d');
-var lineBulan = document.getElementById('line-bulan').getContext('2d');
-var lineTahun = document.getElementById('line-tahun').getContext('2d');
-
-var bar = document.getElementById('bar-chart').getContext('2d');
+window.addEventListener('chart', event => {
+    fullChart()
+})
 
 
-var dataLabel = {!! json_encode($data_label) !!};
-var dataChart = {!! json_encode($data_chart) !!};
+$(document).ready( function () {
+    fullChart()
+})
 
 
+function fullChart(){
+
+    var lineMinggu = document.getElementById('line-minggu').getContext('2d');
+    var lineBulan = document.getElementById('line-bulan').getContext('2d');
+    var lineTahun = document.getElementById('line-tahun').getContext('2d');
+
+    var bar = document.getElementById('bar-chart').getContext('2d');
 
 
-// Line Chart
-var myLineChart = new Chart(lineMinggu, {
-    type: 'line',
-    data: {
-        labels: dataLabel['minggu'],
-        datasets: [{
-            label: 'jumlah penyewaan',
-            data: dataChart['minggu'],
-            fill:false,
-            borderColor: 'rgb(75, 192, 192)',
+    var dataLabel = {!! json_encode($data_label) !!};
+    var dataChart = {!! json_encode($data_chart) !!};
 
-        }],
-    },
-    options: {
-        legend: {
-            display: false,
+    // Line Chart
+    var myLineChart = new Chart(lineMinggu, {
+        type: 'line',
+        data: {
+            labels: dataLabel['minggu'],
+            datasets: [{
+                label: 'jumlah penyewaan',
+                data: dataChart['minggu'],
+                fill:false,
+                borderColor: 'rgb(75, 192, 192)',
 
+            }],
         },
-        scales:{
-            xAxes: [{
+        options: {
+            legend: {
                 display: false,
-            }]
-        }
-    },
 
-
-});
-
-var myLineChart2 = new Chart(lineBulan, {
-    type: 'line',
-    data: {
-        labels: dataLabel['bulan'],
-        datasets: [{
-            label: 'jumlah penyewaan',
-            data: dataChart['bulan'],
-            fill:false,
-            borderColor: 'rgb(75, 192, 192)',
-
-        }],
-    },
-    options: {
-        legend: {
-            display: false,
+            },
+            scales:{
+                xAxes: [{
+                    display: false,
+                }]
+            }
         },
-        scales:{
-            xAxes: [{
+
+
+    });
+
+    var myLineChart2 = new Chart(lineBulan, {
+        type: 'line',
+        data: {
+            labels: dataLabel['bulan'],
+            datasets: [{
+                label: 'jumlah penyewaan',
+                data: dataChart['bulan'],
+                fill:false,
+                borderColor: 'rgb(75, 192, 192)',
+
+            }],
+        },
+        options: {
+            legend: {
                 display: false,
-            }]
+            },
+            scales:{
+                xAxes: [{
+                    display: false,
+                }]
+            }
         }
-    }
 
-});
+    });
 
-var myLineChart3 = new Chart(lineTahun, {
-    type: 'line',
-    data: {
-        labels: dataLabel['tahun'],
-        datasets: [{
-            label: 'jumlah penyewaan',
-            data: dataChart['tahun'],
-            fill:false,
-            borderColor: 'rgb(75, 192, 192)',
+    var myLineChart3 = new Chart(lineTahun, {
+        type: 'line',
+        data: {
+            labels: dataLabel['tahun'],
+            datasets: [{
+                label: 'jumlah penyewaan',
+                data: dataChart['tahun'],
+                fill:false,
+                borderColor: 'rgb(75, 192, 192)',
 
-        }],
-    },
-    options: {
-        legend: {
-            display: false,
+            }],
         },
+        options: {
+            legend: {
+                display: false,
+            },
 
-    }
-
-});
-
-
-
-// Bar Chart
-function dynamicColors() {
-    var r = Math.floor(Math.random() * 255);
-    var g = Math.floor(Math.random() * 255);
-    var b = Math.floor(Math.random() * 255);
-    return "rgba(" + r + "," + g + "," + b + ", 0.8)";
-}
-
-function poolColors(a) {
-    var pool = [];
-    for(i = 0; i < a; i++) {
-        pool.push(dynamicColors());
-    }
-    return pool;
-}
-
-var myBarChart = new Chart(bar, {
-    type: 'horizontalBar',
-    data: {
-        labels: dataLabel['alat'],
-        datasets: [{
-            data: dataChart['alat'],
-            backgroundColor: poolColors(dataChart['alat'].length),
-            borderColor: poolColors(dataChart['alat'].length),
-            borderWidth: 0.5
-        }],
-    },
-    options:{
-        legend: {
-            display: false,
-        },
-        scales: {
-            xAxes: [{
-                ticks: {
-                beginAtZero: true,
-                min : 0,
-                }
-            }]
         }
+
+    });
+
+
+
+    // Bar Chart
+    function dynamicColors() {
+        var r = Math.floor(Math.random() * 255);
+        var g = Math.floor(Math.random() * 255);
+        var b = Math.floor(Math.random() * 255);
+        return "rgba(" + r + "," + g + "," + b + ", 0.8)";
     }
+
+    function poolColors(a) {
+        var pool = [];
+        for(i = 0; i < a; i++) {
+            pool.push(dynamicColors());
+        }
+        return pool;
+    }
+
+    var myBarChart = new Chart(bar, {
+        type: 'horizontalBar',
+        data: {
+            labels: dataLabel['alat'],
+            datasets: [{
+                data: dataChart['alat'],
+                backgroundColor: poolColors(dataChart['alat'].length),
+                borderColor: poolColors(dataChart['alat'].length),
+                borderWidth: 0.5
+            }],
+        },
+        options:{
+            legend: {
+                display: false,
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                    beginAtZero: true,
+                    }
+                }]
+            }
+        }
 
 });
 
-
+}
 
 </script>

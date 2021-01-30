@@ -20,7 +20,7 @@ class ExportReport extends Component
     public $totalSewa = [];
 
     public $harga= [];
-    public $harga1= [];
+    public $harga1 = [];
     public $totalBiaya= [];
 
     public $tgl = '';
@@ -107,6 +107,7 @@ class ExportReport extends Component
                 $hargaXqtt[$item->sewa_no][] = $this->harga[$item->sewa_no][$row->detail_sewa_alat_kode] * $row->total_alat;
             }
 
+            // dd($this->harga1);
             $this->totalSewa[$item->sewa_no] = array_sum($hargaXqtt[$item->sewa_no]);
 
             if(Carbon::parse( $item->sewa_tglkembali) > Carbon::parse( $this->kondisi[$item->sewa_no][$row->alat->alat_kode][0]->pengembalian_waktu)){
@@ -115,7 +116,7 @@ class ExportReport extends Component
             }
             else{
                 $this->estimasiTerlambat[$item->sewa_no] = Carbon::parse( $item->sewa_tglkembali)->diffInDays( $this->kondisi[$item->sewa_no][$row->alat->alat_kode][0]->pengembalian_waktu );
-                $this->totalBiaya[$item->sewa_no] = (array_sum($this->hagra1[$item->sewa_no] ) * $this->estimasiTerlambat[$item->sewa_no]) + array_sum($this->totalDendaRusak[$item->sewa_no]) + $this->totalSewa[$item->sewa_no];
+                $this->totalBiaya[$item->sewa_no] = (array_sum($this->harga1[$item->sewa_no] ) * $this->estimasiTerlambat[$item->sewa_no]) + array_sum($this->totalDendaRusak[$item->sewa_no]) + $this->totalSewa[$item->sewa_no];
             }
 
         }

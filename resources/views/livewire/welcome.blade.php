@@ -126,7 +126,11 @@
                                                         </div>
                                                         <div class="product-img position-relative">
                                                             <a href="{{ url('/produk/'.$data->alat_kode) }}">
+                                                                @if($data->gambar_alat->count() == 0 )
+                                                                <img src="" alt="" class="img-fluid mx-auto d-block" style=" height: 100px;">
+                                                                @else
                                                                 <img src="{{ asset("storage/gambarAlat/".$data->gambar_alat[0]->gambar_file) }}" alt="" class="img-fluid mx-auto d-block" style=" height: 100px;">
+                                                                @endif
                                                             </a>
                                                         </div>
                                                         <div class="mt-4 text-center">
@@ -157,6 +161,17 @@
                                 </div>
                             @endif
 
+                            <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mvalidasi">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-body" style="text-align: center">
+                                                <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                                                <h4 class="mb-4"> Masukkan Rentang Waktu dengan Benar !</h4>
+                                                <button type="button" class="btn btn-secondary waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -169,3 +184,10 @@
 </div>
 
 </div>
+
+<script>
+    window.addEventListener('validasi', event => {
+        $("#mvalidasi").modal('show');
+    })
+
+</script>

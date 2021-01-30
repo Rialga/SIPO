@@ -24,6 +24,8 @@ class Dashboard extends Component
     public $data_label = [];
     public $data_chart = [];
 
+    public $filter = 'Semua';
+
     public $jenis;
 
     public function mount(){
@@ -39,17 +41,17 @@ class Dashboard extends Component
 
             foreach( CarbonPeriod::create(Carbon::now()->subDays(7), Carbon::now()) as $item){
                 $this->data_label['minggu'][] = $item->isoFormat('dddd (D/M/Y)');
-                $this->data_chart['minggu'][] = Penyewaan::whereDate('sewa_tglsewa', $item->format('Y-m-d'))->count();
+                $this->data_chart['minggu'][] = Penyewaan::where('sewa_status',6)->whereDate('created_at', $item->format('Y-m-d'))->count();
             }
 
 
 
             // Data Perbulan
-            $bulan = Penyewaan::whereMonth('sewa_tglsewa' , Carbon::now()->month)
+            $bulan = Penyewaan::where('sewa_status',6)->whereMonth('created_at' , Carbon::now()->month)
             ->where(function($a){
                 $a->Where('sewa_status', '!=', 0)
                 ->Where('sewa_status', '!=', 7);
-            })->orderBy('sewa_tglsewa', 'ASC')->pluck('sewa_tglsewa');
+            })->orderBy('created_at', 'ASC')->pluck('created_at');
 
             $sebulan = array();
             foreach($bulan as $month){
@@ -58,24 +60,18 @@ class Dashboard extends Component
 
             foreach($sebulan as $tgl => $name){
                 $this->data_chart['bulan'][] =
-                Penyewaan::whereYear('sewa_tglsewa' , Carbon::now()->year)
-                ->whereMonth('sewa_tglsewa' , Carbon::now()->month)
-                ->whereDate('sewa_tglsewa' , $tgl)
-                ->where(function($a){
-                    $a->Where('sewa_status', '!=', 0)
-                    ->Where('sewa_status', '!=', 7);
-                })->count();
-
+                Penyewaan::where('sewa_status',6)
+                ->whereYear('created_at' , Carbon::now()->year)
+                ->whereMonth('created_at' , Carbon::now()->month)
+                ->whereDate('created_at' , $tgl)
+                ->count();
                 $this->data_label['bulan'][] = $name;
             }
 
 
             // Data per Setahun
-            $tahun = Penyewaan::whereYear('sewa_tglsewa' , Carbon::now()->year)
-            ->where(function($a){
-                $a->Where('sewa_status', '!=', 0)
-                ->Where('sewa_status', '!=', 7);
-            })->orderBy('sewa_tglsewa', 'ASC')->pluck('sewa_tglsewa');
+            $tahun = Penyewaan::where('sewa_status',6)->whereYear('created_at' , Carbon::now()->year)
+            ->orderBy('created_at', 'ASC')->pluck('created_at');
 
             $setahun = [];
 
@@ -85,7 +81,7 @@ class Dashboard extends Component
 
             foreach($setahun as $num => $name){
                 $this->data_chart['tahun'][] =
-                Penyewaan::whereYear('sewa_tglsewa' , Carbon::now()->year)
+                Penyewaan::where('sewa_status',6)->whereYear('sewa_tglsewa' , Carbon::now()->year)
                 ->whereMonth('sewa_tglsewa' , $num)
                 ->where(function($a){
                     $a->Where('sewa_status', '!=', 0)
@@ -96,7 +92,7 @@ class Dashboard extends Component
             }
 
 
-
+            $this->totalBiaya = [];
             // Jenis Alat jumlah
             foreach(JenisAlat::all() as $item ){
 
@@ -116,72 +112,30 @@ class Dashboard extends Component
             }
 
 
-            //Pemasukan bulanan
-
-            $totalbulanan = Penyewaan::whereBetween('created_at', [Carbon::now()->startOfMonth()->format('Y-m-d'), Carbon::now()->endOfMonth()->format('Y-m-d')])
-            ->where(function($a){
-                $a->Where('sewa_status',  6);
-            })->get();
-
-            $totalBiayabulanan = [];
-            foreach($totalbulanan as $itembulanan){
-
-                foreach($itembulanan->detail_sewa as $key => $rowbulanan){
-
-                    $kondisibulanan[$itembulanan->sewa_no][$rowbulanan->alat->alat_kode] = Pengembalian::where('sewa_no' , $itembulanan->sewa_no)->where('alat_kode',$rowbulanan->alat->alat_kode)->get();
-                    $totalSewa[$itembulanan->sewa_no][$rowbulanan->alat->alat_kode] = $rowbulanan->total_alat * $rowbulanan->alat->jenis_alat->jenis_alat_harga;
-
-                    foreach($kondisibulanan[$itembulanan->sewa_no][$rowbulanan->alat->alat_kode] as $idDendabulanan => $dendabulanan){
-
-                        $dendaRusakbulanan[$itembulanan->sewa_no][$rowbulanan->alat->alat_kode][$idDendabulanan] = $dendabulanan->kondisi_alat->kondisi_dendarusak * $dendabulanan->total_kerusakan;
-
-                    }
-
-                    $totalDendaRusakbulanan [$itembulanan->sewa_no][$rowbulanan->alat->alat_kode] = array_sum($dendaRusakbulanan[$itembulanan->sewa_no][$rowbulanan->alat->alat_kode]);
-
-                    $est = Carbon::parse($itembulanan->sewa_tglsewa)->diffInDays($itembulanan->sewa_tglkembali);
-                    if($est == 1){
-                        $harga =$rowbulanan->harga_sewa1 * $rowbulanan->total_alat;
-                    }
-                    elseif($est == 2){
-                        $harga =$rowbulanan->harga_sewa2 * $rowbulanan->total_alat;
-
-                    }
-                    elseif($est == 3){
-                        $harga =$rowbulanan->harga_sewa3 * $rowbulanan->total_alat;
-
-                    }
-                    else{
-                        $lama = $est - 3;
-                        $harga =  (($rowbulanan->harga_sewa1 * $lama) + $rowbulanan->harga_sewa3) * $rowbulanan->total_alat;
-                    }
-
-                    $harga1[$itembulanan->sewa_no][] = $rowbulanan->harga_sewa1 * $rowbulanan->total_alat;
-                    $totalSewaAlat[$itembulanan->sewa_no][]= $harga;
-                }
-
-                if($itembulanan->sewa_tglkembali > $kondisibulanan[$itembulanan->sewa_no][$rowbulanan->alat->alat_kode][0]->pengembalian_waktu ){
-                    $estimasiTerlambatbulanan[$itembulanan->sewa_no] = 0;
-                }
-                else{
-                    $estimasiTerlambatbulanan[$itembulanan->sewa_no] = Carbon::parse( $itembulanan->sewa_tglkembali)->diffInDays( $kondisibulanan[$itembulanan->sewa_no][$rowbulanan->alat->alat_kode][0]->pengembalian_waktu );
-                }
 
 
-                $totalBiayabulanan[$itembulanan->sewa_no] = (array_sum($totalDendaRusakbulanan[$itembulanan->sewa_no]) + array_sum($totalSewaAlat[$itembulanan->sewa_no]) + (array_sum($harga1[$itembulanan->sewa_no]) * $estimasiTerlambatbulanan[$itembulanan->sewa_no]) );
+            if($this->filter == 'Semua'){
+                // Pemasukan semua
+                $data = Penyewaan::where('sewa_status', 6)->get();
+
+            }
+            elseif($this->filter == 'Bulan Ini'){
+                $data = Penyewaan::whereBetween('created_at', [Carbon::now()->startOfMonth()->format('Y-m-d'), Carbon::now()->endOfMonth()->format('Y-m-d')])
+                ->where(function($a){
+                    $a->Where('sewa_status',  6);
+                })->get();
+
+
+            }
+            else{
+                $data = Penyewaan::whereBetween('created_at', [Carbon::now()->startOfYear()->format('Y-m-d'), Carbon::now()->endOfYear()->format('Y-m-d')])
+                ->where(function($a){
+                    $a->Where('sewa_status',  6);
+                })->get();
+
             }
 
-
-
-            $this->sewa_bulanini['sewa'] = $totalbulanan->count();
-            $this->sewa_bulanini['pendapatan'] = array_sum($totalBiayabulanan);
-
-
-
-            // Pemasukan semua
-            $data = Penyewaan::where('sewa_status', 6)->get();
             foreach($data as $item){
-
 
                 foreach($item->detail_sewa as $key => $row){
 
@@ -225,18 +179,26 @@ class Dashboard extends Component
                     $estimasiTerlambat[$item->sewa_no] = Carbon::parse( $item->sewa_tglkembali)->diffInDays( $kondisi[$item->sewa_no][$row->alat->alat_kode][0]->pengembalian_waktu );
                 }
 
-                $this->totalBiaya[$item->sewa_no] = (array_sum($totalDendaRusak[$item->sewa_no]) + array_sum($totalSewaAlat[$item->sewa_no]) + (array_sum($harga1[$item->sewa_no]) * $estimasiTerlambat[$item->sewa_no]) );
+                $this->totalBiaya[$item->sewa_no] = (array_sum($totalDendaRusak[$item->sewa_no]) + array_sum($totalSewaAlatAll[$item->sewa_no]) + (array_sum($harga1All[$item->sewa_no]) * $estimasiTerlambat[$item->sewa_no]) );
 
             }
         }
+        $this->dispatchBrowserEvent('chart');
+
+    }
 
 
+    public function filter($id){
+        $this->filter = $id;
+        return $this->mount();
     }
 
     public function render()
     {
+
         return view('livewire.admin.dashboard.dashboard');
     }
+
 
 
 }

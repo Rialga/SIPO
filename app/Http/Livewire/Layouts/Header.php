@@ -32,7 +32,8 @@ class Header extends Component
             $this->dataRefuse = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',7)->get();
             $this->dataNotif = Penyewaan::where('sewa_user', Auth::User()->user_id)
                                 ->where('sewa_status',5)
-                                ->whereDate('sewa_tglkembali','<=',Carbon::now())
+                                ->where('updated_at','like' , '%2000-02-02%')
+                                ->whereDate('sewa_tglkembali','<=',Carbon::now()->addDays(1))
                                 ->get();
 
         }
@@ -65,7 +66,11 @@ class Header extends Component
     public function updateNotif(){
 
         $this->dataRefuse = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',7)->get();
-        $this->dataNotif = Penyewaan::where('sewa_user', Auth::User()->user_id)->where('sewa_status',5)->whereDate('sewa_tglkembali','<=',Carbon::now())->get();
+        $this->dataNotif = Penyewaan::where('sewa_user', Auth::User()->user_id)
+                            ->where('sewa_status',5)
+                            ->where('updated_at','like' , '%2000-02-02%')
+                            ->whereDate('sewa_tglkembali','<=',Carbon::now()->addDays(1))
+                            ->get();
 
 
     }

@@ -6,7 +6,7 @@
                                 <th class="text-sm-center" style="width: 50px"> No </th>
                                 <th style="width: 200px"> Nama Alat </th>
                                 <th class="text-sm-center" style="width: 100px"> Stok </th>
-                                <th class="text-sm-center"> Kondisi </th>
+                                <th class="text-sm-center"> Kondisi Pengembalian</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -21,7 +21,16 @@
                                 <td>
                                     ({{ $item->alat->alat_kode }}) <br>
                                     {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
-                                    Tipe : {{ $item->alat->alat_tipe }}
+                                    Tipe : {{ $item->alat->alat_tipe }} <br>
+                                    Kondisi (%) :
+                                    <select class="form-control select2" id="{{ $item->alat->alat_kode }}" name="{{ $item->alat->alat_kode }}" wire:model="kTerbaru.{{ $item->alat->alat_kode }}">
+                                            <option value="0% - 20%"> 0% - 20% </option>
+                                            <option value="21% - 40%"> 21% - 40% </option>
+                                            <option value="41% - 60%"> 41% - 60% </option>
+                                            <option value="61% - 80%"> 61% - 80% </option>
+                                            <option value="81% - 100%"> 81% - 100% </option>
+
+                                    </select>
                                 </td>
                                 <td class="text-sm-center"> {{ $item->total_alat }} unit</td>
                                 <td>

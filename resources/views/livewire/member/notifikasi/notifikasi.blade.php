@@ -34,7 +34,7 @@
                                     <div class="tab-content crypto-buy-sell-nav-content p-4">
 
                                         <h5 style="color: red"><i style="color: red" class="fas fa-bahai"></i> <b>Bukti Pembayaran Ditolak</b> </h5>
-                                        <a wire:click = "page('{{ $item->sewa_no }}' , 7)" style="cursor: pointer;">
+                                        <a wire:click = "page('{{ $item->sewa_no }}' , 0)" style="cursor: pointer;">
                                             <p>
                                                 No Invoice  <b>{{ $item->sewa_no }}</b>.
                                                 Untuk penyewan <b>{{ Carbon\Carbon::parse($item->sewa_tglsewa)->format('d, M Y') }}</b> -
@@ -53,7 +53,7 @@
                                     <div class="tab-content crypto-buy-sell-nav-content p-4">
 
                                         <h5 style="color: orange"><i style="color: orange" class="fas fa-bahai"></i> <b>Reminder Pengembalian Barang !!!</b> </h5>
-                                        <a wire:click = "page('{{ $item->sewa_no }}' , 7)" style="cursor: pointer;">
+                                        <a wire:click = "page('{{ $item->sewa_no }}' , 1)" style="cursor: pointer;">
                                             <p>
                                                 No Invoice  <b>{{ $item->sewa_no }}</b>.
                                                 Untuk penyewan <b>{{ Carbon\Carbon::parse($item->sewa_tglsewa)->format('d, M Y') }}</b> -

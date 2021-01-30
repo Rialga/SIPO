@@ -26,9 +26,15 @@
                                 <div class="card-body">
                                     <div class="invoice-title">
                                         <h4 class="float-left font-size-20">{{ $currentInvoice }}</h4> <br><br>
-                                        <h4 class="float-left font-size-15">( <b style="color: #0AC8C8"> {{$dataSewa->status_sewa->status_detail }} </b> )</h4> <br>
-
+                                        @if($fullDetail)
+                                        <h4 class="float-left font-size-15">( <b style="color: #0AC8C8"> Detail Pengembalian </b> )</h4>
+                                        <a onclick="window.print()" class="btn btn-success waves-effect waves-light float-right" id="btnPrint" title="export" style="color: white"><i class="dripicons-print"></i></a>
+                                        @else
+                                        <h4 class="float-left font-size-15">( <b style="color: #0AC8C8"> {{$dataSewa->status_sewa->status_detail }} </b> )</h4>
+                                        @endif
+                                        <br> <br>
                                     </div>
+
                                     <hr>
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -65,9 +71,10 @@
 
                                         <div class="col-sm-6 mt-3 text-sm-right">
                                             <address>
-                                                <strong>Jenis Pembayaran:</strong><br>
+                                                <strong>Waktu Pembayaran:</strong><br>
                                                 di Bayar pada :<br>
                                                 {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('d, M Y') }} | {{ \Carbon\Carbon::parse($dataSewa->sewa_tglbayar)->format('H:i') }} WIB<br>
+                                                Pembayaran via : Bank {{ $dataSewa->rekening->rekening_bank }}
                                             </address>
                                         </div>
                                     </div>
@@ -114,7 +121,8 @@
                                                         <td class="text-left">
                                                             ({{ $item->alat->alat_kode }}) <br>
                                                             {{ $item->alat->jenis_alat->jenis_alat_nama }} - {{ $item->alat->merk->merk_nama }} <br>
-                                                            Tipe : {{ $item->alat->alat_tipe }}
+                                                            Tipe : {{ $item->alat->alat_tipe }}<br>
+                                                            Kondisi : {{ $item->alat->kondisi_terbaru }}
                                                         </td>
                                                         <td class="text-center"> {{ $item->total_alat }} Unit</td>
                                                         <td class="text-right"> Rp. {{ $harga[$item->detail_sewa_alat_kode] }} </td>
@@ -161,7 +169,27 @@
             </footer>
         </div>
 
+        <div class="modal fade bs-example-modal-center" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mhandling">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body" style="text-align: center">
+                            <i class="mdi mdi-alert-circle-outline mb-4 mt-4" style="color: orange; font-size:100px" ></i>
+                            <h4 class="mb-4"> Opps Periksa Kondisi Inputan! <br> Terdapat Duplikasi kondisi !</h4>
+                            <button type="button" class="btn btn-secondary waves-effect mb-2 mt-2 ml-2" data-dismiss="modal">close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 </div>
+
+<script>
+    window.addEventListener('handling', event => {
+        $("#mhandling").modal('show');
+    })
+
+</script>
 
 
 

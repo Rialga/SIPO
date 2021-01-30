@@ -87,48 +87,120 @@
                                                 </thead>
                                                 <tbody>
                                                 @foreach ($data->sortBy('id') as $key =>$item)
+                                                    @if($stokNow[$item->id] <= 0)
+                                                     <input hidden type="text" value="{{ $button = 'disabled' }}">
+                                                    <tr>
+                                                        <td style="opacity: 0.5;">
+                                                            <img src={{ asset("storage/gambarAlat/".$item->attributes->pic) }} class="avatar-md" />
 
-                                                <tr>
-                                                    <td>
-                                                        <img src={{ asset("storage/gambarAlat/".$item->attributes->pic) }} class="avatar-md" />
+                                                        </td>
+                                                        <td style="opacity: 0.5;">
+                                                            <h5 class="font-size-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-dark">{{ $item->name}}</a></h5>
+                                                            <p class="mb-0">Merk : <span class="font-weight-medium">{{ $item->attributes->merk }}</span></p>
+                                                            <p class="mb-0">Tipe : <span class="font-weight-medium">{{ $item->attributes->type }}</span></p>
+                                                        </td>
+                                                        <td style="text-align: center; opacity: 0.5;">
+                                                            Rp. {{ $harga[$key] }}
+                                                        </td>
+                                                        <td style="text-align: center; opacity: 0.5;">
+                                                           <span style="color: red"> Stok Tidak Tersedia !<br> Ganti Alat atau Tanggal Penyewaan </span>
+                                                        </td>
+                                                        <td style="text-align: center; opacity: 0.5;">
+                                                            Rp. {{ number_format($harga[$key] * $item->quantity)}}
+                                                        </td>
+                                                        <td>
+                                                            <a wire:click="modal('{{ $item->id }}')"class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18" style="cursor: pointer;"></i></a>
 
-                                                    </td>
-                                                    <td>
-                                                        <h5 class="font-size-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-dark">{{ $item->name}}</a></h5>
-                                                        <p class="mb-0">Merk : <span class="font-weight-medium">{{ $item->attributes->merk }}</span></p>
-                                                        <p class="mb-0">Tipe : <span class="font-weight-medium">{{ $item->attributes->type }}</span></p>
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        Rp. {{ $harga[$key] }}
-                                                    </td>
-                                                    <td>
-                                                        <div class="row ml-2">
-                                                            <div wire:loading wire:target="removeqty" class="spinner-border text-warning" role="status">
-                                                                <span class="sr-only">Loading...</span>
+                                                        </td>
+                                                    </tr>
+                                                    @elseif($stokNow[$item->id] <  $item->quantity)
+                                                    <input hidden type="text" value="{{ $button = 'disabled' }}">
+                                                    <tr>
+                                                        <td>
+                                                            <img src={{ asset("storage/gambarAlat/".$item->attributes->pic) }} class="avatar-md" />
+
+                                                        </td>
+                                                        <td>
+                                                            <h5 class="font-size-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-dark">{{ $item->name}}</a></h5>
+                                                            <p class="mb-0">Merk : <span class="font-weight-medium">{{ $item->attributes->merk }}</span></p>
+                                                            <p class="mb-0">Tipe : <span class="font-weight-medium">{{ $item->attributes->type }}</span></p>
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            Rp. {{ $harga[$key] }}
+                                                        </td>
+                                                        <td>
+                                                            <div class="row ml-2">
+                                                                <div wire:loading wire:target="removeqty" class="spinner-border text-warning" role="status">
+                                                                    <span class="sr-only">Loading...</span>
+                                                                </div>
+
+                                                                <a wire:loading.remove wire:click="removeqty('{{ $item->id }}')" class="btn btn-danger" > <i class="fa fa-minus" style="cursor: pointer; color:white"></i></a>
+
+                                                                <input disabled type="number" class="form-control col-sm-5 text-center"  min="0" wire:model.lazy = "stok.{{ $item->id }}" />
+
+                                                                <a wire:loading.remove wire:click="addqty('{{ $item->id }}')" class="btn btn-success " > <i class="fa fa-plus" style="cursor: pointer; color:white"></i></a>
+
+                                                                <div wire:loading wire:target="addqty" class="spinner-border text-warning" role="status">
+                                                                    <span class="sr-only">Loading...</span>
+                                                                </div>
+
                                                             </div>
+                                                             @error('stok.*') <span style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+                                                             <span style="color: red">Stok yang tersedia hanya : {{ $stokNow[$item->id] }} </span>
 
-                                                            <a wire:loading.remove wire:click="removeqty('{{ $item->id }}')" class="btn btn-danger" > <i class="fa fa-minus" style="cursor: pointer; color:white"></i></a>
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            Rp. {{ number_format($harga[$key] * $item->quantity)}}
+                                                        </td>
+                                                        <td>
+                                                            <a wire:click="modal('{{ $item->id }}')"class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18" style="cursor: pointer;"></i></a>
 
-                                                            <input disabled type="number" class="form-control col-sm-5 text-center"  min="0" wire:model.lazy = "stok.{{ $item->id }}" />
+                                                        </td>
+                                                    </tr>
+                                                    @else
+                                                    <tr>
+                                                        <td>
+                                                            <img src={{ asset("storage/gambarAlat/".$item->attributes->pic) }} class="avatar-md" />
 
-                                                            <a wire:loading.remove wire:click="addqty('{{ $item->id }}')" class="btn btn-success " > <i class="fa fa-plus" style="cursor: pointer; color:white"></i></a>
+                                                        </td>
+                                                        <td>
+                                                            <h5 class="font-size-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-dark">{{ $item->name}}</a></h5>
+                                                            <p class="mb-0">Merk : <span class="font-weight-medium">{{ $item->attributes->merk }}</span></p>
+                                                            <p class="mb-0">Tipe : <span class="font-weight-medium">{{ $item->attributes->type }}</span></p>
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            Rp. {{ $harga[$key] }}
+                                                        </td>
+                                                        <td>
+                                                            <div class="row ml-2">
+                                                                <div wire:loading wire:target="removeqty" class="spinner-border text-warning" role="status">
+                                                                    <span class="sr-only">Loading...</span>
+                                                                </div>
 
-                                                            <div wire:loading wire:target="addqty" class="spinner-border text-warning" role="status">
-                                                                <span class="sr-only">Loading...</span>
+                                                                <a wire:loading.remove wire:click="removeqty('{{ $item->id }}')" class="btn btn-danger" > <i class="fa fa-minus" style="cursor: pointer; color:white"></i></a>
+
+                                                                <input disabled type="number" class="form-control col-sm-5 text-center"  min="0" wire:model.lazy = "stok.{{ $item->id }}" />
+
+                                                                <a wire:loading.remove wire:click="addqty('{{ $item->id }}')" class="btn btn-success " > <i class="fa fa-plus" style="cursor: pointer; color:white"></i></a>
+
+                                                                <div wire:loading wire:target="addqty" class="spinner-border text-warning" role="status">
+                                                                    <span class="sr-only">Loading...</span>
+                                                                </div>
+
                                                             </div>
+                                                             @error('stok.*') <span style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
 
-                                                        </div>
-                                                         @error('stok.*') <span style="color: red">{{ $message }}</span>  {{$checkKode=false}} @enderror
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            Rp. {{ number_format($harga[$key] * $item->quantity)}}
+                                                        </td>
+                                                        <td>
+                                                            <a wire:click="modal('{{ $item->id }}')"class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18" style="cursor: pointer;"></i></a>
 
-                                                    </td>
-                                                    <td style="text-align: center;">
-                                                        Rp. {{ number_format($harga[$key] * $item->quantity)}}
-                                                    </td>
-                                                    <td>
-                                                        <a wire:click="modal('{{ $item->id }}')"class="action-icon text-danger"> <i class="mdi mdi-trash-can font-size-18" style="cursor: pointer;"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    @endif
 
-                                                    </td>
-                                                </tr>
                                                 @endforeach
                                                 </tbody>
                                             </table>
@@ -140,8 +212,8 @@
                                             </div> <!-- end col -->
                                             <div class="col-sm-6">
                                                 <div class="text-sm-right mt-2 mt-sm-0">
-                                                    <a wire:click="checkout" class="btn btn-success" style="color: white">
-                                                        <i class="mdi mdi-cart-arrow-right mr-1"></i> Checkout </a>
+                                                    <button {{ $button }} wire:click="checkout" class="btn btn-success" style="color: white">
+                                                        <i class="mdi mdi-cart-arrow-right mr-1"></i> Buat Penyewaan </button>
                                                 </div>
                                             </div> <!-- end col -->
                                         </div> <!-- end row-->

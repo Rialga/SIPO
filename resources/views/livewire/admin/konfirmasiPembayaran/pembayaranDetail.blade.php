@@ -108,7 +108,12 @@
                                                 <div>
                                                 <a href="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}"  target="_blank">
                                                     <img class="img-fluid" alt="" src="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}" width="145">
-                                                </a>
+                                                </a> <br><br>
+                                                @if($dataSewa->sewa_rek == '1010')
+                                                <strong>( Pembayaran Langsung di Lokasi )</strong>
+                                                @else
+                                                <strong>( Bank {{ $dataSewa->rekening->rekening_bank }} )</strong>
+                                                @endif
                                                 {{-- <img src="{{ asset("storage/buktiTf/$dataSewa->sewa_buktitf") }}" width="170" height="200" /> --}}
                                                 </div>
                                             </address>

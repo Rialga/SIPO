@@ -44,7 +44,7 @@ class Login extends Component
         }
         else{
 
-            dd('apa yang salah');
+            $this->dispatchBrowserEvent('validasiLog');
         }
 
 

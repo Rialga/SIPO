@@ -9,7 +9,7 @@ class Alat extends Model
     protected $table = 'alat';
     protected $primaryKey = 'alat_kode';
     protected $fillable = [
-        'alat_kode' , 'alat_jenis' , 'alat_merk' , 'alat_tipe' , 'alat_total'
+        'alat_kode' , 'alat_jenis' , 'alat_merk' , 'alat_tipe' , 'alat_total' , 'kondisi_terbaru'
     ];
 
     public $incrementing = false;
@@ -54,6 +54,7 @@ class Alat extends Model
         return $query
         ->where('alat_kode','like','%' .$val. '%')
         ->Orwhere('alat_total','like','%' .$val. '%')
+        ->Orwhere('kondisi_terbaru','like','%' .$val. '%')
         ->Orwhere('alat_tipe','like','%' .$val. '%')
         ->orWhereHas('jenis_alat',function ($query) use($val){
             $query->where('jenis_alat_nama', 'like','%' .$val. '%');
